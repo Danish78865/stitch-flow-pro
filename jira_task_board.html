@@ -1,0 +1,1436 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Jira Task Board - Stitch Flow Pro</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Symbols+Outlined" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #0052CC;
+            --primary-dark: #0747A6;
+            --primary-light: #4C9AFF;
+            --secondary: #6554C0;
+            --secondary-light: #998DD9;
+            --success: #36B37E;
+            --warning: #FF991F;
+            --danger: #DE350B;
+            --info: #00B8D9;
+            --background: #FFFFFF;
+            --surface: #F4F5F7;
+            --border: #DFE1E6;
+            --text: #172B4D;
+            --text-secondary: #6B778C;
+            --text-light: #97A0AF;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: var(--background);
+            color: var(--text);
+            line-height: 1.5;
+        }
+
+        .font-mono { font-family: 'JetBrains Mono', monospace; }
+
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 8px 16px;
+            border-radius: 6px;
+            font-weight: 500;
+            font-size: 14px;
+            cursor: pointer;
+            transition: all 0.2s;
+            border: 1px solid transparent;
+            text-decoration: none;
+            background: none;
+        }
+
+        .btn-primary {
+            background: var(--primary);
+            color: white;
+            border-color: var(--primary);
+        }
+
+        .btn-primary:hover {
+            background: var(--primary-dark);
+            border-color: var(--primary-dark);
+        }
+
+        .btn-secondary {
+            background: var(--surface);
+            color: var(--text);
+            border-color: var(--border);
+        }
+
+        .btn-secondary:hover {
+            background: var(--border);
+        }
+
+        .btn-danger {
+            background: var(--danger);
+            color: white;
+            border-color: var(--danger);
+        }
+
+        .btn-success {
+            background: var(--success);
+            color: white;
+            border-color: var(--success);
+        }
+
+        .btn-icon {
+            padding: 8px;
+            border-radius: 6px;
+            background: none;
+            border: none;
+            cursor: pointer;
+            color: var(--text-secondary);
+            transition: all 0.2s;
+        }
+
+        .btn-icon:hover {
+            background: var(--surface);
+            color: var(--text);
+        }
+
+        .card {
+            background: white;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 16px;
+            box-shadow: 0 1px 2px rgba(9, 30, 66, 0.1);
+        }
+
+        .task-card {
+            background: white;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 16px;
+            margin-bottom: 8px;
+            cursor: pointer;
+            transition: all 0.2s;
+            position: relative;
+        }
+
+        .task-card:hover {
+            box-shadow: 0 4px 8px rgba(9, 30, 66, 0.15);
+            transform: translateY(-1px);
+        }
+
+        .priority-critical { border-left: 4px solid var(--danger); }
+        .priority-high { border-left: 4px solid #FF5630; }
+        .priority-medium { border-left: 4px solid var(--warning); }
+        .priority-low { border-left: 4px solid var(--success); }
+        .priority-lowest { border-left: 4px solid var(--info); }
+
+        .status-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            padding: 2px 8px;
+            border-radius: 12px;
+            font-size: 12px;
+            font-weight: 500;
+        }
+
+        .status-todo { background: #F4F5F7; color: #42526E; }
+        .status-progress { background: #E3F2FD; color: #0747A6; }
+        .status-review { background: #FFF4E5; color: #9E7700; }
+        .status-done { background: #E3FCF9; color: #006544; }
+        .status-blocked { background: #FFEBE6; color: #DE350B; }
+
+        .modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.5);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s;
+        }
+
+        .modal.active {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .modal-content {
+            background: white;
+            border-radius: 8px;
+            width: 90%;
+            max-width: 600px;
+            max-height: 90vh;
+            overflow-y: auto;
+            transform: scale(0.9);
+            transition: transform 0.3s;
+        }
+
+        .modal.active .modal-content {
+            transform: scale(1);
+        }
+
+        .form-group {
+            margin-bottom: 16px;
+        }
+
+        .form-label {
+            display: block;
+            margin-bottom: 4px;
+            font-weight: 500;
+            font-size: 14px;
+            color: var(--text);
+        }
+
+        .form-input, .form-select, .form-textarea {
+            width: 100%;
+            padding: 8px 12px;
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            font-size: 14px;
+            transition: border-color 0.2s;
+        }
+
+        .form-input:focus, .form-select:focus, .form-textarea:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 2px rgba(0, 82, 204, 0.2);
+        }
+
+        .form-textarea {
+            resize: vertical;
+            min-height: 80px;
+        }
+
+        .sidebar {
+            width: 280px;
+            background: var(--surface);
+            border-right: 1px solid var(--border);
+            height: 100vh;
+            overflow-y: auto;
+            position: fixed;
+            left: 0;
+            top: 0;
+        }
+
+        .main-content {
+            margin-left: 280px;
+            padding: 24px;
+            min-height: 100vh;
+        }
+
+        .header {
+            background: white;
+            border-bottom: 1px solid var(--border);
+            padding: 16px 24px;
+            margin: -24px -24px 24px -24px;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .kanban-board {
+            display: flex;
+            gap: 16px;
+            overflow-x: auto;
+            padding-bottom: 16px;
+        }
+
+        .kanban-column {
+            min-width: 300px;
+            background: var(--surface);
+            border-radius: 8px;
+            padding: 16px;
+        }
+
+        .kanban-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 16px;
+            padding-bottom: 12px;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .kanban-title {
+            font-weight: 600;
+            font-size: 14px;
+            color: var(--text);
+        }
+
+        .kanban-count {
+            background: var(--text-light);
+            color: white;
+            padding: 2px 8px;
+            border-radius: 12px;
+            font-size: 12px;
+            font-weight: 500;
+        }
+
+        .task-type-icon {
+            width: 16px;
+            height: 16px;
+            border-radius: 3px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 10px;
+            font-weight: 600;
+            color: white;
+            margin-right: 4px;
+        }
+
+        .task-type-task { background: #42526E; }
+        .task-type-bug { background: var(--danger); }
+        .task-type-story { background: var(--success); }
+        .task-type-epic { background: var(--secondary); }
+        .task-type-subtask { background: var(--info); }
+
+        .story-points {
+            background: var(--primary);
+            color: white;
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-size: 11px;
+            font-weight: 600;
+            margin-left: 4px;
+        }
+
+        .label {
+            display: inline-block;
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-size: 11px;
+            font-weight: 500;
+            margin: 2px;
+        }
+
+        .label-blue { background: #E3F2FD; color: #0747A6; }
+        .label-green { background: #E3FCF9; color: #006544; }
+        .label-yellow { background: #FFF4E5; color: #9E7700; }
+        .label-red { background: #FFEBE6; color: #DE350B; }
+        .label-purple { background: #F4F0FF; color: #403294; }
+
+        .avatar {
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            background: var(--primary);
+            color: white;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 11px;
+            font-weight: 600;
+            margin-left: -8px;
+            border: 2px solid white;
+        }
+
+        .avatar:first-child {
+            margin-left: 0;
+        }
+
+        .notification {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            padding: 16px;
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(9, 30, 66, 0.15);
+            z-index: 2000;
+            opacity: 0;
+            transform: translateY(-20px);
+            transition: all 0.3s;
+        }
+
+        .notification.show {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .notification.success {
+            background: var(--success);
+            color: white;
+        }
+
+        .notification.error {
+            background: var(--danger);
+            color: white;
+        }
+
+        .notification.info {
+            background: var(--info);
+            color: white;
+        }
+
+        .dropdown {
+            position: relative;
+            display: inline-block;
+        }
+
+        .dropdown-menu {
+            position: absolute;
+            top: 100%;
+            right: 0;
+            background: white;
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            box-shadow: 0 4px 12px rgba(9, 30, 66, 0.15);
+            min-width: 200px;
+            z-index: 1000;
+            opacity: 0;
+            visibility: hidden;
+            transform: translateY(-10px);
+            transition: all 0.2s;
+        }
+
+        .dropdown-menu.show {
+            opacity: 1;
+            visibility: visible;
+            transform: translateY(0);
+        }
+
+        .dropdown-item {
+            display: block;
+            padding: 8px 16px;
+            color: var(--text);
+            text-decoration: none;
+            font-size: 14px;
+            transition: background 0.2s;
+        }
+
+        .dropdown-item:hover {
+            background: var(--surface);
+        }
+
+        .dropdown-divider {
+            height: 1px;
+            background: var(--border);
+            margin: 4px 0;
+        }
+
+        @keyframes spin {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        .loading {
+            animation: spin 1s linear infinite;
+        }
+    </style>
+</head>
+<body>
+    <!-- Sidebar -->
+    <aside class="sidebar">
+        <div class="p-6">
+            <div class="flex items-center gap-3 mb-8">
+                <div class="w-10 h-10 bg-primary rounded-lg flex items-center justify-center">
+                    <span class="material-symbols-outlined text-white">task_alt</span>
+                </div>
+                <h1 class="text-xl font-bold">Task Board</h1>
+            </div>
+
+            <!-- Quick Actions -->
+            <div class="mb-6">
+                <h3 class="text-sm font-semibold text-gray-600 mb-3">QUICK ACTIONS</h3>
+                <div class="space-y-2">
+                    <button onclick="openCreateTaskModal()" class="btn btn-secondary w-full justify-start">
+                        <span class="material-symbols-outlined">add</span>
+                        Create Task
+                    </button>
+                    <button onclick="openCreateEpicModal()" class="btn btn-secondary w-full justify-start">
+                        <span class="material-symbols-outlined">stars</span>
+                        Create Epic
+                    </button>
+                    <button onclick="openSprintModal()" class="btn btn-secondary w-full justify-start">
+                        <span class="material-symbols-outlined">sprint</span>
+                        Start Sprint
+                    </button>
+                </div>
+            </div>
+
+            <!-- Filters -->
+            <div class="mb-6">
+                <h3 class="text-sm font-semibold text-gray-600 mb-3">FILTERS</h3>
+                <div class="space-y-3">
+                    <div>
+                        <label class="form-label">Project</label>
+                        <select id="projectFilter" class="form-select" onchange="filterTasks()">
+                            <option value="">All Projects</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="form-label">Assignee</label>
+                        <select id="assigneeFilter" class="form-select" onchange="filterTasks()">
+                            <option value="">All Members</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="form-label">Priority</label>
+                        <select id="priorityFilter" class="form-select" onchange="filterTasks()">
+                            <option value="">All Priorities</option>
+                            <option value="critical">Critical</option>
+                            <option value="high">High</option>
+                            <option value="medium">Medium</option>
+                            <option value="low">Low</option>
+                            <option value="lowest">Lowest</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Statistics -->
+            <div class="mb-6">
+                <h3 class="text-sm font-semibold text-gray-600 mb-3">STATISTICS</h3>
+                <div class="space-y-2">
+                    <div class="flex justify-between text-sm">
+                        <span>Total Tasks</span>
+                        <span id="totalTasks" class="font-mono font-semibold">0</span>
+                    </div>
+                    <div class="flex justify-between text-sm">
+                        <span>In Progress</span>
+                        <span id="inProgressTasks" class="font-mono font-semibold">0</span>
+                    </div>
+                    <div class="flex justify-between text-sm">
+                        <span>Completed</span>
+                        <span id="completedTasks" class="font-mono font-semibold">0</span>
+                    </div>
+                    <div class="flex justify-between text-sm">
+                        <span>Story Points</span>
+                        <span id="totalStoryPoints" class="font-mono font-semibold">0</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Team Members -->
+            <div class="mb-6">
+                <h3 class="text-sm font-semibold text-gray-600 mb-3">TEAM</h3>
+                <div id="teamMembers" class="space-y-2">
+                    <!-- Team members will be loaded here -->
+                </div>
+            </div>
+        </div>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <!-- Header -->
+        <header class="header">
+            <div class="flex items-center justify-between">
+                <div class="flex items-center gap-4">
+                    <h2 class="text-2xl font-bold">Active Sprint: Sprint 1</h2>
+                    <div class="flex items-center gap-2">
+                        <span class="text-sm text-gray-600">Story Points:</span>
+                        <span class="font-mono font-semibold">23 / 40</span>
+                    </div>
+                    <div class="flex items-center gap-2">
+                        <span class="text-sm text-gray-600">Days Left:</span>
+                        <span class="font-mono font-semibold">7</span>
+                    </div>
+                </div>
+                <div class="flex items-center gap-3">
+                    <button class="btn btn-secondary">
+                        <span class="material-symbols-outlined">view_list</span>
+                        Board View
+                    </button>
+                    <div class="dropdown">
+                        <button class="btn btn-secondary" onclick="toggleDropdown('viewDropdown')">
+                            <span class="material-symbols-outlined">more_horiz</span>
+                        </button>
+                        <div id="viewDropdown" class="dropdown-menu">
+                            <a href="#" class="dropdown-item">List View</a>
+                            <a href="#" class="dropdown-item">Timeline View</a>
+                            <a href="#" class="dropdown-item">Calendar View</a>
+                            <div class="dropdown-divider"></div>
+                            <a href="#" class="dropdown-item">Configure Board</a>
+                        </div>
+                    </div>
+                    <button onclick="refreshBoard()" class="btn btn-secondary">
+                        <span class="material-symbols-outlined">refresh</span>
+                    </button>
+                </div>
+            </div>
+        </header>
+
+        <!-- Kanban Board -->
+        <div class="kanban-board">
+            <!-- To Do Column -->
+            <div class="kanban-column">
+                <div class="kanban-header">
+                    <div class="flex items-center gap-2">
+                        <span class="kanban-title">TO DO</span>
+                        <span class="kanban-count" id="todoCount">0</span>
+                    </div>
+                    <button class="btn-icon" onclick="openQuickTaskModal('todo')">
+                        <span class="material-symbols-outlined">add</span>
+                    </button>
+                </div>
+                <div id="todoColumn" class="task-column">
+                    <!-- Tasks will be loaded here -->
+                </div>
+            </div>
+
+            <!-- In Progress Column -->
+            <div class="kanban-column">
+                <div class="kanban-header">
+                    <div class="flex items-center gap-2">
+                        <span class="kanban-title">IN PROGRESS</span>
+                        <span class="kanban-count" id="progressCount">0</span>
+                    </div>
+                    <button class="btn-icon">
+                        <span class="material-symbols-outlined">more_horiz</span>
+                    </button>
+                </div>
+                <div id="progressColumn" class="task-column">
+                    <!-- Tasks will be loaded here -->
+                </div>
+            </div>
+
+            <!-- Review Column -->
+            <div class="kanban-column">
+                <div class="kanban-header">
+                    <div class="flex items-center gap-2">
+                        <span class="kanban-title">REVIEW</span>
+                        <span class="kanban-count" id="reviewCount">0</span>
+                    </div>
+                    <button class="btn-icon">
+                        <span class="material-symbols-outlined">more_horiz</span>
+                    </button>
+                </div>
+                <div id="reviewColumn" class="task-column">
+                    <!-- Tasks will be loaded here -->
+                </div>
+            </div>
+
+            <!-- Done Column -->
+            <div class="kanban-column">
+                <div class="kanban-header">
+                    <div class="flex items-center gap-2">
+                        <span class="kanban-title">DONE</span>
+                        <span class="kanban-count" id="doneCount">0</span>
+                    </div>
+                    <button class="btn-icon">
+                        <span class="material-symbols-outlined">more_horiz</span>
+                    </button>
+                </div>
+                <div id="doneColumn" class="task-column">
+                    <!-- Tasks will be loaded here -->
+                </div>
+            </div>
+
+            <!-- Blocked Column -->
+            <div class="kanban-column">
+                <div class="kanban-header">
+                    <div class="flex items-center gap-2">
+                        <span class="kanban-title">BLOCKED</span>
+                        <span class="kanban-count" id="blockedCount">0</span>
+                    </div>
+                    <button class="btn-icon">
+                        <span class="material-symbols-outlined">more_horiz</span>
+                    </button>
+                </div>
+                <div id="blockedColumn" class="task-column">
+                    <!-- Tasks will be loaded here -->
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Create Task Modal -->
+    <div id="createTaskModal" class="modal">
+        <div class="modal-content">
+            <div class="card">
+                <div class="flex items-center justify-between mb-6">
+                    <h2 class="text-xl font-bold">Create Task</h2>
+                    <button class="btn-icon" onclick="closeModal('createTaskModal')">
+                        <span class="material-symbols-outlined">close</span>
+                    </button>
+                </div>
+
+                <form id="createTaskForm">
+                    <div class="grid grid-cols-2 gap-4">
+                        <div class="form-group">
+                            <label class="form-label">Task Title *</label>
+                            <input type="text" id="taskTitle" class="form-input" required>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Task Type</label>
+                            <select id="taskType" class="form-select">
+                                <option value="task">Task</option>
+                                <option value="bug">Bug</option>
+                                <option value="story">Story</option>
+                                <option value="epic">Epic</option>
+                                <option value="subtask">Sub-task</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">Description</label>
+                        <textarea id="taskDescription" class="form-textarea"></textarea>
+                    </div>
+
+                    <div class="grid grid-cols-3 gap-4">
+                        <div class="form-group">
+                            <label class="form-label">Priority</label>
+                            <select id="taskPriority" class="form-select">
+                                <option value="lowest">Lowest</option>
+                                <option value="low">Low</option>
+                                <option value="medium" selected>Medium</option>
+                                <option value="high">High</option>
+                                <option value="critical">Critical</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Story Points</label>
+                            <input type="number" id="storyPoints" class="form-input" min="1" max="21" value="1">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Assignee</label>
+                            <select id="taskAssignee" class="form-select">
+                                <option value="">Unassigned</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-2 gap-4">
+                        <div class="form-group">
+                            <label class="form-label">Project</label>
+                            <select id="taskProject" class="form-select">
+                                <option value="">Select Project</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Due Date</label>
+                            <input type="date" id="taskDueDate" class="form-input">
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">Labels (comma-separated)</label>
+                        <input type="text" id="taskLabels" class="form-input" placeholder="frontend, urgent, backend">
+                    </div>
+
+                    <div class="flex justify-end gap-3">
+                        <button type="button" class="btn btn-secondary" onclick="closeModal('createTaskModal')">Cancel</button>
+                        <button type="submit" class="btn btn-primary">Create Task</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Task Detail Modal -->
+    <div id="taskDetailModal" class="modal">
+        <div class="modal-content">
+            <div class="card">
+                <div class="flex items-center justify-between mb-6">
+                    <h2 class="text-xl font-bold">Task Details</h2>
+                    <button class="btn-icon" onclick="closeModal('taskDetailModal')">
+                        <span class="material-symbols-outlined">close</span>
+                    </button>
+                </div>
+
+                <div id="taskDetailContent">
+                    <!-- Task details will be loaded here -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Notification -->
+    <div id="notification" class="notification"></div>
+
+    <!-- API Integration -->
+    <script src="static/js/api.js"></script>
+    <script>
+        // Global variables
+        let tasks = [];
+        let projects = [];
+        let teamMembers = [];
+        let currentTask = null;
+
+        // Initialize the board
+        document.addEventListener('DOMContentLoaded', async () => {
+            try {
+                await loadData();
+                setupEventListeners();
+                renderTasks();
+            } catch (error) {
+                console.error('Failed to initialize board:', error);
+                showNotification('Failed to load data. Please refresh the page.', 'error');
+            }
+        });
+
+        // Load data from API
+        async function loadData() {
+            try {
+                // Authenticate first
+                if (!api.token) {
+                    await authenticateUser();
+                }
+
+                const [projectsData, tasksData, teamData] = await Promise.all([
+                    api.getProjects(),
+                    api.getTasks(),
+                    api.getTeamMembers()
+                ]);
+
+                projects = projectsData;
+                tasks = tasksData;
+                teamMembers = teamData;
+
+                populateSelects();
+                updateStatistics();
+                renderTeamMembers();
+                showNotification('Connected to backend API', 'success');
+            } catch (error) {
+                console.error('Failed to load data:', error);
+                showNotification('Failed to load data: ' + error.message, 'error');
+                throw error;
+            }
+        }
+
+        // Authenticate user
+        async function authenticateUser() {
+            try {
+                const response = await api.login('admin', 'admin123');
+                api.token = response.access_token;
+                localStorage.setItem('authToken', api.token);
+            } catch (error) {
+                console.error('Authentication failed:', error);
+                throw error;
+            }
+        }
+
+        // Load mock data for testing
+        function loadMockData() {
+            projects = [
+                { id: 1, name: 'E-Commerce Platform', description: 'Online shopping platform with payment integration' },
+                { id: 2, name: 'Mobile Banking App', description: 'iOS and Android banking application' },
+                { id: 3, name: 'Analytics Dashboard', description: 'Real-time data visualization platform' },
+                { id: 4, name: 'Social Media API', description: 'Backend API for social media features' },
+                { id: 5, name: 'AI Chatbot System', description: 'Customer service AI automation' }
+            ];
+
+            teamMembers = [
+                { id: 1, name: 'Alice Chen', role: 'Frontend Developer' },
+                { id: 2, name: 'Bob Wilson', role: 'Backend Developer' },
+                { id: 3, name: 'Carol Davis', role: 'UI/UX Designer' },
+                { id: 4, name: 'David Miller', role: 'Project Manager' },
+                { id: 5, name: 'Emma Thompson', role: 'QA Engineer' },
+                { id: 6, name: 'Frank Garcia', role: 'DevOps Engineer' }
+            ];
+
+            tasks = [
+                { id: 1, title: 'Setup React project structure', description: 'Initialize React with TypeScript and testing setup', status: 'done', priority: 'medium', task_type: 'task', story_points: 3, project_id: 1, assigned_to: 1, labels: 'frontend,react', due_date: '2024-01-15' },
+                { id: 2, title: 'Design user authentication flow', description: 'Create wireframes and mockups for login/register', status: 'progress', priority: 'high', task_type: 'story', story_points: 5, project_id: 1, assigned_to: 3, labels: 'design,auth', due_date: '2024-01-20' },
+                { id: 3, title: 'Fix payment gateway integration bug', description: 'Critical bug in Stripe payment processing', status: 'todo', priority: 'critical', task_type: 'bug', story_points: 2, project_id: 1, assigned_to: 2, labels: 'bug,payment,critical', due_date: '2024-01-10' },
+                { id: 4, title: 'Implement REST API endpoints', description: 'Create CRUD operations for user management', status: 'progress', priority: 'high', task_type: 'task', story_points: 8, project_id: 4, assigned_to: 2, labels: 'api,backend', due_date: '2024-01-25' },
+                { id: 5, title: 'User acceptance testing', description: 'Conduct UAT with beta users', status: 'review', priority: 'medium', task_type: 'task', story_points: 3, project_id: 1, assigned_to: 5, labels: 'testing,qa', due_date: '2024-01-22' },
+                { id: 6, title: 'Database schema optimization', description: 'Optimize queries for better performance', status: 'todo', priority: 'medium', task_type: 'task', story_points: 5, project_id: 4, assigned_to: 6, labels: 'database,performance', due_date: '2024-01-28' },
+                { id: 7, title: 'Mobile app UI redesign', description: 'Update app design to match new brand guidelines', status: 'progress', priority: 'high', task_type: 'story', story_points: 8, project_id: 2, assigned_to: 3, labels: 'mobile,design', due_date: '2024-01-18' },
+                { id: 8, title: 'Implement push notifications', description: 'Add Firebase push notifications for mobile app', status: 'todo', priority: 'medium', task_type: 'task', story_points: 5, project_id: 2, assigned_to: 1, labels: 'mobile,notifications', due_date: '2024-01-30' },
+                { id: 9, title: 'Create analytics dashboard', description: 'Build real-time data visualization dashboard', status: 'progress', priority: 'high', task_type: 'epic', story_points: 13, project_id: 3, assigned_to: 1, labels: 'analytics,dashboard', due_date: '2024-02-05' },
+                { id: 10, title: 'Setup CI/CD pipeline', description: 'Configure GitHub Actions for automated deployment', status: 'done', priority: 'medium', task_type: 'task', story_points: 3, project_id: 5, assigned_to: 6, labels: 'devops,cicd', due_date: '2024-01-12' },
+                { id: 11, title: 'Security audit and fixes', description: 'Conduct security audit and implement fixes', status: 'blocked', priority: 'critical', task_type: 'task', story_points: 8, project_id: 5, assigned_to: 2, labels: 'security,audit', due_date: '2024-01-15' },
+                { id: 12, title: 'Customer support chatbot', description: 'Implement AI-powered customer service bot', status: 'todo', priority: 'medium', task_type: 'epic', story_points: 21, project_id: 5, assigned_to: 4, labels: 'ai,chatbot', due_date: '2024-02-10' }
+            ];
+
+            populateSelects();
+            updateStatistics();
+            renderTeamMembers();
+            showNotification('Demo data loaded - Full functionality available!', 'success');
+        }
+
+        // Populate select elements
+        function populateSelects() {
+            // Project selects
+            const projectSelects = ['taskProject', 'projectFilter'];
+            projectSelects.forEach(id => {
+                const select = document.getElementById(id);
+                if (select) {
+                    select.innerHTML = id === 'projectFilter' ? 
+                        '<option value="">All Projects</option>' : 
+                        '<option value="">Select Project</option>';
+                    projects.forEach(project => {
+                        select.innerHTML += `<option value="${project.id}">${project.name}</option>`;
+                    });
+                }
+            });
+
+            // Assignee selects
+            const assigneeSelects = ['taskAssignee', 'assigneeFilter'];
+            assigneeSelects.forEach(id => {
+                const select = document.getElementById(id);
+                if (select) {
+                    select.innerHTML = id === 'assigneeFilter' ? 
+                        '<option value="">All Members</option>' : 
+                        '<option value="">Unassigned</option>';
+                    teamMembers.forEach(member => {
+                        select.innerHTML += `<option value="${member.id}">${member.name}</option>`;
+                    });
+                }
+            });
+        }
+
+        // Setup event listeners
+        function setupEventListeners() {
+            // Create task form
+            document.getElementById('createTaskForm').addEventListener('submit', handleCreateTask);
+
+            // Filter event listeners
+            const filterSelects = ['projectFilter', 'assigneeFilter', 'priorityFilter'];
+            filterSelects.forEach(id => {
+                const select = document.getElementById(id);
+                if (select) {
+                    select.addEventListener('change', () => {
+                        renderTasks();
+                    });
+                }
+            });
+
+            // Setup drag and drop for columns
+            const columns = ['todoColumn', 'progressColumn', 'reviewColumn', 'doneColumn', 'blockedColumn'];
+            columns.forEach(columnId => {
+                const column = document.getElementById(columnId);
+                if (column) {
+                    column.addEventListener('dragover', (e) => {
+                        e.preventDefault();
+                        column.classList.add('drag-over');
+                    });
+
+                    column.addEventListener('dragleave', () => {
+                        column.classList.remove('drag-over');
+                    });
+
+                    column.addEventListener('drop', async (e) => {
+                        e.preventDefault();
+                        column.classList.remove('drag-over');
+                        const taskId = e.dataTransfer.getData('text/plain');
+                        if (taskId) {
+                            const newStatus = columnId.replace('Column', '');
+                            await updateTaskStatus(parseInt(taskId), newStatus);
+                        }
+                    });
+                }
+            });
+
+            // Close dropdowns when clicking outside
+            document.addEventListener('click', (e) => {
+                if (!e.target.closest('.dropdown')) {
+                    document.querySelectorAll('.dropdown-menu').forEach(menu => {
+                        menu.classList.remove('show');
+                    });
+                }
+            });
+
+            // Modal close on backdrop click
+            document.querySelectorAll('.modal').forEach(modal => {
+                modal.addEventListener('click', (e) => {
+                    if (e.target === modal) {
+                        modal.classList.remove('active');
+                    }
+                });
+            });
+        }
+
+        // Render tasks on the board
+        function renderTasks() {
+            const filteredTasks = getFilteredTasks();
+            const columns = {
+                todo: document.getElementById('todoColumn'),
+                progress: document.getElementById('progressColumn'),
+                review: document.getElementById('reviewColumn'),
+                done: document.getElementById('doneColumn'),
+                blocked: document.getElementById('blockedColumn')
+            };
+
+            // Clear all columns
+            Object.values(columns).forEach(column => {
+                if (column) column.innerHTML = '';
+            });
+
+            // Add tasks to columns
+            filteredTasks.forEach(task => {
+                const taskCard = createTaskCard(task);
+                const column = columns[task.status];
+                if (column) {
+                    column.appendChild(taskCard);
+                }
+            });
+
+            updateColumnCounts();
+        }
+
+        // Get filtered tasks
+        function getFilteredTasks() {
+            let filtered = [...tasks];
+
+            // Project filter
+            const projectFilter = document.getElementById('projectFilter').value;
+            if (projectFilter) {
+                filtered = filtered.filter(task => task.project_id == projectFilter);
+            }
+
+            // Assignee filter
+            const assigneeFilter = document.getElementById('assigneeFilter').value;
+            if (assigneeFilter) {
+                filtered = filtered.filter(task => task.assigned_to == assigneeFilter);
+            }
+
+            // Priority filter
+            const priorityFilter = document.getElementById('priorityFilter').value;
+            if (priorityFilter) {
+                filtered = filtered.filter(task => task.priority == priorityFilter);
+            }
+
+            return filtered;
+        }
+
+        // Create task card element
+        function createTaskCard(task) {
+            const card = document.createElement('div');
+            card.className = `task-card priority-${task.priority} task-type-${task.task_type}`;
+            card.onclick = () => showTaskDetail(task);
+            
+            // Make card draggable
+            card.draggable = true;
+            card.addEventListener('dragstart', (e) => {
+                e.dataTransfer.setData('text/plain', task.id.toString());
+                card.classList.add('dragging');
+            });
+            card.addEventListener('dragend', () => {
+                card.classList.remove('dragging');
+            });
+
+            const typeIcons = {
+                task: 'assignment',
+                bug: 'bug_report',
+                story: 'auto_stories',
+                epic: 'stars',
+                subtask: 'subtask'
+            };
+
+            const projectName = projects.find(p => p.id === task.project_id)?.name || 'No Project';
+            const assigneeName = teamMembers.find(m => m.id === task.assigned_to)?.name || 'Unassigned';
+            const labels = task.labels ? task.labels.split(',').map(label => label.trim()) : [];
+
+            const labelColors = ['blue', 'green', 'yellow', 'red', 'purple'];
+            const randomColor = () => labelColors[Math.floor(Math.random() * labelColors.length)];
+
+            card.innerHTML = `
+                <div class="flex items-start justify-between mb-2">
+                    <div class="flex items-center gap-2">
+                        <span class="task-type-icon task-type-${task.task_type}">
+                            ${typeIcons[task.task_type] || 'assignment'}
+                        </span>
+                        <span class="story-points">${task.story_points || 1}</span>
+                    </div>
+                    <span class="text-xs text-gray-500">#${task.id}</span>
+                </div>
+                
+                <h3 class="font-semibold mb-2">${task.title}</h3>
+                
+                ${task.description ? `<p class="text-sm text-gray-600 mb-2 line-clamp-2">${task.description}</p>` : ''}
+                
+                <div class="flex flex-wrap gap-1 mb-2">
+                    ${labels.map(label => `<span class="label label-${randomColor()}">${label}</span>`).join('')}
+                </div>
+                
+                <div class="flex items-center justify-between text-xs text-gray-500">
+                    <div class="flex items-center gap-2">
+                        <span class="material-symbols-outlined text-[14px]">folder</span>
+                        <span>${projectName}</span>
+                    </div>
+                    <div class="flex items-center gap-1">
+                        ${task.assigned_to ? `<div class="avatar" title="${assigneeName}">${assigneeName.charAt(0).toUpperCase()}</div>` : ''}
+                    </div>
+                </div>
+                
+                ${task.due_date ? `
+                <div class="flex items-center gap-2 text-xs text-orange-600 mt-2">
+                    <span class="material-symbols-outlined text-[14px]">schedule</span>
+                    <span>${new Date(task.due_date).toLocaleDateString()}</span>
+                </div>
+                ` : ''}
+            `;
+
+            return card;
+        }
+
+        // Show task detail
+        function showTaskDetail(task) {
+            currentTask = task;
+            const modal = document.getElementById('taskDetailModal');
+            const content = document.getElementById('taskDetailContent');
+
+            const projectName = projects.find(p => p.id === task.project_id)?.name || 'No Project';
+            const assigneeName = teamMembers.find(m => m.id === task.assigned_to)?.name || 'Unassigned';
+            const labels = task.labels ? task.labels.split(',').map(label => label.trim()) : [];
+
+            content.innerHTML = `
+                <div class="space-y-6">
+                    <div>
+                        <div class="flex items-center gap-3 mb-2">
+                            <span class="task-type-icon task-type-${task.task_type}">
+                                ${task.task_type === 'task' ? 'assignment' : task.task_type}
+                            </span>
+                            <h3 class="text-xl font-bold">${task.title}</h3>
+                            <span class="story-points">${task.story_points || 1}</span>
+                        </div>
+                        <p class="text-gray-600">${task.description || 'No description provided'}</p>
+                    </div>
+
+                    <div class="grid grid-cols-2 gap-4">
+                        <div>
+                            <h4 class="font-semibold mb-2">Details</h4>
+                            <div class="space-y-2 text-sm">
+                                <div><strong>Type:</strong> ${task.task_type}</div>
+                                <div><strong>Priority:</strong> ${task.priority}</div>
+                                <div><strong>Status:</strong> ${task.status}</div>
+                                <div><strong>Project:</strong> ${projectName}</div>
+                            </div>
+                        </div>
+                        <div>
+                            <h4 class="font-semibold mb-2">People</h4>
+                            <div class="space-y-2 text-sm">
+                                <div><strong>Assignee:</strong> ${assigneeName}</div>
+                                <div><strong>Reporter:</strong> You</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div>
+                        <h4 class="font-semibold mb-2">Labels</h4>
+                        <div class="flex flex-wrap gap-2">
+                            ${labels.length > 0 ? labels.map(label => `<span class="label label-blue">${label}</span>`).join('') : '<span class="text-gray-500">No labels</span>'}
+                        </div>
+                    </div>
+
+                    ${task.due_date ? `
+                    <div>
+                        <h4 class="font-semibold mb-2">Dates</h4>
+                        <div class="space-y-2 text-sm">
+                            <div><strong>Created:</strong> ${new Date(task.created_at).toLocaleDateString()}</div>
+                            <div><strong>Due:</strong> ${new Date(task.due_date).toLocaleDateString()}</div>
+                        </div>
+                    </div>
+                    ` : ''}
+
+                    <div class="flex justify-between">
+                        <button onclick="editTask(${task.id})" class="btn btn-secondary">
+                            <span class="material-symbols-outlined">edit</span>
+                            Edit Task
+                        </button>
+                        <button onclick="deleteTask(${task.id})" class="btn btn-danger">
+                            <span class="material-symbols-outlined">delete</span>
+                            Delete Task
+                        </button>
+                    </div>
+                </div>
+            `;
+
+            modal.classList.add('active');
+        }
+
+        // Handle create task
+        async function handleCreateTask(e) {
+            e.preventDefault();
+            
+            const taskData = {
+                title: document.getElementById('taskTitle').value,
+                description: document.getElementById('taskDescription').value,
+                task_type: document.getElementById('taskType').value,
+                priority: document.getElementById('taskPriority').value,
+                story_points: parseInt(document.getElementById('storyPoints').value),
+                project_id: document.getElementById('taskProject').value || null,
+                assigned_to: document.getElementById('taskAssignee').value || null,
+                due_date: document.getElementById('taskDueDate').value || null,
+                labels: document.getElementById('taskLabels').value,
+                status: 'todo'
+            };
+
+            try {
+                showNotification('Creating task...', 'info');
+                const newTask = await api.createTask(taskData);
+                tasks.push(newTask);
+                renderTasks();
+                updateStatistics();
+                closeModal('createTaskModal');
+                document.getElementById('createTaskForm').reset();
+                showNotification('Task created successfully!', 'success');
+            } catch (error) {
+                console.error('Failed to create task:', error);
+                showNotification('Failed to create task: ' + error.message, 'error');
+            }
+        }
+
+        // Update task status via API
+        async function updateTaskStatus(taskId, newStatus) {
+            try {
+                showNotification('Updating task status...', 'info');
+                const updatedTask = await api.updateTask(taskId, { status: newStatus });
+                
+                // Update local task
+                const taskIndex = tasks.findIndex(t => t.id === taskId);
+                if (taskIndex !== -1) {
+                    tasks[taskIndex] = updatedTask;
+                }
+                
+                renderTasks();
+                updateStatistics();
+                showNotification('Task status updated successfully!', 'success');
+            } catch (error) {
+                console.error('Failed to update task status:', error);
+                showNotification('Failed to update task status: ' + error.message, 'error');
+            }
+        }
+
+        // Update statistics
+        function updateStatistics() {
+            const totalTasks = tasks.length;
+            const inProgressTasks = tasks.filter(t => t.status === 'in_progress').length;
+            const completedTasks = tasks.filter(t => t.status === 'completed').length;
+            const totalStoryPoints = tasks.reduce((sum, t) => sum + (t.story_points || 0), 0);
+
+            document.getElementById('totalTasks').textContent = totalTasks;
+            document.getElementById('inProgressTasks').textContent = inProgressTasks;
+            document.getElementById('completedTasks').textContent = completedTasks;
+            document.getElementById('totalStoryPoints').textContent = totalStoryPoints;
+        }
+
+        // Update column counts
+        function updateColumnCounts() {
+            const counts = {
+                todo: 0,
+                progress: 0,
+                review: 0,
+                done: 0,
+                blocked: 0
+            };
+
+            getFilteredTasks().forEach(task => {
+                if (counts.hasOwnProperty(task.status)) {
+                    counts[task.status]++;
+                }
+            });
+
+            document.getElementById('todoCount').textContent = counts.todo;
+            document.getElementById('progressCount').textContent = counts.progress;
+            document.getElementById('reviewCount').textContent = counts.review;
+            document.getElementById('doneCount').textContent = counts.done;
+            document.getElementById('blockedCount').textContent = counts.blocked;
+        }
+
+        // Render team members
+        function renderTeamMembers() {
+            const container = document.getElementById('teamMembers');
+            container.innerHTML = teamMembers.slice(0, 5).map(member => `
+                <div class="flex items-center gap-2">
+                    <div class="avatar">${member.name.charAt(0).toUpperCase()}</div>
+                    <div>
+                        <div class="text-sm font-medium">${member.name}</div>
+                        <div class="text-xs text-gray-500">${member.role}</div>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        // Modal functions
+        function openCreateTaskModal() {
+            document.getElementById('createTaskModal').classList.add('active');
+        }
+
+        function closeModal(modalId) {
+            document.getElementById(modalId).classList.remove('active');
+        }
+
+        function toggleDropdown(dropdownId) {
+            const dropdown = document.getElementById(dropdownId);
+            dropdown.classList.toggle('show');
+        }
+
+        function filterTasks() {
+            renderTasks();
+        }
+
+        function refreshBoard() {
+            loadData();
+        }
+
+        function showNotification(message, type = 'info') {
+            const notification = document.getElementById('notification');
+            notification.textContent = message;
+            notification.className = `notification ${type} show`;
+            
+            setTimeout(() => {
+                notification.classList.remove('show');
+            }, 3000);
+        }
+
+        function editTask(taskId) {
+            showNotification('Edit functionality coming soon!', 'info');
+        }
+
+        function deleteTask(taskId) {
+            if (confirm('Are you sure you want to delete this task?')) {
+                showNotification('Delete functionality coming soon!', 'info');
+            }
+        }
+
+        function openCreateEpicModal() {
+            const modal = document.getElementById('createTaskModal');
+            const title = document.getElementById('taskTitle');
+            const type = document.getElementById('taskType');
+            
+            // Set epic-specific defaults
+            title.placeholder = 'Enter epic title...';
+            type.value = 'epic';
+            document.querySelector('#createTaskModal h2').textContent = 'Create Epic';
+            
+            modal.classList.add('active');
+        }
+
+        function openSprintModal() {
+            const modal = document.createElement('div');
+            modal.className = 'modal active';
+            modal.innerHTML = `
+                <div class="modal-content">
+                    <div class="card">
+                        <div class="flex items-center justify-between mb-6">
+                            <h2 class="text-xl font-bold">Start New Sprint</h2>
+                            <button class="btn-icon" onclick="closeSprintModal()">
+                                <span class="material-symbols-outlined">close</span>
+                            </button>
+                        </div>
+
+                        <form id="sprintForm">
+                            <div class="form-group">
+                                <label class="form-label">Sprint Name</label>
+                                <input type="text" id="sprintName" class="form-input" placeholder="Sprint 1" required>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="form-label">Sprint Goal</label>
+                                <textarea id="sprintGoal" class="form-textarea" placeholder="What do you want to achieve in this sprint?"></textarea>
+                            </div>
+
+                            <div class="grid grid-cols-2 gap-4">
+                                <div class="form-group">
+                                    <label class="form-label">Duration (weeks)</label>
+                                    <select id="sprintDuration" class="form-select">
+                                        <option value="1">1 week</option>
+                                        <option value="2" selected>2 weeks</option>
+                                        <option value="3">3 weeks</option>
+                                        <option value="4">4 weeks</option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label class="form-label">Capacity (story points)</label>
+                                    <input type="number" id="sprintCapacity" class="form-input" value="40" min="1">
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="form-label">Select Tasks for Sprint</label>
+                                <div id="sprintTasks" class="space-y-2 max-h-48 overflow-y-auto border rounded-lg p-3">
+                                    <!-- Tasks will be loaded here -->
+                                </div>
+                            </div>
+
+                            <div class="flex justify-end gap-3">
+                                <button type="button" class="btn btn-secondary" onclick="closeSprintModal()">Cancel</button>
+                                <button type="submit" class="btn btn-primary">Start Sprint</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            `;
+            
+            document.body.appendChild(modal);
+            loadSprintTasks();
+            
+            // Add form submit handler
+            document.getElementById('sprintForm').addEventListener('submit', handleCreateSprint);
+            
+            // Add close handlers
+            modal.addEventListener('click', (e) => {
+                if (e.target === modal) {
+                    closeSprintModal();
+                }
+            });
+        }
+
+        function closeSprintModal() {
+            const modal = document.querySelector('.modal.active');
+            if (modal) {
+                modal.remove();
+            }
+        }
+
+        function loadSprintTasks() {
+            const container = document.getElementById('sprintTasks');
+            if (!container) return;
+            
+            container.innerHTML = tasks.filter(t => t.status === 'todo').map(task => `
+                <label class="flex items-center gap-3 p-2 hover:bg-gray-50 rounded cursor-pointer">
+                    <input type="checkbox" name="sprintTask" value="${task.id}" class="form-checkbox">
+                    <div class="flex-1">
+                        <div class="font-medium">${task.title}</div>
+                        <div class="text-sm text-gray-500">${task.story_points} story points • ${task.priority}</div>
+                    </div>
+                </label>
+            `).join('');
+        }
+
+        function handleCreateSprint(e) {
+            e.preventDefault();
+            
+            const selectedTasks = Array.from(document.querySelectorAll('input[name="sprintTask"]:checked'))
+                .map(cb => parseInt(cb.value));
+            
+            const sprintData = {
+                name: document.getElementById('sprintName').value,
+                goal: document.getElementById('sprintGoal').value,
+                duration: parseInt(document.getElementById('sprintDuration').value),
+                capacity: parseInt(document.getElementById('sprintCapacity').value),
+                tasks: selectedTasks
+            };
+            
+            // Update selected tasks to show they're in a sprint
+            selectedTasks.forEach(taskId => {
+                const task = tasks.find(t => t.id === taskId);
+                if (task) {
+                    // Add sprint info to task labels
+                    task.labels = task.labels ? `${task.labels}, sprint:${sprintData.name}` : `sprint:${sprintData.name}`;
+                }
+            });
+            
+            renderTasks();
+            showNotification(`Sprint "${sprintData.name}" started with ${selectedTasks.length} tasks!`, 'success');
+            closeSprintModal();
+        }
+
+        function openQuickTaskModal(status) {
+            openCreateTaskModal();
+        }
+    </script>
+</body>
+</html>

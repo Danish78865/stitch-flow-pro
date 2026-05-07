@@ -1,0 +1,771 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Advanced Dashboard - Stitch Flow Pro</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Symbols+Outlined" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #19216C;
+            --primary-light: #2D35B3;
+            --secondary: #C0C1FF;
+            --secondary-light: #D4D5FF;
+            --tertiary: #00D9FF;
+            --tertiary-light: #1EE5FF;
+            --surface: #0F0F23;
+            --surface-container: #1A1A2E;
+            --surface-container-low: #252542;
+            --surface-container-lowest: #303050;
+            --on-surface: #FFFFFF;
+            --on-surface-variant: #B8B8D1;
+            --outline: #6B6B8E;
+            --outline-variant: #4A4A6E;
+            --error: #FF5252;
+            --success: #4CAF50;
+            --warning: #FF9800;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: var(--surface);
+            color: var(--on-surface);
+            overflow-x: hidden;
+        }
+
+        .font-display-xl { font-size: 2.5rem; font-weight: 700; font-family: 'Inter', sans-serif; }
+        .font-headline-md { font-size: 1.125rem; font-weight: 600; font-family: 'Inter', sans-serif; }
+        .font-body-base { font-size: 1rem; font-weight: 400; font-family: 'Inter', sans-serif; }
+        .font-label-caps { font-size: 0.75rem; font-weight: 500; font-family: 'Inter', sans-serif; letter-spacing: 0.1em; }
+        .font-data-mono { font-family: 'JetBrains Mono', monospace; }
+
+        .glass-card {
+            background: rgba(37, 37, 66, 0.8);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+        }
+
+        .metric-card {
+            background: linear-gradient(135deg, var(--surface-container-low), var(--surface-container));
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 16px;
+            padding: 24px;
+            position: relative;
+            overflow: hidden;
+            transition: all 0.3s ease;
+        }
+
+        .metric-card:hover {
+            transform: translateY(-4px);
+            border-color: var(--secondary);
+        }
+
+        .metric-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, var(--primary), var(--secondary));
+        }
+
+        .progress-ring {
+            transform: rotate(-90deg);
+        }
+
+        .progress-ring-circle {
+            transition: stroke-dashoffset 0.5s ease;
+        }
+
+        .chart-container {
+            position: relative;
+            height: 300px;
+        }
+
+        .sidebar {
+            width: 280px;
+            background: var(--surface-container);
+            border-right: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .main-content {
+            margin-left: 280px;
+            padding-top: 64px;
+        }
+
+        .header {
+            position: fixed;
+            top: 0;
+            left: 280px;
+            right: 0;
+            height: 64px;
+            background: var(--surface-container);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            z-index: 100;
+            display: flex;
+            align-items: center;
+            padding: 0 24px;
+        }
+
+        .status-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            padding: 4px 8px;
+            border-radius: 12px;
+            font-size: 0.75rem;
+            font-weight: 500;
+        }
+
+        .status-active { background: rgba(76, 175, 80, 0.1); color: #4CAF50; }
+        .status-warning { background: rgba(255, 152, 0, 0.1); color: #FF9800; }
+        .status-error { background: rgba(255, 82, 82, 0.1); color: #FF5252; }
+
+        .timeline-item {
+            position: relative;
+            padding-left: 32px;
+            margin-bottom: 24px;
+        }
+
+        .timeline-item::before {
+            content: '';
+            position: absolute;
+            left: 8px;
+            top: 8px;
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: var(--secondary);
+        }
+
+        .timeline-item::after {
+            content: '';
+            position: absolute;
+            left: 11px;
+            top: 16px;
+            width: 1px;
+            height: calc(100% + 8px);
+            background: var(--outline-variant);
+        }
+
+        .timeline-item:last-child::after {
+            display: none;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+
+        .pulse {
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes slideIn {
+            from { transform: translateX(-20px); opacity: 0; }
+            to { transform: translateX(0); opacity: 1; }
+        }
+
+        .slide-in {
+            animation: slideIn 0.5s ease;
+        }
+    </style>
+</head>
+<body>
+    <!-- Sidebar -->
+    <aside class="sidebar fixed left-0 top-0 h-full overflow-y-auto">
+        <div class="p-6">
+            <div class="flex items-center gap-3 mb-8">
+                <div class="w-10 h-10 bg-primary rounded-lg flex items-center justify-center">
+                    <span class="material-symbols-outlined text-white">dashboard</span>
+                </div>
+                <h1 class="font-headline-md text-white">Dashboard</h1>
+            </div>
+
+            <!-- Quick Stats -->
+            <div class="mb-6">
+                <h3 class="font-label-caps text-on-surface-variant mb-3">OVERVIEW</h3>
+                <div class="space-y-3">
+                    <div class="flex justify-between text-sm">
+                        <span>Active Projects</span>
+                        <span id="activeProjectsCount" class="font-data-mono text-secondary">0</span>
+                    </div>
+                    <div class="flex justify-between text-sm">
+                        <span>Total Tasks</span>
+                        <span id="totalTasksCount" class="font-data-mono text-secondary">0</span>
+                    </div>
+                    <div class="flex justify-between text-sm">
+                        <span>Team Members</span>
+                        <span id="teamMembersCount" class="font-data-mono text-secondary">0</span>
+                    </div>
+                    <div class="flex justify-between text-sm">
+                        <span>Completion Rate</span>
+                        <span id="completionRate" class="font-data-mono text-secondary">0%</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Quick Actions -->
+            <div class="mb-6">
+                <h3 class="font-label-caps text-on-surface-variant mb-3">QUICK ACTIONS</h3>
+                <div class="space-y-2">
+                    <button class="w-full text-left px-3 py-2 rounded hover:bg-surface-container-low transition-colors text-sm">
+                        <span class="material-symbols-outlined text-[16px] mr-2">add</span>
+                        Create Task
+                    </button>
+                    <button class="w-full text-left px-3 py-2 rounded hover:bg-surface-container-low transition-colors text-sm">
+                        <span class="material-symbols-outlined text-[16px] mr-2">group_add</span>
+                        Invite Member
+                    </button>
+                    <button class="w-full text-left px-3 py-2 rounded hover:bg-surface-container-low transition-colors text-sm">
+                        <span class="material-symbols-outlined text-[16px] mr-2">assessment</span>
+                        Generate Report
+                    </button>
+                </div>
+            </div>
+
+            <!-- Recent Activity -->
+            <div class="mb-6">
+                <h3 class="font-label-caps text-on-surface-variant mb-3">RECENT ACTIVITY</h3>
+                <div id="recentActivity" class="space-y-2">
+                    <!-- Activity items will be loaded here -->
+                </div>
+            </div>
+        </div>
+    </aside>
+
+    <!-- Header -->
+    <header class="header">
+        <div class="flex items-center justify-between w-full">
+            <div class="flex items-center gap-4">
+                <h2 class="font-headline-md text-white">Advanced Analytics Dashboard</h2>
+                <div class="flex items-center gap-2">
+                    <select id="timeRange" class="bg-surface-container-low border border-white/10 text-on-surface text-sm px-3 py-2 rounded">
+                        <option value="7">Last 7 Days</option>
+                        <option value="30" selected>Last 30 Days</option>
+                        <option value="90">Last 90 Days</option>
+                    </select>
+                    <button class="bg-surface-container-low border border-white/10 text-on-surface px-3 py-2 rounded text-sm">
+                        <span class="material-symbols-outlined text-[16px]">refresh</span>
+                    </button>
+                </div>
+            </div>
+            <div class="flex items-center gap-3">
+                <button class="bg-surface-container-low border border-white/10 text-on-surface px-3 py-2 rounded text-sm">
+                    <span class="material-symbols-outlined text-[16px]">download</span>
+                    Export
+                </button>
+                <button class="bg-primary text-on-primary px-4 py-2 rounded text-sm">
+                    <span class="material-symbols-outlined text-[16px] mr-2">settings</span>
+                    Settings
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <div class="p-6">
+            <!-- Key Metrics -->
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+                <div class="metric-card">
+                    <div class="flex items-center justify-between mb-4">
+                        <div>
+                            <p class="text-on-surface-variant text-sm mb-1">Active Projects</p>
+                            <p class="font-display-xl text-white" id="activeProjects">0</p>
+                        </div>
+                        <div class="w-12 h-12 bg-primary/20 rounded-lg flex items-center justify-center">
+                            <span class="material-symbols-outlined text-primary text-2xl">folder</span>
+                        </div>
+                    </div>
+                    <div class="flex items-center gap-2">
+                        <span class="text-sm text-success">↑ 12%</span>
+                        <span class="text-xs text-on-surface-variant">vs last month</span>
+                    </div>
+                </div>
+
+                <div class="metric-card">
+                    <div class="flex items-center justify-between mb-4">
+                        <div>
+                            <p class="text-on-surface-variant text-sm mb-1">Total Tasks</p>
+                            <p class="font-display-xl text-white" id="totalTasks">0</p>
+                        </div>
+                        <div class="w-12 h-12 bg-secondary/20 rounded-lg flex items-center justify-center">
+                            <span class="material-symbols-outlined text-secondary text-2xl">assignment</span>
+                        </div>
+                    </div>
+                    <div class="flex items-center gap-2">
+                        <span class="text-sm text-success">↑ 8%</span>
+                        <span class="text-xs text-on-surface-variant">vs last month</span>
+                    </div>
+                </div>
+
+                <div class="metric-card">
+                    <div class="flex items-center justify-between mb-4">
+                        <div>
+                            <p class="text-on-surface-variant text-sm mb-1">Team Velocity</p>
+                            <p class="font-display-xl text-white" id="teamVelocity">0</p>
+                        </div>
+                        <div class="w-12 h-12 bg-tertiary/20 rounded-lg flex items-center justify-center">
+                            <span class="material-symbols-outlined text-tertiary text-2xl">speed</span>
+                        </div>
+                    </div>
+                    <div class="flex items-center gap-2">
+                        <span class="text-sm text-warning">→ 0%</span>
+                        <span class="text-xs text-on-surface-variant">vs last sprint</span>
+                    </div>
+                </div>
+
+                <div class="metric-card">
+                    <div class="flex items-center justify-between mb-4">
+                        <div>
+                            <p class="text-on-surface-variant text-sm mb-1">Critical Issues</p>
+                            <p class="font-display-xl text-white" id="criticalIssues">0</p>
+                        </div>
+                        <div class="w-12 h-12 bg-error/20 rounded-lg flex items-center justify-center">
+                            <span class="material-symbols-outlined text-error text-2xl">warning</span>
+                        </div>
+                    </div>
+                    <div class="flex items-center gap-2">
+                        <span class="text-sm text-error">↓ 25%</span>
+                        <span class="text-xs text-on-surface-variant">vs last week</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Charts Row -->
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
+                <!-- Task Status Chart -->
+                <div class="glass-card p-6">
+                    <h3 class="font-headline-md text-white mb-4">Task Status Distribution</h3>
+                    <div class="chart-container">
+                        <canvas id="taskStatusChart"></canvas>
+                    </div>
+                </div>
+
+                <!-- Priority Distribution -->
+                <div class="glass-card p-6">
+                    <h3 class="font-headline-md text-white mb-4">Priority Distribution</h3>
+                    <div class="chart-container">
+                        <canvas id="priorityChart"></canvas>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Performance Metrics -->
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-8">
+                <!-- Sprint Progress -->
+                <div class="glass-card p-6">
+                    <h3 class="font-headline-md text-white mb-4">Sprint Progress</h3>
+                    <div class="flex items-center justify-center mb-4">
+                        <svg class="progress-ring" width="120" height="120">
+                            <circle class="progress-ring-circle" stroke="#4A4A6E" stroke-width="8" fill="transparent" r="52" cx="60" cy="60"/>
+                            <circle id="sprintProgressCircle" class="progress-ring-circle" stroke="#C0C1FF" stroke-width="8" fill="transparent" r="52" cx="60" cy="60" stroke-dasharray="326.73" stroke-dashoffset="326.73"/>
+                        </svg>
+                        <div class="absolute">
+                            <p class="font-display-xl text-white" id="sprintProgress">0%</p>
+                            <p class="text-xs text-on-surface-variant">Complete</p>
+                        </div>
+                    </div>
+                    <div class="space-y-2">
+                        <div class="flex justify-between text-sm">
+                            <span>Story Points</span>
+                            <span class="font-data-mono">0 / 0</span>
+                        </div>
+                        <div class="flex justify-between text-sm">
+                            <span>Tasks</span>
+                            <span class="font-data-mono">0 / 0</span>
+                        </div>
+                        <div class="flex justify-between text-sm">
+                            <span>Days Left</span>
+                            <span class="font-data-mono">0</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Team Performance -->
+                <div class="glass-card p-6">
+                    <h3 class="font-headline-md text-white mb-4">Team Performance</h3>
+                    <div class="space-y-4">
+                        <div>
+                            <div class="flex justify-between text-sm mb-1">
+                                <span>Average Task Time</span>
+                                <span class="font-data-mono">0h</span>
+                            </div>
+                            <div class="w-full bg-surface-container-lowest rounded-full h-2">
+                                <div class="bg-success h-2 rounded-full" style="width: 75%"></div>
+                            </div>
+                        </div>
+                        <div>
+                            <div class="flex justify-between text-sm mb-1">
+                                <span>On-Time Delivery</span>
+                                <span class="font-data-mono">0%</span>
+                            </div>
+                            <div class="w-full bg-surface-container-lowest rounded-full h-2">
+                                <div class="bg-warning h-2 rounded-full" style="width: 60%"></div>
+                            </div>
+                        </div>
+                        <div>
+                            <div class="flex justify-between text-sm mb-1">
+                                <span>Code Quality</span>
+                                <span class="font-data-mono">0%</span>
+                            </div>
+                            <div class="w-full bg-surface-container-lowest rounded-full h-2">
+                                <div class="bg-primary h-2 rounded-full" style="width: 85%"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Resource Utilization -->
+                <div class="glass-card p-6">
+                    <h3 class="font-headline-md text-white mb-4">Resource Utilization</h3>
+                    <div class="chart-container">
+                        <canvas id="resourceChart"></canvas>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Recent Projects & Activity -->
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                <!-- Recent Projects -->
+                <div class="glass-card p-6">
+                    <h3 class="font-headline-md text-white mb-4">Recent Projects</h3>
+                    <div id="recentProjects" class="space-y-3">
+                        <!-- Projects will be loaded here -->
+                    </div>
+                </div>
+
+                <!-- Activity Timeline -->
+                <div class="glass-card p-6">
+                    <h3 class="font-headline-md text-white mb-4">Activity Timeline</h3>
+                    <div id="activityTimeline" class="space-y-3">
+                        <!-- Timeline items will be loaded here -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- API Integration -->
+    <script src="static/js/api.js"></script>
+    <script>
+        // Check authentication
+        checkAuth();
+
+        // Global variables
+        let projects = [];
+        let tasks = [];
+        let teamMembers = [];
+        let charts = {};
+
+        // Initialize dashboard
+        document.addEventListener('DOMContentLoaded', async () => {
+            try {
+                await loadDashboardData();
+                initializeCharts();
+                updateMetrics();
+                setupEventListeners();
+            } catch (error) {
+                console.error('Failed to initialize dashboard:', error);
+            }
+        });
+
+        // Load dashboard data
+        async function loadDashboardData() {
+            try {
+                const [projectsData, tasksData, teamData, statsData] = await Promise.all([
+                    api.getProjects(),
+                    api.getTasks(),
+                    api.getTeam(),
+                    api.getDashboardStats()
+                ]);
+
+                projects = projectsData;
+                tasks = tasksData;
+                teamMembers = teamData;
+
+                // Update sidebar stats
+                document.getElementById('activeProjectsCount').textContent = statsData.active_projects;
+                document.getElementById('totalTasksCount').textContent = statsData.total_tasks;
+                document.getElementById('teamMembersCount').textContent = statsData.team_members;
+                document.getElementById('completionRate').textContent = Math.round(statsData.task_completion_rate) + '%';
+
+                // Update main metrics
+                document.getElementById('activeProjects').textContent = statsData.active_projects;
+                document.getElementById('totalTasks').textContent = statsData.total_tasks;
+                document.getElementById('criticalIssues').textContent = statsData.critical_alerts;
+                document.getElementById('teamVelocity').textContent = Math.round(statsData.team_efficiency);
+
+                // Load recent projects and activity
+                loadRecentProjects();
+                loadRecentActivity();
+
+            } catch (error) {
+                console.error('Failed to load dashboard data:', error);
+            }
+        }
+
+        // Initialize charts
+        function initializeCharts() {
+            // Task Status Chart
+            const statusCtx = document.getElementById('taskStatusChart').getContext('2d');
+            const statusData = getTaskStatusData();
+            charts.taskStatus = new Chart(statusCtx, {
+                type: 'doughnut',
+                data: {
+                    labels: Object.keys(statusData),
+                    datasets: [{
+                        data: Object.values(statusData),
+                        backgroundColor: [
+                            '#FFC107',
+                            '#2196F3',
+                            '#00D9FF',
+                            '#4CAF50',
+                            '#FF5252',
+                            '#9C27B0'
+                        ],
+                        borderWidth: 0
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            position: 'bottom',
+                            labels: { color: '#B8B8D1' }
+                        }
+                    }
+                }
+            });
+
+            // Priority Chart
+            const priorityCtx = document.getElementById('priorityChart').getContext('2d');
+            const priorityData = getPriorityData();
+            charts.priority = new Chart(priorityCtx, {
+                type: 'bar',
+                data: {
+                    labels: Object.keys(priorityData),
+                    datasets: [{
+                        label: 'Tasks',
+                        data: Object.values(priorityData),
+                        backgroundColor: [
+                            '#D32F2F',
+                            '#FF1744',
+                            '#FF5722',
+                            '#FFC107',
+                            '#4CAF50',
+                            '#2196F3'
+                        ],
+                        borderWidth: 0
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: { display: false }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            ticks: { color: '#B8B8D1' },
+                            grid: { color: '#4A4A6E' }
+                        },
+                        x: {
+                            ticks: { color: '#B8B8D1' },
+                            grid: { display: false }
+                        }
+                    }
+                }
+            });
+
+            // Resource Chart
+            const resourceCtx = document.getElementById('resourceChart').getContext('2d');
+            charts.resource = new Chart(resourceCtx, {
+                type: 'radar',
+                data: {
+                    labels: ['Development', 'Design', 'Testing', 'Documentation', 'Meetings', 'Planning'],
+                    datasets: [{
+                        label: 'Current',
+                        data: [85, 60, 70, 40, 30, 50],
+                        borderColor: '#C0C1FF',
+                        backgroundColor: 'rgba(192, 193, 255, 0.2)',
+                        borderWidth: 2
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: { display: false }
+                    },
+                    scales: {
+                        r: {
+                            beginAtZero: true,
+                            max: 100,
+                            ticks: { color: '#B8B8D1' },
+                            grid: { color: '#4A4A6E' },
+                            pointLabels: { color: '#B8B8D1' }
+                        }
+                    }
+                }
+            });
+        }
+
+        // Get task status data
+        function getTaskStatusData() {
+            const statusCounts = {
+                'To Do': 0,
+                'In Progress': 0,
+                'Review': 0,
+                'Done': 0,
+                'Blocked': 0,
+                'Cancelled': 0
+            };
+
+            tasks.forEach(task => {
+                if (statusCounts.hasOwnProperty(task.status)) {
+                    statusCounts[task.status]++;
+                }
+            });
+
+            return statusCounts;
+        }
+
+        // Get priority data
+        function getPriorityData() {
+            const priorityCounts = {
+                'Critical': 0,
+                'Highest': 0,
+                'High': 0,
+                'Medium': 0,
+                'Low': 0,
+                'Lowest': 0
+            };
+
+            tasks.forEach(task => {
+                if (priorityCounts.hasOwnProperty(task.priority)) {
+                    priorityCounts[task.priority]++;
+                }
+            });
+
+            return priorityCounts;
+        }
+
+        // Update metrics
+        function updateMetrics() {
+            // Update sprint progress
+            const completedTasks = tasks.filter(t => t.status === 'completed').length;
+            const totalTasks = tasks.length;
+            const progressPercentage = totalTasks > 0 ? (completedTasks / totalTasks) * 100 : 0;
+            
+            const circle = document.getElementById('sprintProgressCircle');
+            const circumference = 2 * Math.PI * 52;
+            const offset = circumference - (progressPercentage / 100) * circumference;
+            circle.style.strokeDashoffset = offset;
+            
+            document.getElementById('sprintProgress').textContent = Math.round(progressPercentage) + '%';
+
+            // Update team performance metrics
+            const avgTaskTime = tasks.reduce((sum, task) => sum + (task.time_spent || 0), 0) / tasks.length || 0;
+            const onTimeDelivery = tasks.filter(t => !t.due_date || new Date(t.due_date) >= new Date()).length / tasks.length * 100 || 0;
+
+            // These would be calculated from actual data in a real implementation
+            document.querySelector('.font-data-mono').textContent = Math.round(avgTaskTime) + 'h';
+        }
+
+        // Load recent projects
+        function loadRecentProjects() {
+            const container = document.getElementById('recentProjects');
+            const recentProjects = projects.slice(0, 5);
+            
+            container.innerHTML = recentProjects.map(project => `
+                <div class="flex items-center justify-between p-3 bg-surface-container-low rounded-lg">
+                    <div class="flex items-center gap-3">
+                        <div class="w-8 h-8 bg-primary/20 rounded-lg flex items-center justify-center">
+                            <span class="material-symbols-outlined text-primary text-sm">folder</span>
+                        </div>
+                        <div>
+                            <p class="font-body-base font-medium text-white">${project.name}</p>
+                            <p class="text-xs text-on-surface-variant">${project.description || 'No description'}</p>
+                        </div>
+                    </div>
+                    <span class="status-badge status-active">Active</span>
+                </div>
+            `).join('');
+        }
+
+        // Load recent activity
+        function loadRecentActivity() {
+            const container = document.getElementById('recentActivity');
+            const timeline = document.getElementById('activityTimeline');
+            
+            // Mock activity data - in real implementation, this would come from activity logs
+            const activities = [
+                { type: 'task_created', user: 'John Doe', detail: 'Created task "API Integration"', time: '2 hours ago' },
+                { type: 'project_updated', user: 'Jane Smith', detail: 'Updated project "Frontend Redesign"', time: '4 hours ago' },
+                { type: 'task_completed', user: 'Bob Johnson', detail: 'Completed task "Database Migration"', time: '6 hours ago' }
+            ];
+
+            container.innerHTML = activities.map(activity => `
+                <div class="flex items-center gap-2 text-sm">
+                    <span class="material-symbols-outlined text-[14px] text-secondary">circle</span>
+                    <span class="text-on-surface-variant">${activity.time}</span>
+                </div>
+            `).join('');
+
+            timeline.innerHTML = activities.map(activity => `
+                <div class="timeline-item">
+                    <div class="flex items-center justify-between mb-1">
+                        <span class="font-body-base text-sm">${activity.detail}</span>
+                        <span class="text-xs text-on-surface-variant">${activity.time}</span>
+                    </div>
+                    <p class="text-xs text-on-surface-variant">by ${activity.user}</p>
+                </div>
+            `).join('');
+        }
+
+        // Setup event listeners
+        function setupEventListeners() {
+            document.getElementById('timeRange').addEventListener('change', () => {
+                loadDashboardData();
+                updateCharts();
+            });
+
+            // Refresh button
+            document.querySelector('.refresh').addEventListener('click', () => {
+                loadDashboardData();
+                updateCharts();
+            });
+        }
+
+        // Update charts
+        function updateCharts() {
+            if (charts.taskStatus) {
+                const statusData = getTaskStatusData();
+                charts.taskStatus.data.datasets[0].data = Object.values(statusData);
+                charts.taskStatus.update();
+            }
+
+            if (charts.priority) {
+                const priorityData = getPriorityData();
+                charts.priority.data.datasets[0].data = Object.values(priorityData);
+                charts.priority.update();
+            }
+        }
+    </script>
+</body>
+</html>

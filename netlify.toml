@@ -1,0 +1,14 @@
+[build]
+  command = "python -m uvicorn app.main:app --host 0.0.0.0 --port 8000 & python serve_frontend.py"
+  publish = "."
+
+[build.environment]
+  PYTHON_VERSION = "3.13"
+
+[[redirects]]
+  from = "/*"
+  to = "/index.html"
+  status = 200
+
+[functions]
+  directory = "netlify/functions"

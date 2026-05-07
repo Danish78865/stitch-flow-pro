@@ -1,0 +1,503 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "tertiary": "#ffb783",
+                    "secondary-fixed": "#b8eaff",
+                    "on-tertiary": "#4f2500",
+                    "on-background": "#e4e0f0",
+                    "primary": "#c0c1ff",
+                    "on-secondary": "#003544",
+                    "primary-fixed-dim": "#c0c1ff",
+                    "outline": "#908fa0",
+                    "on-error": "#690005",
+                    "outline-variant": "#464554",
+                    "surface-variant": "#343440",
+                    "on-primary": "#1000a9",
+                    "inverse-surface": "#e4e0f0",
+                    "on-primary-fixed-variant": "#2f2ebe",
+                    "on-primary-container": "#0d0096",
+                    "primary-container": "#8083ff",
+                    "background": "#12121d",
+                    "tertiary-container": "#d97721",
+                    "on-secondary-fixed-variant": "#004d61",
+                    "surface-container-highest": "#343440",
+                    "on-primary-fixed": "#07006c",
+                    "inverse-primary": "#494bd6",
+                    "surface": "#12121d",
+                    "secondary": "#56d5fe",
+                    "surface-container-lowest": "#0d0d18",
+                    "error": "#ffb4ab",
+                    "secondary-fixed-dim": "#56d5fe",
+                    "tertiary-fixed-dim": "#ffb783",
+                    "surface-tint": "#c0c1ff",
+                    "on-surface": "#e4e0f0",
+                    "secondary-container": "#00a9d0",
+                    "inverse-on-surface": "#302f3b",
+                    "on-error-container": "#ffdad6",
+                    "surface-bright": "#393844",
+                    "on-secondary-fixed": "#001f28",
+                    "on-tertiary-container": "#452000",
+                    "surface-container": "#1f1f2a",
+                    "surface-container-low": "#1b1b26",
+                    "error-container": "#93000a",
+                    "on-surface-variant": "#c7c4d7",
+                    "on-tertiary-fixed-variant": "#703700",
+                    "on-tertiary-fixed": "#301400",
+                    "surface-dim": "#12121d",
+                    "on-secondary-container": "#003847",
+                    "primary-fixed": "#e1e0ff",
+                    "tertiary-fixed": "#ffdcc5",
+                    "surface-container-high": "#292934"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.25rem",
+                    "lg": "0.5rem",
+                    "xl": "0.75rem",
+                    "full": "9999px"
+            },
+            "spacing": {
+                    "gutter": "1.5rem",
+                    "sidebar-width": "280px",
+                    "unit": "4px",
+                    "container-margin": "2rem"
+            },
+            "fontFamily": {
+                    "display-xl": ["Space Grotesk"],
+                    "headline-lg": ["Space Grotesk"],
+                    "headline-md": ["Space Grotesk"],
+                    "body-base": ["Space Grotesk"],
+                    "data-mono": ["ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace"],
+                    "label-caps": ["Space Grotesk"]
+            },
+            "fontSize": {
+                    "display-xl": ["48px", {"lineHeight": "1.1", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                    "headline-lg": ["32px", {"lineHeight": "1.2", "fontWeight": "600"}],
+                    "headline-md": ["24px", {"lineHeight": "1.3", "fontWeight": "600"}],
+                    "body-base": ["16px", {"lineHeight": "1.6", "fontWeight": "400"}],
+                    "data-mono": ["14px", {"lineHeight": "1.5", "letterSpacing": "0.05em", "fontWeight": "500"}],
+                    "label-caps": ["12px", {"lineHeight": "1", "letterSpacing": "0.1em", "fontWeight": "700"}]
+            }
+          },
+        },
+      }
+    </script>
+<style>
+        .glass-card {
+            background: rgba(31, 31, 42, 0.4);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .glass-card:hover {
+            border-color: rgba(192, 193, 255, 0.3);
+            box-shadow: 0 0 30px rgba(192, 193, 255, 0.1);
+            transform: translateY(-2px);
+        }
+        .neon-glow-primary {
+            box-shadow: 0 0 15px 2px rgba(192, 193, 255, 0.2);
+            transition: all 0.3s ease;
+        }
+        .neon-glow-primary:hover {
+            box-shadow: 0 0 25px 4px rgba(192, 193, 255, 0.4);
+        }
+        .neon-glow-secondary {
+            box-shadow: 0 0 15px 2px rgba(86, 213, 254, 0.2);
+            transition: all 0.3s ease;
+        }
+        .neon-glow-secondary:hover {
+            box-shadow: 0 0 25px 4px rgba(86, 213, 254, 0.4);
+        }
+        ::-webkit-scrollbar {
+            width: 4px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #12121d;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #464554;
+            border-radius: 2px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #c0c1ff;
+        }
+        .nav-item {
+            position: relative;
+            overflow: hidden;
+        }
+        .nav-item::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(192, 193, 255, 0.1), transparent);
+            transition: left 0.5s ease;
+        }
+        .nav-item:hover::before {
+            left: 100%;
+        }
+        .metric-card {
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .metric-card:hover {
+            transform: translateY(-4px) scale(1.02);
+            box-shadow: 0 20px 40px rgba(192, 193, 255, 0.15);
+        }
+    </style>
+</head>
+<body class="bg-background text-on-background font-body-base overflow-hidden">
+<!-- SideNavBar Anchor -->
+<aside class="w-sidebar-width h-screen fixed left-0 top-0 bg-surface/80 backdrop-blur-xl border-r border-white/10 shadow-[15px_0_30px_-15px_rgba(192,193,255,0.1)] flex flex-col h-full py-8 px-4 z-50">
+<div class="mb-12 px-4">
+<div class="font-display-xl text-headline-md font-bold tracking-widest text-primary">FLOW</div>
+<div class="font-data-mono text-label-caps text-on-surface-variant opacity-50">V.2.0.48</div>
+</div>
+<nav class="flex-1 space-y-2">
+<!-- Active State: Analytics -->
+<a class="flex items-center gap-4 px-4 py-3 rounded text-primary border-l-2 border-primary bg-primary/5 font-bold transition-all ease-out" href="executive_dashboard_code.html">
+<span class="material-symbols-outlined" data-icon="dashboard">dashboard</span>
+<span>Dashboard</span>
+</a>
+<a class="flex items-center gap-4 px-4 py-3 rounded transition-all duration-300 hover:bg-primary/10 hover:text-primary text-on-surface-variant font-body-base" href="project_board_code.html">
+<span class="material-symbols-outlined" data-icon="folder_copy">folder_copy</span>
+<span>Projects</span>
+</a>
+<a class="flex items-center gap-4 px-4 py-3 rounded transition-all duration-300 hover:bg-primary/10 hover:text-primary text-on-surface-variant font-body-base" href="project_board_code.html">
+<span class="material-symbols-outlined" data-icon="checklist">checklist</span>
+<span>Tasks</span>
+</a>
+<a class="flex items-center gap-4 px-4 py-3 rounded transition-all duration-300 hover:bg-primary/10 hover:text-primary text-on-surface-variant font-body-base" href="team_management_code.html">
+<span class="material-symbols-outlined" data-icon="groups">groups</span>
+<span>Team</span>
+</a>
+<!-- Active State: Analytics -->
+<a class="flex items-center gap-4 px-4 py-3 rounded text-primary border-l-2 border-primary bg-primary/5 font-bold transition-all ease-out" href="#">
+<span class="material-symbols-outlined" data-icon="analytics" style="font-variation-settings: 'FILL' 1;">analytics</span>
+<span>Analytics</span>
+</a>
+<a class="flex items-center gap-4 px-4 py-3 rounded transition-all duration-300 hover:bg-primary/10 hover:text-primary text-on-surface-variant font-body-base" href="settings.html">
+<span class="material-symbols-outlined" data-icon="settings">settings</span>
+<span>Settings</span>
+</a>
+</nav>
+<div class="mt-auto px-4 pt-8 border-t border-white/5 flex items-center gap-3">
+<img alt="Flow System Logo" class="w-10 h-10 rounded-full border border-primary/30" src="https://lh3.googleusercontent.com/aida-public/AB6AXuA5o5Tk1S_D6lE7pEcEB-0LseKvvuv__jVlKrB3dWmRg-Ty6F1TgNnOF83FGLkbs0lT2Tv5n6J14jhZFTa1ax5Y0FeOk9gSzxPQDvLeJOuMS_Epfxu1heyGFIz5_uC7httrOxH4J_ZbEko-0hv_KKUA0Vn1HEWunXcIU5LCkjOGm1VffvF2I7zQYjHz97BCLI6n6OchaOsz_fKLhmegtR438HhRbbu5fpvv_iz01PPksQvSiPKC6bIn7Z1IwkzsuuisvPwlfjexJLA"/>
+<div>
+<p class="font-label-caps text-on-surface">SYS_ADMIN</p>
+<p class="text-[10px] text-on-surface-variant">NODE_0492</p>
+</div>
+</div>
+</aside>
+<!-- TopAppBar Anchor -->
+<header class="fixed top-0 right-0 left-[280px] h-16 bg-background/60 backdrop-blur-md border-b border-white/10 flex justify-between items-center px-gutter w-auto z-40">
+<div class="flex items-center gap-8">
+<h1 class="font-headline-md text-headline-md text-primary hidden md:block">Analytics Command Center</h1>
+<div class="relative group">
+<span class="absolute left-3 top-1/2 -translate-y-1/2 material-symbols-outlined text-on-surface-variant text-sm" data-icon="search">search</span>
+<input class="bg-surface-container-lowest border-none focus:ring-1 focus:ring-secondary/30 transition-all text-on-surface text-sm pl-10 pr-4 py-2 w-64 rounded-none border-b border-secondary/20 focus:border-secondary" placeholder="QUERY_SYSTEM..." type="text"/>
+</div>
+</div>
+<div class="flex items-center gap-6">
+<button class="text-on-surface-variant hover:text-secondary transition-colors relative">
+<span class="material-symbols-outlined" data-icon="notifications">notifications</span>
+<span class="absolute top-0 right-0 w-2 h-2 bg-error rounded-full"></span>
+</button>
+<button class="text-on-surface-variant hover:text-secondary transition-colors">
+<span class="material-symbols-outlined" data-icon="help_outline">help_outline</span>
+</button>
+<div class="h-8 w-[1px] bg-white/10 mx-2"></div>
+<img alt="User Workspace Profile" class="w-8 h-8 rounded-full border border-secondary/50" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAdwln3KnSEV0_nN9hk9-dcJlRRZT-bF5ax9SH-a_DNTawVl1fQbtCrxAaqXm_Ptg4WJrtMxPuQcZcehsG5xtjiKtEYEDUDVSTB7WaApeu4RAmmKOXD_XLuKn9p1yJhnHYaE9B6AzNpGiUiu1e-QIxZfUoUfPVn5TEDwpdDe1J2XLpWDhu0oO4EPGc8v1Hie6JwmYl4zEZZBdxAo6Bosc0Xsx9D0sOFJUPTCqccfMUuvK2Ik0DbbD2oYObLsD4kqWXRJhM1bQpVhVo"/>
+</div>
+</header>
+<!-- Main Content Grid -->
+<main class="ml-[280px] pt-16 h-screen flex">
+<div class="flex-1 overflow-y-auto p-gutter space-y-gutter custom-scrollbar">
+<!-- Hero Stats Bento -->
+<div class="grid grid-cols-12 gap-gutter">
+<!-- Project Health Gauge -->
+<div class="col-span-12 lg:col-span-4 glass-card p-6 flex flex-col items-center justify-center relative overflow-hidden group">
+<div class="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-secondary to-primary opacity-50"></div>
+<span class="absolute top-4 left-4 font-label-caps text-on-surface-variant opacity-70">SYSTEM_INTEGRITY</span>
+<div class="relative w-48 h-48 flex items-center justify-center">
+<svg class="w-full h-full transform -rotate-90">
+<circle class="text-white/5" cx="96" cy="96" fill="transparent" r="80" stroke="currentColor" stroke-width="8"></circle>
+<circle class="text-secondary neon-glow-secondary transition-all duration-1000" cx="96" cy="96" fill="transparent" r="80" stroke="currentColor" stroke-dasharray="502.4" stroke-dashoffset="90.4" stroke-width="8"></circle>
+</svg>
+<div class="absolute inset-0 flex flex-col items-center justify-center">
+<span class="font-display-xl text-display-xl text-secondary">82%</span>
+<span class="font-data-mono text-[10px] text-on-surface-variant">OPTIMAL</span>
+</div>
+</div>
+<div class="mt-6 w-full flex justify-between text-on-surface-variant font-data-mono text-xs">
+<div class="flex items-center gap-2">
+<span class="w-2 h-2 rounded-full bg-secondary"></span>
+<span>ACTIVE_SERVICES</span>
+</div>
+<span>NORMAL_LOAD</span>
+</div>
+</div>
+<!-- Workload Intensity Heat Map -->
+<div class="col-span-12 lg:col-span-8 glass-card p-6">
+<div class="flex justify-between items-start mb-6">
+<div>
+<h3 class="font-headline-md text-headline-md text-on-surface">Workload Intensity</h3>
+<p class="font-data-mono text-xs text-on-surface-variant opacity-60">DISTRIBUTION_MAP_L7D</p>
+</div>
+<div class="flex gap-1">
+<div class="w-3 h-3 bg-surface-container"></div>
+<div class="w-3 h-3 bg-primary/20"></div>
+<div class="w-3 h-3 bg-primary/40"></div>
+<div class="w-3 h-3 bg-primary/60"></div>
+<div class="w-3 h-3 bg-primary"></div>
+</div>
+</div>
+<div class="grid grid-cols-7 grid-rows-5 gap-2 h-48">
+<!-- Simulated heat map cells -->
+<div class="bg-primary/40 rounded-sm"></div><div class="bg-primary/20 rounded-sm"></div><div class="bg-primary/60 rounded-sm"></div><div class="bg-primary rounded-sm neon-glow-primary"></div><div class="bg-primary/40 rounded-sm"></div><div class="bg-primary/20 rounded-sm"></div><div class="bg-primary/10 rounded-sm"></div>
+<div class="bg-primary/10 rounded-sm"></div><div class="bg-primary/60 rounded-sm"></div><div class="bg-primary/40 rounded-sm"></div><div class="bg-primary/80 rounded-sm"></div><div class="bg-primary/20 rounded-sm"></div><div class="bg-primary/40 rounded-sm"></div><div class="bg-primary/60 rounded-sm"></div>
+<div class="bg-primary/40 rounded-sm"></div><div class="bg-primary/10 rounded-sm"></div><div class="bg-primary/20 rounded-sm"></div><div class="bg-primary/40 rounded-sm"></div><div class="bg-primary/10 rounded-sm"></div><div class="bg-primary/20 rounded-sm"></div><div class="bg-primary/40 rounded-sm"></div>
+<div class="bg-primary/80 rounded-sm"></div><div class="bg-primary/40 rounded-sm"></div><div class="bg-primary/60 rounded-sm"></div><div class="bg-primary/10 rounded-sm"></div><div class="bg-primary/20 rounded-sm"></div><div class="bg-primary/40 rounded-sm"></div><div class="bg-primary/80 rounded-sm neon-glow-primary"></div>
+<div class="bg-primary/20 rounded-sm"></div><div class="bg-primary/10 rounded-sm"></div><div class="bg-primary/40 rounded-sm"></div><div class="bg-primary/20 rounded-sm"></div><div class="bg-primary/60 rounded-sm"></div><div class="bg-primary/10 rounded-sm"></div><div class="bg-primary/20 rounded-sm"></div>
+</div>
+</div>
+</div>
+<!-- Visualization Row -->
+<div class="grid grid-cols-12 gap-gutter">
+<!-- Task Velocity Chart -->
+<div class="col-span-12 lg:col-span-7 glass-card p-6 overflow-hidden">
+<div class="flex justify-between items-center mb-8">
+<h3 class="font-headline-md text-headline-md text-on-surface">Task Velocity</h3>
+<div class="flex gap-4 font-data-mono text-xs text-on-surface-variant">
+<span class="flex items-center gap-2"><span class="w-2 h-[2px] bg-secondary"></span> PLANNED</span>
+<span class="flex items-center gap-2"><span class="w-2 h-[2px] bg-primary"></span> ACTUAL</span>
+</div>
+</div>
+<div class="relative h-64 w-full">
+<!-- Custom SVG for Line Chart -->
+<svg class="w-full h-full" preserveaspectratio="none" viewbox="0 0 100 100">
+<!-- Grid lines -->
+<line stroke="rgba(255,255,255,0.05)" stroke-width="0.5" x1="0" x2="100" y1="20" y2="20"></line>
+<line stroke="rgba(255,255,255,0.05)" stroke-width="0.5" x1="0" x2="100" y1="40" y2="40"></line>
+<line stroke="rgba(255,255,255,0.05)" stroke-width="0.5" x1="0" x2="100" y1="60" y2="60"></line>
+<line stroke="rgba(255,255,255,0.05)" stroke-width="0.5" x1="0" x2="100" y1="80" y2="80"></line>
+<!-- Area fill -->
+<path d="M0 80 L10 60 L25 70 L40 30 L60 45 L80 15 L100 25 L100 100 L0 100 Z" fill="url(#gradient-primary)" opacity="0.1"></path>
+<!-- Data Lines -->
+<polyline fill="none" points="0,80 10,60 25,70 40,30 60,45 80,15 100,25" stroke="#c0c1ff" stroke-width="2"></polyline>
+<polyline fill="none" points="0,85 20,75 40,65 60,55 80,45 100,35" stroke="#56d5fe" stroke-dasharray="2" stroke-width="1"></polyline>
+<defs>
+<lineargradient id="gradient-primary" x1="0" x2="0" y1="0" y2="1">
+<stop offset="0%" stop-color="#c0c1ff"></stop>
+<stop offset="100%" stop-color="#c0c1ff" stop-opacity="0"></stop>
+</lineargradient>
+</defs>
+</svg>
+<div class="absolute bottom-0 w-full flex justify-between font-data-mono text-[10px] text-on-surface-variant pt-2">
+<span>MON</span><span>TUE</span><span>WED</span><span>THU</span><span>FRI</span><span>SAT</span><span>SUN</span>
+</div>
+</div>
+</div>
+<!-- Team Skill Distribution Radar -->
+<div class="col-span-12 lg:col-span-5 glass-card p-6 flex flex-col items-center">
+<h3 class="font-headline-md text-headline-md text-on-surface self-start mb-6">Team Distribution</h3>
+<div class="relative w-64 h-64">
+<svg class="w-full h-full" viewbox="0 0 100 100">
+<!-- Background Circles -->
+<circle cx="50" cy="50" fill="none" r="40" stroke="rgba(255,255,255,0.05)" stroke-width="0.5"></circle>
+<circle cx="50" cy="50" fill="none" r="30" stroke="rgba(255,255,255,0.05)" stroke-width="0.5"></circle>
+<circle cx="50" cy="50" fill="none" r="20" stroke="rgba(255,255,255,0.05)" stroke-width="0.5"></circle>
+<circle cx="50" cy="50" fill="none" r="10" stroke="rgba(255,255,255,0.05)" stroke-width="0.5"></circle>
+<!-- Radar Web -->
+<line stroke="rgba(255,255,255,0.1)" stroke-width="0.5" x1="50" x2="50" y1="10" y2="90"></line>
+<line stroke="rgba(255,255,255,0.1)" stroke-width="0.5" x1="10" x2="90" y1="50" y2="50"></line>
+<!-- Skill Polygon -->
+<polygon fill="rgba(86, 213, 254, 0.2)" points="50,15 85,50 50,70 15,50" stroke="#56d5fe" stroke-width="1.5"></polygon>
+<!-- Labels -->
+<text class="font-data-mono" fill="#908fa0" font-size="4" text-anchor="middle" x="50" y="8">BACKEND</text>
+<text class="font-data-mono" fill="#908fa0" font-size="4" text-anchor="start" x="94" y="52">UI/UX</text>
+<text class="font-data-mono" fill="#908fa0" font-size="4" text-anchor="middle" x="50" y="96">DEVOPS</text>
+<text class="font-data-mono" fill="#908fa0" font-size="4" text-anchor="end" x="6" y="52">QA</text>
+</svg>
+</div>
+<div class="w-full grid grid-cols-2 gap-4 mt-8">
+<div class="flex items-center justify-between border-l-2 border-secondary pl-3">
+<span class="text-xs text-on-surface-variant font-data-mono">CORE_OPS</span>
+<span class="text-secondary font-bold">92</span>
+</div>
+<div class="flex items-center justify-between border-l-2 border-primary pl-3">
+<span class="text-xs text-on-surface-variant font-data-mono">RELIABILITY</span>
+<span class="text-primary font-bold">78</span>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Milestone Timeline Sidebar -->
+<aside class="w-80 h-full border-l border-white/10 glass-card flex flex-col">
+<div class="p-6 border-b border-white/5">
+<h2 class="font-headline-md text-headline-md text-on-surface flex items-center gap-2">
+<span class="material-symbols-outlined text-tertiary" data-icon="timer">timer</span>
+                    Timeline
+                </h2>
+<p class="font-data-mono text-xs text-tertiary/70 mt-1 uppercase">Critical Deadlines</p>
+</div>
+<div class="flex-1 overflow-y-auto p-6 space-y-8">
+<!-- Milestone Item -->
+<div class="relative pl-6 border-l border-white/10 group">
+<div class="absolute -left-[5px] top-0 w-[9px] h-[9px] bg-tertiary rounded-full shadow-[0_0_8px_rgba(255,183,131,0.6)]"></div>
+<div class="font-data-mono text-[10px] text-tertiary mb-1">T-MINUS 12H</div>
+<h4 class="text-on-surface font-semibold text-sm">Sprint Alpha Finalization</h4>
+<p class="text-xs text-on-surface-variant mt-2 leading-relaxed">System integration testing and deployment to staging clusters for NODE_01.</p>
+</div>
+<div class="relative pl-6 border-l border-white/10 opacity-60">
+<div class="absolute -left-[5px] top-0 w-[9px] h-[9px] bg-white/20 rounded-full"></div>
+<div class="font-data-mono text-[10px] text-on-surface-variant mb-1">OCT 24, 0900</div>
+<h4 class="text-on-surface font-semibold text-sm">Beta Stress Test</h4>
+<p class="text-xs text-on-surface-variant mt-2 leading-relaxed">Simulated load testing of user database with 10k concurrent sessions.</p>
+</div>
+<div class="relative pl-6 border-l border-white/10 opacity-60">
+<div class="absolute -left-[5px] top-0 w-[9px] h-[9px] bg-white/20 rounded-full"></div>
+<div class="font-data-mono text-[10px] text-on-surface-variant mb-1">OCT 26, 1400</div>
+<h4 class="text-on-surface font-semibold text-sm">Security Audit Review</h4>
+<p class="text-xs text-on-surface-variant mt-2 leading-relaxed">External audit team review of encrypted transaction logs.</p>
+</div>
+<!-- Atmospheric Image Element -->
+<div class="mt-12 rounded-lg overflow-hidden glass-card">
+<img class="w-full h-32 object-cover opacity-50 grayscale hover:grayscale-0 transition-all duration-700" data-alt="A high-tech server room background with deep indigo and neon cyan lighting casting long shadows and creating a cyberpunk atmosphere. The image features rows of glowing server racks with intricate wire management and microscopic data transmission lights blinking. The mood is professional, secure, and technologically advanced, echoing the dark minimalist aesthetic of the UI." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAo9Hcqj9fSs9N89j4ZyRdBjVUSr-bVX-1gscCsfzMJz7dOo6X7NrHfVGZZfyhO6mr7WkJZOuLLqJa3XWsZBm2RpzgOrrjgmO-tKT3NfCt4DwuL0w731wqjy9oH-2Q8s5F5S1jT_lvFYzknO6HyIJxz7lErzK9pdvnpF6TZDS5SEcmqKGE3fhFFSbDMjdAJxKzOn1i4LYNF-SNJTMdcEDJWCL6ELi5yhRJIuurdn02EL9ARrW6dXezFX843CQzemlgok11hKWp-JXA"/>
+<div class="p-4 bg-surface-container-low">
+<p class="font-data-mono text-[10px] text-primary">ENCRYPTION_ACTIVE</p>
+<p class="text-[10px] text-on-surface-variant">L7 Security Layer: Enabled</p>
+</div>
+</div>
+</div>
+<div class="p-6">
+<button class="w-full py-3 bg-tertiary text-on-tertiary font-bold rounded-none hover:bg-tertiary/90 transition-all active:scale-[0.98] uppercase tracking-widest text-xs">
+                    Generate Report
+                </button>
+</div>
+</aside>
+</main>
+
+<!-- API Integration -->
+<script src="static/js/api.js"></script>
+<script>
+// Check authentication
+checkAuth();
+
+// Load analytics data when page loads
+document.addEventListener('DOMContentLoaded', async () => {
+    try {
+        // Load dashboard stats
+        await loadDashboardStats();
+        
+        // Load workload data
+        await loadWorkloadData();
+        
+        // Load task velocity
+        await loadTaskVelocity();
+        
+        // Load team distribution
+        await loadTeamDistribution();
+        
+    } catch (error) {
+        console.error('Failed to load analytics data:', error);
+    }
+});
+
+async function loadDashboardStats() {
+    try {
+        const stats = await api.getDashboardStats();
+        
+        // Update system integrity gauge
+        updateElementContent('.font-display-xl.text-secondary', `${Math.round(stats.team_efficiency)}%`);
+        
+        // Update workload intensity indicator
+        updateElementContent('.flex.justify-between.text-on-surface-variant.font-data-mono.text-xs span:last-child', 
+            stats.team_efficiency > 80 ? 'OPTIMAL' : 'HIGH_LOAD');
+            
+    } catch (error) {
+        console.error('Failed to load dashboard stats:', error);
+    }
+}
+
+async function loadWorkloadData() {
+    try {
+        const data = await api.getWorkloadData();
+        const heatmap = document.querySelector('.grid.grid-cols-7.grid-rows-5.gap-2');
+        
+        if (heatmap && data.workload_data) {
+            // Update heatmap cells with real data
+            const cells = heatmap.querySelectorAll('div');
+            data.workload_data.forEach((row, rowIndex) => {
+                row.forEach((value, colIndex) => {
+                    const cellIndex = rowIndex * 7 + colIndex;
+                    if (cells[cellIndex]) {
+                        // Map intensity to color classes
+                        const intensity = value / 100; // Normalize to 0-1
+                        let colorClass = 'bg-primary/10';
+                        if (intensity > 0.8) colorClass = 'bg-primary';
+                        else if (intensity > 0.6) colorClass = 'bg-primary/80';
+                        else if (intensity > 0.4) colorClass = 'bg-primary/60';
+                        else if (intensity > 0.2) colorClass = 'bg-primary/40';
+                        else if (intensity > 0.1) colorClass = 'bg-primary/20';
+                        
+                        cells[cellIndex].className = `${colorClass} rounded-sm`;
+                        if (intensity > 0.8) {
+                            cells[cellIndex].classList.add('neon-glow-primary');
+                        }
+                    }
+                });
+            });
+        }
+    } catch (error) {
+        console.error('Failed to load workload data:', error);
+    }
+}
+
+async function loadTaskVelocity() {
+    try {
+        const data = await api.getTaskVelocity();
+        
+        if (data.planned_velocity && data.actual_velocity) {
+            // Update the velocity chart (this would require more complex chart manipulation)
+            console.log('Task velocity data loaded:', data);
+        }
+    } catch (error) {
+        console.error('Failed to load task velocity:', error);
+    }
+}
+
+async function loadTeamDistribution() {
+    try {
+        const data = await api.getTeamDistribution();
+        
+        // Update team distribution stats
+        updateElementContent('.border-l-2.border-secondary.pl-3 .text-secondary.font-bold', data.core_ops);
+        updateElementContent('.border-l-2.border-primary.pl-3 .text-primary.font-bold', data.reliability);
+        
+    } catch (error) {
+        console.error('Failed to load team distribution:', error);
+    }
+}
+
+// Add logout functionality
+document.addEventListener('click', (e) => {
+    if (e.target.closest('button') && e.target.textContent.includes('LOGOUT')) {
+        api.logout();
+    }
+});
+</script>
+</body></html>

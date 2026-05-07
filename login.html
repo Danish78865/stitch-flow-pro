@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html class="dark" lang="en">
+<head>
+    <meta charset="utf-8"/>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+    <title>Stitch Flow Pro - Login</title>
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&display=swap" rel="stylesheet"/>
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <style>
+        body {
+            background: linear-gradient(135deg, #12121d 0%, #1f1f2a 100%);
+            font-family: 'Space Grotesk', sans-serif;
+        }
+        .glass-card {
+            background: rgba(31, 31, 42, 0.4);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        .neon-glow-primary {
+            box-shadow: 0 0 15px rgba(192, 193, 255, 0.2);
+        }
+        .neon-glow-secondary {
+            box-shadow: 0 0 15px rgba(86, 213, 254, 0.2);
+        }
+    </style>
+</head>
+<body class="min-h-screen flex items-center justify-center bg-background text-on-background">
+    <div class="w-full max-w-md p-8">
+        <!-- Logo and Title -->
+        <div class="text-center mb-8">
+            <div class="font-display-xl text-headline-md font-bold tracking-widest text-primary mb-2">FLOW</div>
+            <p class="font-data-mono text-xs text-on-surface-variant opacity-50">V.2.0.48</p>
+            <h1 class="font-display-xl text-display-xl text-on-background mt-6">Welcome Back</h1>
+            <p class="text-on-surface-variant mt-2">Sign in to access your workspace</p>
+        </div>
+
+        <!-- Login Form -->
+        <div class="glass-card p-8">
+            <form id="loginForm" class="space-y-6">
+                <div>
+                    <label for="username" class="block text-sm font-medium text-on-surface mb-2">Username</label>
+                    <div class="relative">
+                        <span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-on-surface-variant text-sm">person</span>
+                        <input 
+                            type="text" 
+                            id="username" 
+                            name="username"
+                            required
+                            class="w-full bg-surface-container-lowest border border-white/10 text-on-surface text-sm pl-10 pr-4 py-3 rounded-none focus:ring-1 focus:ring-secondary focus:border-secondary transition-all"
+                            placeholder="Enter your username"
+                        >
+                    </div>
+                </div>
+
+                <div>
+                    <label for="password" class="block text-sm font-medium text-on-surface mb-2">Password</label>
+                    <div class="relative">
+                        <span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-on-surface-variant text-sm">lock</span>
+                        <input 
+                            type="password" 
+                            id="password" 
+                            name="password"
+                            required
+                            class="w-full bg-surface-container-lowest border border-white/10 text-on-surface text-sm pl-10 pr-4 py-3 rounded-none focus:ring-1 focus:ring-secondary focus:border-secondary transition-all"
+                            placeholder="Enter your password"
+                        >
+                    </div>
+                </div>
+
+                <div class="flex items-center justify-between">
+                    <label class="flex items-center">
+                        <input type="checkbox" class="mr-2">
+                        <span class="text-sm text-on-surface-variant">Remember me</span>
+                    </label>
+                    <a href="#" class="text-sm text-secondary hover:underline">Forgot password?</a>
+                </div>
+
+                <button 
+                    type="submit" 
+                    class="w-full py-3 bg-primary text-on-primary font-bold rounded-none hover:bg-primary/90 transition-all neon-glow-primary uppercase tracking-widest text-sm"
+                >
+                    Sign In
+                </button>
+            </form>
+
+            <!-- Error Message -->
+            <div id="errorMessage" class="hidden mt-4 p-3 bg-error/10 border border-error/30 rounded-none">
+                <p class="text-error text-sm font-data-mono"></p>
+            </div>
+
+            <!-- Demo Account Info -->
+            <div class="mt-6 p-4 bg-surface-container-lowest border border-white/5 rounded-none">
+                <p class="text-xs text-on-surface-variant mb-2">Demo Account:</p>
+                <p class="text-xs font-data-mono text-primary">Username: admin</p>
+                <p class="text-xs font-data-mono text-primary">Password: admin123</p>
+            </div>
+        </div>
+
+        <!-- Footer -->
+        <div class="text-center mt-8">
+            <p class="text-xs text-on-surface-variant">
+                © 2024 Stitch Flow Pro. All rights reserved.
+            </p>
+        </div>
+    </div>
+
+    <!-- API Service -->
+    <script src="static/js/api.js"></script>
+    <script>
+        document.getElementById('loginForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            const username = document.getElementById('username').value;
+            const password = document.getElementById('password').value;
+            const errorDiv = document.getElementById('errorMessage');
+            const errorText = errorDiv.querySelector('p');
+            const submitButton = e.target.querySelector('button[type="submit"]');
+            
+            // Show loading state
+            submitButton.textContent = 'Signing in...';
+            submitButton.disabled = true;
+            errorDiv.classList.add('hidden');
+            
+            try {
+                await api.login(username, password);
+                // Redirect to dashboard on successful login
+                window.location.href = 'index.html';
+            } catch (error) {
+                console.error('Login failed:', error);
+                errorText.textContent = error.message || 'Login failed. Please check your credentials.';
+                errorDiv.classList.remove('hidden');
+                
+                // Reset button
+                submitButton.textContent = 'Sign In';
+                submitButton.disabled = false;
+            }
+        });
+
+        // Check if already logged in
+        if (localStorage.getItem('authToken')) {
+            window.location.href = 'index.html';
+        }
+    </script>
+</body>
+</html>

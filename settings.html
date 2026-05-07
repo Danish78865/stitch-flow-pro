@@ -1,0 +1,411 @@
+<!DOCTYPE html>
+<html class="dark" lang="en">
+<head>
+    <meta charset="utf-8"/>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+    <title>Stitch Flow Pro - Settings</title>
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&display=swap" rel="stylesheet"/>
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <style>
+        body {
+            background-color: #12121d;
+            font-family: 'Space Grotesk', sans-serif;
+            color: #e4e0f0;
+        }
+        .glass-card {
+            background: rgba(31, 31, 42, 0.4);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .glass-card:hover {
+            border-color: rgba(192, 193, 255, 0.3);
+            box-shadow: 0 0 30px rgba(192, 193, 255, 0.1);
+            transform: translateY(-2px);
+        }
+        .neon-glow-primary {
+            box-shadow: 0 0 15px rgba(192, 193, 255, 0.2);
+            transition: all 0.3s ease;
+        }
+        .neon-glow-primary:hover {
+            box-shadow: 0 0 25px 4px rgba(192, 193, 255, 0.4);
+        }
+        .nav-item {
+            position: relative;
+            overflow: hidden;
+        }
+        .nav-item::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(192, 193, 255, 0.1), transparent);
+            transition: left 0.5s ease;
+        }
+        .nav-item:hover::before {
+            left: 100%;
+        }
+        .settings-card {
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .settings-card:hover {
+            transform: translateY(-4px) scale(1.02);
+            box-shadow: 0 20px 40px rgba(192, 193, 255, 0.15);
+        }
+        .toggle-switch {
+            position: relative;
+            width: 48px;
+            height: 24px;
+            background: #343440;
+            border-radius: 12px;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+        .toggle-switch.active {
+            background: #c0c1ff;
+        }
+        .toggle-switch::after {
+            content: '';
+            position: absolute;
+            top: 2px;
+            left: 2px;
+            width: 20px;
+            height: 20px;
+            background: white;
+            border-radius: 50%;
+            transition: all 0.3s ease;
+        }
+        .toggle-switch.active::after {
+            transform: translateX(24px);
+        }
+    </style>
+</head>
+<body class="bg-background text-on-background antialiased">
+<!-- SideNavBar -->
+<aside class="w-sidebar-width h-screen fixed left-0 top-0 bg-surface/80 backdrop-blur-xl border-r border-white/10 flex flex-col h-full py-8 px-4 z-50">
+    <div class="mb-12 px-4">
+        <h1 class="font-display-xl text-headline-md font-bold tracking-widest text-primary">FLOW</h1>
+        <p class="font-data-mono text-[10px] text-outline tracking-widest uppercase mt-1">V.2.0.48</p>
+    </div>
+    <nav class="flex-1 space-y-2">
+        <a class="flex items-center gap-4 px-4 py-3 text-on-surface-variant font-body-base hover:bg-primary/10 hover:text-primary transition-all duration-300 rounded-none nav-item" href="executive_dashboard_code.html">
+            <span class="material-symbols-outlined">dashboard</span>
+            <span>Dashboard</span>
+        </a>
+        <a class="flex items-center gap-4 px-4 py-3 text-on-surface-variant font-body-base hover:bg-primary/10 hover:text-primary transition-all duration-300 rounded-none nav-item" href="project_board_code.html">
+            <span class="material-symbols-outlined">folder_copy</span>
+            <span>Projects</span>
+        </a>
+        <a class="flex items-center gap-4 px-4 py-3 text-on-surface-variant font-body-base hover:bg-primary/10 hover:text-primary transition-all duration-300 rounded-none nav-item" href="project_board_code.html">
+            <span class="material-symbols-outlined">checklist</span>
+            <span>Tasks</span>
+        </a>
+        <a class="flex items-center gap-4 px-4 py-3 text-on-surface-variant font-body-base hover:bg-primary/10 hover:text-primary transition-all duration-300 rounded-none nav-item" href="team_management_code.html">
+            <span class="material-symbols-outlined">groups</span>
+            <span>Team</span>
+        </a>
+        <a class="flex items-center gap-4 px-4 py-3 text-on-surface-variant font-body-base hover:bg-primary/10 hover:text-primary transition-all duration-300 rounded-none nav-item" href="code.html">
+            <span class="material-symbols-outlined">analytics</span>
+            <span>Analytics</span>
+        </a>
+        <!-- Active State: Settings -->
+        <a class="flex items-center gap-4 px-4 py-3 text-primary border-l-2 border-primary bg-primary/5 font-bold transition-all ease-out rounded-none nav-item" href="settings.html">
+            <span class="material-symbols-outlined">settings</span>
+            <span>Settings</span>
+        </a>
+    </nav>
+    <div class="mt-auto pt-8 border-t border-white/5">
+        <div class="flex items-center gap-3">
+            <div class="w-10 h-10 bg-surface-container-highest border border-white/10 flex items-center justify-center">
+                <span class="material-symbols-outlined text-primary">account_circle</span>
+            </div>
+            <div>
+                <p class="text-on-surface text-sm font-bold">Admin Console</p>
+                <p class="text-outline text-[10px] font-data-mono">ROOT_ACCESS_GRANTED</p>
+            </div>
+        </div>
+    </div>
+</aside>
+
+<!-- Main Content -->
+<main class="ml-sidebar-width pt-24 px-gutter pb-12 min-h-screen">
+    <!-- Header -->
+    <div class="flex justify-between items-end mb-8">
+        <div>
+            <h2 class="font-display-xl text-display-xl text-primary tracking-tighter">SYSTEM_SETTINGS</h2>
+            <div class="flex items-center gap-4 mt-2">
+                <span class="font-data-mono text-xs text-outline flex items-center gap-1">
+                    <span class="material-symbols-outlined text-[14px]">settings</span>
+                    CONFIGURATION_MANAGEMENT
+                </span>
+                <span class="font-data-mono text-xs text-outline flex items-center gap-1">
+                    <span class="material-symbols-outlined text-[14px]">security</span>
+                    SECURE_MODE: ENABLED
+                </span>
+            </div>
+        </div>
+        <div class="flex gap-4">
+            <button class="px-6 py-2 border border-secondary text-secondary font-label-caps tracking-widest hover:bg-secondary/10 transition-all active:scale-95 flex items-center gap-2">
+                <span class="material-symbols-outlined text-[18px]">refresh</span>
+                RESET_DEFAULTS
+            </button>
+            <button class="px-6 py-2 bg-primary text-on-primary font-label-caps tracking-widest hover:brightness-110 neon-glow-primary transition-all active:scale-95 flex items-center gap-2" onclick="saveSettings()">
+                <span class="material-symbols-outlined text-[18px]">save</span>
+                SAVE_CHANGES
+            </button>
+        </div>
+    </div>
+
+    <!-- Settings Grid -->
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+        <!-- User Preferences -->
+        <div class="glass-card p-8 settings-card">
+            <div class="flex items-center gap-3 mb-6">
+                <span class="material-symbols-outlined text-primary text-2xl">person</span>
+                <h3 class="font-headline-md text-primary">User Preferences</h3>
+            </div>
+            
+            <div class="space-y-6">
+                <div class="flex justify-between items-center">
+                    <div>
+                        <p class="font-body-base text-on-surface">Dark Mode</p>
+                        <p class="text-xs text-on-surface-variant">Enable dark theme interface</p>
+                    </div>
+                    <div class="toggle-switch active" onclick="toggleSwitch(this)"></div>
+                </div>
+                
+                <div class="flex justify-between items-center">
+                    <div>
+                        <p class="font-body-base text-on-surface">Notifications</p>
+                        <p class="text-xs text-on-surface-variant">Receive system notifications</p>
+                    </div>
+                    <div class="toggle-switch active" onclick="toggleSwitch(this)"></div>
+                </div>
+                
+                <div class="flex justify-between items-center">
+                    <div>
+                        <p class="font-body-base text-on-surface">Auto-save</p>
+                        <p class="text-xs text-on-surface-variant">Automatically save work progress</p>
+                    </div>
+                    <div class="toggle-switch" onclick="toggleSwitch(this)"></div>
+                </div>
+                
+                <div class="flex justify-between items-center">
+                    <div>
+                        <p class="font-body-base text-on-surface">Compact View</p>
+                        <p class="text-xs text-on-surface-variant">Use compact layout for dense information</p>
+                    </div>
+                    <div class="toggle-switch" onclick="toggleSwitch(this)"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- System Configuration -->
+        <div class="glass-card p-8 settings-card">
+            <div class="flex items-center gap-3 mb-6">
+                <span class="material-symbols-outlined text-secondary text-2xl">settings_suggest</span>
+                <h3 class="font-headline-md text-secondary">System Configuration</h3>
+            </div>
+            
+            <div class="space-y-6">
+                <div>
+                    <label class="block text-sm font-medium text-on-surface mb-2">Data Refresh Rate</label>
+                    <select class="w-full bg-surface-container-lowest border border-white/10 text-on-surface text-sm px-4 py-2 rounded-none">
+                        <option>Real-time</option>
+                        <option>Every 5 seconds</option>
+                        <option>Every 30 seconds</option>
+                        <option>Every minute</option>
+                    </select>
+                </div>
+                
+                <div>
+                    <label class="block text-sm font-medium text-on-surface mb-2">Timezone</label>
+                    <select class="w-full bg-surface-container-lowest border border-white/10 text-on-surface text-sm px-4 py-2 rounded-none">
+                        <option>UTC</option>
+                        <option>EST</option>
+                        <option>PST</option>
+                        <option>GMT</option>
+                    </select>
+                </div>
+                
+                <div>
+                    <label class="block text-sm font-medium text-on-surface mb-2">Language</label>
+                    <select class="w-full bg-surface-container-lowest border border-white/10 text-on-surface text-sm px-4 py-2 rounded-none">
+                        <option>English</option>
+                        <option>Spanish</option>
+                        <option>French</option>
+                        <option>German</option>
+                    </select>
+                </div>
+                
+                <div>
+                    <label class="block text-sm font-medium text-on-surface mb-2">Date Format</label>
+                    <select class="w-full bg-surface-container-lowest border border-white/10 text-on-surface text-sm px-4 py-2 rounded-none">
+                        <option>MM/DD/YYYY</option>
+                        <option>DD/MM/YYYY</option>
+                        <option>YYYY-MM-DD</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+
+        <!-- Security Settings -->
+        <div class="glass-card p-8 settings-card">
+            <div class="flex items-center gap-3 mb-6">
+                <span class="material-symbols-outlined text-tertiary text-2xl">security</span>
+                <h3 class="font-headline-md text-tertiary">Security Settings</h3>
+            </div>
+            
+            <div class="space-y-6">
+                <div class="flex justify-between items-center">
+                    <div>
+                        <p class="font-body-base text-on-surface">Two-Factor Authentication</p>
+                        <p class="text-xs text-on-surface-variant">Add extra security layer</p>
+                    </div>
+                    <div class="toggle-switch" onclick="toggleSwitch(this)"></div>
+                </div>
+                
+                <div class="flex justify-between items-center">
+                    <div>
+                        <p class="font-body-base text-on-surface">Session Timeout</p>
+                        <p class="text-xs text-on-surface-variant">Auto-logout after inactivity</p>
+                    </div>
+                    <div class="toggle-switch active" onclick="toggleSwitch(this)"></div>
+                </div>
+                
+                <div>
+                    <label class="block text-sm font-medium text-on-surface mb-2">Session Duration</label>
+                    <select class="w-full bg-surface-container-lowest border border-white/10 text-on-surface text-sm px-4 py-2 rounded-none">
+                        <option>15 minutes</option>
+                        <option>30 minutes</option>
+                        <option>1 hour</option>
+                        <option>4 hours</option>
+                    </select>
+                </div>
+                
+                <div class="pt-4 border-t border-white/10">
+                    <button class="w-full py-2 bg-error/10 text-error border border-error/30 font-data-mono text-sm uppercase hover:bg-error/20 transition-all">
+                        CHANGE_PASSWORD
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Database Management -->
+        <div class="glass-card p-8 settings-card">
+            <div class="flex items-center gap-3 mb-6">
+                <span class="material-symbols-outlined text-primary text-2xl">storage</span>
+                <h3 class="font-headline-md text-primary">Database Management</h3>
+            </div>
+            
+            <div class="space-y-6">
+                <div class="bg-surface-container-lowest p-4 rounded-none border border-white/5">
+                    <div class="flex justify-between items-center mb-2">
+                        <p class="font-data-mono text-sm text-primary">Database Status</p>
+                        <span class="px-2 py-1 bg-emerald-500/10 text-emerald-400 text-[9px] font-data-mono uppercase border border-emerald-500/20">ONLINE</span>
+                    </div>
+                    <p class="text-xs text-on-surface-variant">SQLite • 1.2 MB • Last backup: 2 hours ago</p>
+                </div>
+                
+                <div class="space-y-3">
+                    <button class="w-full py-2 bg-secondary/10 text-secondary border border-secondary/30 font-data-mono text-sm uppercase hover:bg-secondary/20 transition-all" onclick="backupDatabase()">
+                        BACKUP_DATABASE
+                    </button>
+                    
+                    <button class="w-full py-2 bg-primary/10 text-primary border border-primary/30 font-data-mono text-sm uppercase hover:bg-primary/20 transition-all" onclick="exportData()">
+                        EXPORT_DATA
+                    </button>
+                    
+                    <button class="w-full py-2 bg-tertiary/10 text-tertiary border border-tertiary/30 font-data-mono text-sm uppercase hover:bg-tertiary/20 transition-all" onclick="clearCache()">
+                        CLEAR_CACHE
+                    </button>
+                </div>
+                
+                <div class="pt-4 border-t border-white/10">
+                    <div class="flex justify-between items-center mb-2">
+                        <p class="font-data-mono text-xs text-outline">Auto Backup</p>
+                        <div class="toggle-switch active" onclick="toggleSwitch(this)"></div>
+                    </div>
+                    <p class="text-xs text-on-surface-variant">Automatic daily backups at 2:00 AM</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Status Message -->
+    <div id="statusMessage" class="hidden mt-8 p-4 bg-emerald-500/10 border border-emerald-500/30 rounded-none">
+        <p class="text-emerald-400 text-sm font-data-mono"></p>
+    </div>
+</main>
+
+<!-- API Integration -->
+<script src="static/js/api.js"></script>
+<script>
+// Check authentication
+checkAuth();
+
+// Settings functions
+function toggleSwitch(element) {
+    element.classList.toggle('active');
+}
+
+function showStatus(message, type = 'success') {
+    const statusDiv = document.getElementById('statusMessage');
+    const messageText = statusDiv.querySelector('p');
+    
+    messageText.textContent = message;
+    statusDiv.classList.remove('hidden', 'bg-emerald-500/10', 'border-emerald-500/30', 'text-emerald-400', 
+                              'bg-error/10', 'border-error/30', 'text-error',
+                              'bg-secondary/10', 'border-secondary/30', 'text-secondary');
+    
+    if (type === 'success') {
+        statusDiv.classList.add('bg-emerald-500/10', 'border-emerald-500/30', 'text-emerald-400');
+    } else if (type === 'error') {
+        statusDiv.classList.add('bg-error/10', 'border-error/30', 'text-error');
+    } else {
+        statusDiv.classList.add('bg-secondary/10', 'border-secondary/30', 'text-secondary');
+    }
+    
+    setTimeout(() => {
+        statusDiv.classList.add('hidden');
+    }, 3000);
+}
+
+function saveSettings() {
+    // Simulate saving settings
+    showStatus('Settings saved successfully!', 'success');
+}
+
+function backupDatabase() {
+    showStatus('Database backup initiated...', 'info');
+    setTimeout(() => {
+        showStatus('Database backup completed successfully!', 'success');
+    }, 2000);
+}
+
+function exportData() {
+    showStatus('Exporting data...', 'info');
+    setTimeout(() => {
+        showStatus('Data exported successfully!', 'success');
+    }, 1500);
+}
+
+function clearCache() {
+    showStatus('Clearing cache...', 'info');
+    setTimeout(() => {
+        showStatus('Cache cleared successfully!', 'success');
+    }, 1000);
+}
+
+// Add logout functionality
+document.addEventListener('click', (e) => {
+    if (e.target.closest('button') && e.target.textContent.includes('LOGOUT')) {
+        api.logout();
+    }
+});
+</script>
+</body>
+</html>

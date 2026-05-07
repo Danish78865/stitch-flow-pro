@@ -1,0 +1,666 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "tertiary": "#ffb783",
+                        "secondary-fixed": "#b8eaff",
+                        "on-tertiary": "#4f2500",
+                        "on-background": "#e4e0f0",
+                        "primary": "#c0c1ff",
+                        "on-secondary": "#003544",
+                        "primary-fixed-dim": "#c0c1ff",
+                        "outline": "#908fa0",
+                        "on-error": "#690005",
+                        "outline-variant": "#464554",
+                        "surface-variant": "#343440",
+                        "on-primary": "#1000a9",
+                        "inverse-surface": "#e4e0f0",
+                        "on-primary-fixed-variant": "#2f2ebe",
+                        "on-primary-container": "#0d0096",
+                        "primary-container": "#8083ff",
+                        "background": "#12121d",
+                        "tertiary-container": "#d97721",
+                        "on-secondary-fixed-variant": "#004d61",
+                        "surface-container-highest": "#343440",
+                        "on-primary-fixed": "#07006c",
+                        "inverse-primary": "#494bd6",
+                        "surface": "#12121d",
+                        "secondary": "#56d5fe",
+                        "surface-container-lowest": "#0d0d18",
+                        "error": "#ffb4ab",
+                        "secondary-fixed-dim": "#56d5fe",
+                        "tertiary-fixed-dim": "#ffb783",
+                        "surface-tint": "#c0c1ff",
+                        "on-surface": "#e4e0f0",
+                        "secondary-container": "#00a9d0",
+                        "inverse-on-surface": "#302f3b",
+                        "on-error-container": "#ffdad6",
+                        "surface-bright": "#393844",
+                        "on-secondary-fixed": "#001f28",
+                        "on-tertiary-container": "#452000",
+                        "surface-container": "#1f1f2a",
+                        "surface-container-low": "#1b1b26",
+                        "error-container": "#93000a",
+                        "on-surface-variant": "#c7c4d7",
+                        "on-tertiary-fixed-variant": "#703700",
+                        "on-tertiary-fixed": "#301400",
+                        "surface-dim": "#12121d",
+                        "on-secondary-container": "#003847",
+                        "primary-fixed": "#e1e0ff",
+                        "tertiary-fixed": "#ffdcc5",
+                        "surface-container-high": "#292934"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "gutter": "1.5rem",
+                        "sidebar-width": "280px",
+                        "unit": "4px",
+                        "container-margin": "2rem"
+                    },
+                    "fontFamily": {
+                        "display-xl": ["Space Grotesk"],
+                        "headline-lg": ["Space Grotesk"],
+                        "headline-md": ["Space Grotesk"],
+                        "body-base": ["Space Grotesk"],
+                        "data-mono": ["ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace"],
+                        "label-caps": ["Space Grotesk"]
+                    },
+                    "fontSize": {
+                        "display-xl": ["48px", {"lineHeight": "1.1", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                        "headline-lg": ["32px", {"lineHeight": "1.2", "fontWeight": "600"}],
+                        "headline-md": ["24px", {"lineHeight": "1.3", "fontWeight": "600"}],
+                        "body-base": ["16px", {"lineHeight": "1.6", "fontWeight": "400"}],
+                        "data-mono": ["14px", {"lineHeight": "1.5", "letterSpacing": "0.05em", "fontWeight": "500"}],
+                        "label-caps": ["12px", {"lineHeight": "1", "letterSpacing": "0.1em", "fontWeight": "700"}]
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+        body {
+            background-color: #12121d;
+            font-family: 'Space Grotesk', sans-serif;
+            color: #e4e0f0;
+        }
+        .glass-card {
+            background: rgba(31, 31, 42, 0.4);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .glass-card:hover {
+            border-color: rgba(192, 193, 255, 0.3);
+            box-shadow: 0 0 30px rgba(192, 193, 255, 0.1);
+            transform: translateY(-2px);
+        }
+        .neon-glow-primary {
+            box-shadow: 0 0 15px 0 rgba(192, 193, 255, 0.2);
+            transition: all 0.3s ease;
+        }
+        .neon-glow-primary:hover {
+            box-shadow: 0 0 25px 4px rgba(192, 193, 255, 0.4);
+        }
+        .neon-glow-secondary {
+            box-shadow: 0 0 15px 0 rgba(86, 213, 254, 0.2);
+            transition: all 0.3s ease;
+        }
+        .neon-glow-secondary:hover {
+            box-shadow: 0 0 25px 4px rgba(86, 213, 254, 0.4);
+        }
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+            transition: all 0.2s ease;
+        }
+        .nav-item {
+            position: relative;
+            overflow: hidden;
+        }
+        .nav-item::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(192, 193, 255, 0.1), transparent);
+            transition: left 0.5s ease;
+        }
+        .nav-item:hover::before {
+            left: 100%;
+        }
+        .nav-item:hover .material-symbols-outlined {
+            transform: scale(1.1);
+        }
+        .metric-card {
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .metric-card:hover {
+            transform: translateY(-4px) scale(1.02);
+            box-shadow: 0 20px 40px rgba(192, 193, 255, 0.15);
+        }
+        .project-row {
+            transition: all 0.2s ease;
+        }
+        .project-row:hover {
+            background: rgba(192, 193, 255, 0.05);
+            transform: translateX(4px);
+        }
+    </style>
+</head>
+<body class="bg-background overflow-x-hidden">
+<!-- SideNavBar -->
+<aside class="w-sidebar-width h-screen fixed left-0 top-0 bg-surface/80 backdrop-blur-xl border-r border-white/10 shadow-[15px_0_30px_-15px_rgba(192,193,255,0.1)] flex flex-col h-full py-8 px-4 z-50">
+<div class="mb-12 px-4">
+<h1 class="font-display-xl text-headline-md font-bold tracking-widest text-primary">FLOW</h1>
+<p class="font-data-mono text-[10px] text-on-surface-variant opacity-50 tracking-[0.3em] mt-1">V.2.0.48</p>
+</div>
+<nav class="flex-1 space-y-2">
+<!-- Active Tab: Dashboard -->
+<a class="flex items-center gap-4 px-4 py-3 text-primary border-l-2 border-primary bg-primary/5 font-bold transition-all duration-300 nav-item" href="executive_dashboard_code.html">
+<span class="material-symbols-outlined">dashboard</span>
+<span class="font-body-base">Dashboard</span>
+</a>
+<a class="flex items-center gap-4 px-4 py-3 text-on-surface-variant font-body-base hover:bg-primary/10 hover:text-primary transition-all duration-300 nav-item" href="project_board_code.html">
+<span class="material-symbols-outlined">folder_copy</span>
+<span class="font-body-base">Projects</span>
+</a>
+<a class="flex items-center gap-4 px-4 py-3 text-on-surface-variant font-body-base hover:bg-primary/10 hover:text-primary transition-all duration-300 nav-item" href="project_board_code.html">
+<span class="material-symbols-outlined">checklist</span>
+<span class="font-body-base">Tasks</span>
+</a>
+<a class="flex items-center gap-4 px-4 py-3 text-on-surface-variant font-body-base hover:bg-primary/10 hover:text-primary transition-all duration-300 nav-item" href="team_management_code.html">
+<span class="material-symbols-outlined">groups</span>
+<span class="font-body-base">Team</span>
+</a>
+<a class="flex items-center gap-4 px-4 py-3 text-on-surface-variant font-body-base hover:bg-primary/10 hover:text-primary transition-all duration-300 nav-item" href="code.html">
+<span class="material-symbols-outlined">analytics</span>
+<span class="font-body-base">Analytics</span>
+</a>
+<a class="flex items-center gap-4 px-4 py-3 text-on-surface-variant font-body-base hover:bg-primary/10 hover:text-primary transition-all duration-300 nav-item" href="settings.html">
+<span class="material-symbols-outlined">settings</span>
+<span class="font-body-base">Settings</span>
+</a>
+</nav>
+<div class="mt-auto pt-8 border-t border-white/5 flex items-center gap-4 px-4">
+<div class="w-10 h-10 bg-primary-container rounded-sm flex items-center justify-center">
+<img alt="User Avatar" class="w-6 h-6" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDTbI2JxCtfaMEy9kl2CGQSAaOyCqS-LHE0egc_x5UDOHxWuINV5EdIM7cqej1oVAqBa37tIh3HCRWS29XrotBKruCxuGxrRdp3k6yYdBvB4Gbr7sQoP1kCuu8IH4uOE3m-1q7KvmJTRaRzwp1mLHGEvnb4-Z7Cf7sixl2QdEbXSI7LSlHP5b_yhgg_cwZZZ97Zzp7JHu2QLy5EyhodTrRROAY-VmzKJS_UgLz-_2UfuKyhIVuelXxKvGPjgebI720DdLkLLwuAVSU"/>
+</div>
+<div>
+<p class="font-label-caps text-on-surface text-[11px]">ADMIN_ACCESS</p>
+<p class="font-data-mono text-[10px] text-on-surface-variant">NODE_0492</p>
+</div>
+</div>
+</aside>
+<!-- Main Content Canvas -->
+<main class="ml-[280px] min-h-screen">
+<!-- TopAppBar -->
+<header class="fixed top-0 right-0 left-[280px] h-16 bg-background/60 backdrop-blur-md border-b border-white/10 flex justify-between items-center px-gutter w-auto z-40">
+<div class="flex items-center gap-8 w-1/2">
+<div class="relative w-full max-w-md">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-on-surface-variant text-sm">search</span>
+<input class="w-full bg-black border-0 border-b border-white/10 text-on-surface font-data-mono text-xs py-2 pl-10 focus:ring-0 focus:border-secondary transition-all" placeholder="QUERY SYSTEM..." type="text"/>
+</div>
+<!-- Navigation -->
+<nav class="flex items-center gap-8 px-8">
+<a href="advanced_dashboard.html" class="text-primary font-label-caps tracking-widest">DASHBOARD</a>
+<a href="advanced_task_board.html" class="text-on-surface-variant hover:text-secondary transition-colors font-label-caps tracking-widest">TASK BOARD</a>
+<a href="executive_dashboard_code.html" class="text-on-surface-variant hover:text-secondary transition-colors font-label-caps tracking-widest">PROJECTS</a>
+<a href="team_management_code.html" class="text-on-surface-variant hover:text-secondary transition-colors font-label-caps tracking-widest">TEAM</a>
+<a href="code.html" class="text-on-surface-variant hover:text-secondary transition-colors font-label-caps tracking-widest">ANALYTICS</a>
+<a href="settings.html" class="text-on-surface-variant hover:text-secondary transition-colors font-label-caps tracking-widest">SETTINGS</a>
+</nav>
+</div>
+<div class="h-8 w-[1px] bg-white/10 mx-2"></div>
+<div class="flex items-center gap-3">
+<div class="text-right">
+<p class="font-label-caps text-[10px] text-on-surface leading-none">OPERATOR</p>
+<p class="font-data-mono text-[9px] text-secondary">ACTIVE</p>
+</div>
+<img alt="User Workspace Profile" class="w-8 h-8 rounded-sm grayscale" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCSHFg11R5Z66yiDOopSu6SDuwvK1QqbsdaUnklgauzV1du4YQ-uzzZKb3EMnVs35nqPD1bkmZeIRT_O_VO0i2CYjHYnOkv6RZNcpG064VVy3C5uUm6GeS5knf_CKNOa4lrrweE3AxgS7g1_TrcpRkjdooXNmHpFgO0k7NHkw4tmZddWrYN0ROODKD6nQArE-kHU6XENbkNm9FhPkQctRoL3fuXeTRNFBrjbw4IXMZyNqOdQYwQcvS8NFIgNCw6iklSNBsEmwjGZHY"/>
+</div>
+</div>
+</header>
+<!-- Dashboard Content -->
+<div class="pt-24 px-gutter pb-12">
+<!-- Greeting & CTA -->
+<section class="flex justify-between items-end mb-10">
+<div>
+<p class="font-data-mono text-secondary text-sm mb-2 tracking-[0.2em]">08:45 AM // SYSTEM_BOOT_COMPLETE</p>
+<h2 class="font-display-xl text-display-xl text-on-background">Good Morning.</h2>
+</div>
+<button class="bg-primary text-on-primary px-8 py-3 font-label-caps tracking-widest text-sm neon-glow-primary transition-all hover:translate-y-[-2px] flex items-center gap-3">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">add</span>
+                    NEW PROJECT
+                </button>
+</section>
+<!-- Metric Cards Grid -->
+<section class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-10">
+<!-- Metric 1 -->
+<div class="glass-card p-6 border-l-4 border-l-primary metric-card">
+<div class="flex justify-between items-start mb-4">
+<span class="material-symbols-outlined text-primary" data-icon="folder_special">folder_special</span>
+<span class="font-data-mono text-[10px] text-on-surface-variant">+2 THIS WEEK</span>
+</div>
+<p class="font-label-caps text-on-surface-variant text-[11px] mb-1">ACTIVE PROJECTS</p>
+<p class="font-display-xl text-headline-lg">12</p>
+</div>
+<!-- Metric 2 -->
+<div class="glass-card p-6 border-l-4 border-l-secondary metric-card">
+<div class="flex justify-between items-start mb-4">
+<span class="material-symbols-outlined text-secondary" data-icon="task_alt">task_alt</span>
+<span class="font-data-mono text-[10px] text-on-surface-variant">82% COMPLETE</span>
+</div>
+<p class="font-label-caps text-on-surface-variant text-[11px] mb-1">TOTAL TASKS</p>
+<p class="font-display-xl text-headline-lg">48</p>
+</div>
+<!-- Metric 3 -->
+<div class="glass-card p-6 border-l-4 border-l-tertiary metric-card">
+<div class="flex justify-between items-start mb-4">
+<span class="material-symbols-outlined text-tertiary" data-icon="speed">speed</span>
+<span class="font-data-mono text-[10px] text-on-surface-variant">OPTIMAL</span>
+</div>
+<p class="font-label-caps text-on-surface-variant text-[11px] mb-1">TEAM EFFICIENCY</p>
+<p class="font-display-xl text-headline-lg">94%</p>
+</div>
+<!-- Metric 4 -->
+<div class="glass-card p-6 border-l-4 border-l-error neon-glow-secondary metric-card" style="border-color: #ffb4ab;">
+<div class="flex justify-between items-start mb-4">
+<span class="material-symbols-outlined text-error" data-icon="warning" style="font-variation-settings: 'FILL' 1;">warning</span>
+<span class="font-data-mono text-[10px] text-error">ACTION REQUIRED</span>
+</div>
+<p class="font-label-caps text-on-surface-variant text-[11px] mb-1">CRITICAL ALERTS</p>
+<p class="font-display-xl text-headline-lg text-error">3</p>
+</div>
+</section>
+<!-- Wide Chart Section -->
+<section class="glass-card p-8 mb-10">
+<div class="flex justify-between items-center mb-12">
+<div>
+<h3 class="font-headline-md text-headline-md">System Activity</h3>
+<p class="font-data-mono text-xs text-on-surface-variant">TASK COMPLETION METRICS — LAST 14 DAYS</p>
+</div>
+<div class="flex gap-2">
+<div class="flex items-center gap-2 px-3 py-1 bg-white/5 rounded-sm">
+<div class="w-2 h-2 bg-primary"></div>
+<span class="font-data-mono text-[10px]">TASKS</span>
+</div>
+<div class="flex items-center gap-2 px-3 py-1 bg-white/5 rounded-sm">
+<div class="w-2 h-2 bg-secondary"></div>
+<span class="font-data-mono text-[10px]">COMMITS</span>
+</div>
+</div>
+</div>
+<!-- Mock Bar Chart -->
+<div class="h-64 flex items-end justify-between gap-2 px-4 relative">
+<!-- Grid Lines -->
+<div class="absolute inset-x-0 bottom-0 top-0 flex flex-col justify-between pointer-events-none opacity-10">
+<div class="border-t border-white"></div>
+<div class="border-t border-white"></div>
+<div class="border-t border-white"></div>
+<div class="border-t border-white"></div>
+</div>
+<!-- Bars -->
+<div class="flex-1 bg-primary/20 hover:bg-primary/40 transition-all border-t-2 border-primary h-[40%] group relative">
+<div class="absolute -top-8 left-1/2 -translate-x-1/2 font-data-mono text-[10px] opacity-0 group-hover:opacity-100 transition-opacity">12</div>
+</div>
+<div class="flex-1 bg-primary/20 hover:bg-primary/40 transition-all border-t-2 border-primary h-[65%] group relative"></div>
+<div class="flex-1 bg-primary/20 hover:bg-primary/40 transition-all border-t-2 border-primary h-[55%] group relative"></div>
+<div class="flex-1 bg-secondary/20 hover:bg-secondary/40 transition-all border-t-2 border-secondary h-[85%] group relative"></div>
+<div class="flex-1 bg-primary/20 hover:bg-primary/40 transition-all border-t-2 border-primary h-[35%] group relative"></div>
+<div class="flex-1 bg-primary/20 hover:bg-primary/40 transition-all border-t-2 border-primary h-[90%] group relative"></div>
+<div class="flex-1 bg-secondary/20 hover:bg-secondary/40 transition-all border-t-2 border-secondary h-[45%] group relative"></div>
+<div class="flex-1 bg-primary/20 hover:bg-primary/40 transition-all border-t-2 border-primary h-[60%] group relative"></div>
+<div class="flex-1 bg-primary/20 hover:bg-primary/40 transition-all border-t-2 border-primary h-[75%] group relative"></div>
+<div class="flex-1 bg-secondary/20 hover:bg-secondary/40 transition-all border-t-2 border-secondary h-[95%] group relative"></div>
+<div class="flex-1 bg-primary/20 hover:bg-primary/40 transition-all border-t-2 border-primary h-[30%] group relative"></div>
+<div class="flex-1 bg-primary/20 hover:bg-primary/40 transition-all border-t-2 border-primary h-[50%] group relative"></div>
+<div class="flex-1 bg-secondary/20 hover:bg-secondary/40 transition-all border-t-2 border-secondary h-[80%] group relative"></div>
+<div class="flex-1 bg-primary/20 hover:bg-primary/40 transition-all border-t-2 border-primary h-[70%] group relative"></div>
+</div>
+<div class="flex justify-between mt-4 px-4 font-data-mono text-[9px] text-on-surface-variant tracking-widest">
+<span>DAY_01</span>
+<span>DAY_04</span>
+<span>DAY_07</span>
+<span>DAY_10</span>
+<span>DAY_14</span>
+</div>
+</section>
+<!-- Recent Projects Table -->
+<section class="glass-card overflow-hidden">
+<div class="p-8 border-b border-white/10 flex justify-between items-center">
+<h3 class="font-headline-md text-headline-md">Recent Projects</h3>
+<button class="font-data-mono text-xs text-secondary hover:underline underline-offset-4">VIEW_ALL_RECORDS</button>
+</div>
+<div class="overflow-x-auto">
+<table class="w-full text-left">
+<thead class="bg-black/40">
+<tr>
+<th class="px-8 py-4 font-label-caps text-[10px] text-on-surface-variant tracking-widest uppercase">Project Name</th>
+<th class="px-8 py-4 font-label-caps text-[10px] text-on-surface-variant tracking-widest uppercase">Owner</th>
+<th class="px-8 py-4 font-label-caps text-[10px] text-on-surface-variant tracking-widest uppercase">Progress</th>
+<th class="px-8 py-4 font-label-caps text-[10px] text-on-surface-variant tracking-widest uppercase">Status</th>
+</tr>
+</thead>
+<tbody class="divide-y divide-white/5" id="projectsTableBody">
+<!-- Projects will be loaded dynamically here -->
+<tr>
+<td colspan="4" class="px-8 py-8 text-center text-on-surface-variant">
+<p class="font-data-mono text-sm">Loading projects...</p>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+</div>
+</main>
+<!-- Contextual FAB (Dashboard only) -->
+<button class="fixed bottom-8 right-8 w-14 h-14 bg-secondary text-on-secondary rounded-sm flex items-center justify-center neon-glow-secondary transition-all hover:scale-110 active:scale-95 z-50">
+<span class="material-symbols-outlined" data-icon="add_task">add_task</span>
+</button>
+<!-- API Integration -->
+<script src="static/js/api.js"></script>
+<script>
+// Check authentication
+checkAuth();
+
+// Load dashboard data when page loads
+document.addEventListener('DOMContentLoaded', async () => {
+    try {
+        await loadDashboardData();
+        await loadRecentProjects();
+        
+        // Connect WebSocket for real-time updates
+        api.connectWebSocket();
+        
+        // Listen for real-time updates
+        document.addEventListener('realtime-update', handleRealtimeUpdate);
+        
+    } catch (error) {
+        console.error('Failed to load dashboard data:', error);
+    }
+});
+
+// Handle real-time WebSocket updates
+function handleRealtimeUpdate(event) {
+    const data = event.detail;
+    
+    switch (data.type) {
+        case 'project_created':
+            showSuccess('New project created in real-time!');
+            loadRecentProjects();
+            loadDashboardData();
+            break;
+        case 'task_completed':
+            showSuccess('Task completed in real-time!');
+            loadDashboardData();
+            break;
+        case 'team_member_added':
+            showSuccess('Team member added in real-time!');
+            loadDashboardData();
+            break;
+    }
+}
+
+async function loadDashboardData() {
+    try {
+        const stats = await api.getDashboardStats();
+        
+        // Update metric cards
+        updateElementContent('.border-l-4.border-l-primary .font-display-xl', stats.active_projects);
+        updateElementContent('.border-l-4.border-l-secondary .font-display-xl', stats.total_tasks);
+        updateElementContent('.border-l-4.border-l-tertiary .font-display-xl', `${Math.round(stats.team_efficiency)}%`);
+        updateElementContent('.border-l-4.border-l-error .font-display-xl', stats.critical_alerts);
+        
+        // Update task completion rate
+        updateElementContent('.font-data-mono.text-[10px].text-on-surface-variant', 
+            `${Math.round(stats.task_completion_rate)}% COMPLETE`);
+            
+    } catch (error) {
+        console.error('Failed to load dashboard stats:', error);
+    }
+}
+
+async function loadRecentProjects() {
+    try {
+        console.log('Loading projects...');
+        const projects = await api.getProjects();
+        console.log('Projects loaded:', projects);
+        
+        // Use the specific ID for the table body
+        const tableBody = document.getElementById('projectsTableBody');
+        
+        console.log('Table body found:', tableBody);
+        
+        if (tableBody) {
+            // Clear existing rows
+            tableBody.innerHTML = '';
+            
+            if (projects.length > 0) {
+                console.log(`Adding ${projects.length} projects to table`);
+                // Add project rows
+                projects.slice(0, 5).forEach(project => {
+                    const row = createProjectRow(project);
+                    tableBody.appendChild(row);
+                });
+                console.log('Projects added to table');
+            } else {
+                console.log('No projects to display');
+                // Show empty state
+                tableBody.innerHTML = `
+                    <tr>
+                        <td colspan="4" class="px-8 py-8 text-center text-on-surface-variant">
+                            <p class="font-data-mono text-sm">No projects found. Create your first project to get started.</p>
+                        </td>
+                    </tr>
+                `;
+            }
+        } else {
+            console.error('Table body not found in the DOM');
+            showError('Unable to find projects table in the page');
+        }
+    } catch (error) {
+        console.error('Failed to load projects:', error);
+        showError('Failed to load projects: ' + error.message);
+    }
+}
+
+function getStatusColor(status) {
+    const statusColors = {
+        'active': 'text-primary',
+        'completed': 'text-emerald-400',
+        'delayed': 'text-error',
+        'on_hold': 'text-secondary',
+        'cancelled': 'text-outline-variant'
+    };
+    return statusColors[status] || 'text-primary';
+}
+
+function createProjectRow(project) {
+    const row = document.createElement('tr');
+    row.className = 'hover:bg-primary/5 transition-colors group project-row';
+    
+    const statusClass = getStatusColor(project.status);
+    const progressColor = project.progress >= 75 ? 'bg-primary' : 
+                         project.progress >= 50 ? 'bg-secondary' : 'bg-error';
+    
+    // Generate owner initials from project data
+    const ownerInitials = project.owner_id ? 'AD' : 'SY';
+    const ownerName = project.owner_id ? 'ADMIN' : 'SYSTEM';
+    
+    row.innerHTML = `
+        <td class="px-8 py-5 border-l-2 border-transparent group-hover:border-primary transition-all">
+            <p class="font-body-base font-semibold">${project.name}</p>
+            <p class="font-data-mono text-[10px] text-on-surface-variant opacity-60">ID: PRJ-${project.id}</p>
+        </td>
+        <td class="px-8 py-5">
+            <div class="flex items-center gap-3">
+                <div class="w-6 h-6 rounded-full bg-primary/20 flex items-center justify-center font-data-mono text-[8px] text-primary">${ownerInitials}</div>
+                <span class="font-data-mono text-xs">${ownerName}</span>
+            </div>
+        </td>
+        <td class="px-8 py-5 w-64">
+            <div class="flex items-center gap-4">
+                <div class="flex-1 h-1 bg-white/10 rounded-full overflow-hidden">
+                    <div class="h-full ${progressColor}" style="width: ${project.progress}%"></div>
+                </div>
+                <span class="font-data-mono text-[10px]">${Math.round(project.progress)}%</span>
+            </div>
+        </td>
+        <td class="px-8 py-5">
+            <span class="px-3 py-1 bg-primary/10 text-primary border border-primary/30 font-data-mono text-[10px] uppercase neon-glow-primary">${project.status.toUpperCase()}</span>
+        </td>
+    `;
+    
+    return row;
+}
+
+// Add new project functionality
+document.addEventListener('click', async (e) => {
+    if (e.target.closest('button') && e.target.textContent.includes('NEW PROJECT')) {
+        // Create a modal for better UX
+        const modal = createProjectModal();
+        document.body.appendChild(modal);
+        
+        // Handle modal close
+        modal.addEventListener('click', (e) => {
+            if (e.target === modal || e.target.classList.contains('cancel-btn')) {
+                modal.remove();
+            }
+        });
+        
+        // Handle form submission
+        modal.querySelector('.submit-btn').addEventListener('click', async () => {
+            const projectName = modal.querySelector('#projectName').value.trim();
+            const projectDesc = modal.querySelector('#projectDesc').value.trim();
+            
+            if (!projectName) {
+                showError('Project name is required');
+                return;
+            }
+            
+            try {
+                showLoading('Creating project...');
+                const newProject = await api.createProject({
+                    name: projectName,
+                    description: projectDesc || 'New project created from dashboard',
+                    status: 'active'
+                });
+                
+                // Show success message
+                showSuccess(`Project "${projectName}" created successfully!`);
+                
+                // Remove modal
+                modal.remove();
+                
+                // Reload data with a small delay to ensure database is updated
+                setTimeout(async () => {
+                    await loadRecentProjects();
+                    await loadDashboardData();
+                }, 500);
+                
+            } catch (error) {
+                console.error('Failed to create project:', error);
+                showError('Failed to create project: ' + error.message);
+            }
+        });
+    }
+});
+
+function createProjectModal() {
+    const modal = document.createElement('div');
+    modal.className = 'fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-50';
+    modal.innerHTML = `
+        <div class="glass-card p-8 max-w-md w-full mx-4">
+            <h3 class="font-headline-md text-primary mb-6">Create New Project</h3>
+            
+            <div class="space-y-4">
+                <div>
+                    <label class="block text-sm font-medium text-on-surface mb-2">Project Name *</label>
+                    <input type="text" id="projectName" class="w-full bg-surface-container-lowest border border-white/10 text-on-surface text-sm px-4 py-2 rounded-none focus:ring-1 focus:ring-secondary" placeholder="Enter project name">
+                </div>
+                
+                <div>
+                    <label class="block text-sm font-medium text-on-surface mb-2">Description</label>
+                    <textarea id="projectDesc" class="w-full bg-surface-container-lowest border border-white/10 text-on-surface text-sm px-4 py-2 rounded-none focus:ring-1 focus:ring-secondary" rows="3" placeholder="Enter project description"></textarea>
+                </div>
+            </div>
+            
+            <div class="flex gap-4 mt-6">
+                <button class="flex-1 py-2 border border-secondary text-secondary font-label-caps tracking-widest hover:bg-secondary/10 transition-all cancel-btn">
+                    CANCEL
+                </button>
+                <button class="flex-1 py-2 bg-primary text-on-primary font-label-caps tracking-widest hover:brightness-110 neon-glow-primary transition-all submit-btn">
+                    CREATE
+                </button>
+            </div>
+        </div>
+    `;
+    
+    // Auto-focus on name input
+    setTimeout(() => {
+        modal.querySelector('#projectName').focus();
+    }, 100);
+    
+    return modal;
+}
+
+function showSuccess(message) {
+    showNotification(message, 'success');
+}
+
+function showError(message) {
+    showNotification(message, 'error');
+}
+
+function showLoading(message) {
+    showNotification(message, 'info');
+}
+
+function showNotification(message, type = 'info') {
+    const notification = document.createElement('div');
+    const colors = {
+        success: 'bg-emerald-500/10 border-emerald-500/30 text-emerald-400',
+        error: 'bg-error/10 border-error/30 text-error',
+        info: 'bg-secondary/10 border-secondary/30 text-secondary'
+    };
+    
+    notification.className = `fixed top-20 right-8 p-4 ${colors[type]} border rounded-none glass-card z-50 transition-all`;
+    notification.innerHTML = `
+        <p class="font-data-mono text-sm">${message}</p>
+    `;
+    
+    document.body.appendChild(notification);
+    
+    // Auto-remove after 3 seconds
+    setTimeout(() => {
+        notification.style.opacity = '0';
+        setTimeout(() => notification.remove(), 300);
+    }, 3000);
+}
+
+// Add logout functionality
+document.addEventListener('click', (e) => {
+    if (e.target.closest('button') && e.target.textContent.includes('LOGOUT')) {
+        api.logout();
+    }
+});
+</script>
+</body></html>

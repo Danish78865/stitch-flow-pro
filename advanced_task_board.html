@@ -1,0 +1,1028 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Advanced Task Board - Stitch Flow Pro</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Symbols+Outlined" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #19216C;
+            --primary-light: #2D35B3;
+            --secondary: #C0C1FF;
+            --secondary-light: #D4D5FF;
+            --tertiary: #00D9FF;
+            --tertiary-light: #1EE5FF;
+            --surface: #0F0F23;
+            --surface-container: #1A1A2E;
+            --surface-container-low: #252542;
+            --surface-container-lowest: #303050;
+            --on-surface: #FFFFFF;
+            --on-surface-variant: #B8B8D1;
+            --outline: #6B6B8E;
+            --outline-variant: #4A4A6E;
+            --error: #FF5252;
+            --error-container: #FFDAD6;
+            --success: #4CAF50;
+            --warning: #FF9800;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: var(--surface);
+            color: var(--on-surface);
+            overflow-x: hidden;
+        }
+
+        .font-display-xl { font-size: 2.5rem; font-weight: 700; font-family: 'Inter', sans-serif; }
+        .font-headline-md { font-size: 1.125rem; font-weight: 600; font-family: 'Inter', sans-serif; }
+        .font-body-base { font-size: 1rem; font-weight: 400; font-family: 'Inter', sans-serif; }
+        .font-label-caps { font-size: 0.75rem; font-weight: 500; font-family: 'Inter', sans-serif; letter-spacing: 0.1em; }
+        .font-data-mono { font-family: 'JetBrains Mono', monospace; }
+
+        .glass-card {
+            background: rgba(37, 37, 66, 0.8);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 8px;
+        }
+
+        .neon-glow-primary {
+            box-shadow: 0 0 20px rgba(25, 33, 108, 0.5);
+        }
+
+        .neon-glow-secondary {
+            box-shadow: 0 0 20px rgba(192, 193, 255, 0.5);
+        }
+
+        .task-card {
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .task-card:hover {
+            transform: translateY(-2px);
+            border-color: var(--secondary);
+        }
+
+        .priority-highest { border-left: 4px solid #FF1744; }
+        .priority-high { border-left: 4px solid #FF5722; }
+        .priority-medium { border-left: 4px solid #FFC107; }
+        .priority-low { border-left: 4px solid #4CAF50; }
+        .priority-lowest { border-left: 4px solid #2196F3; }
+        .priority-critical { border-left: 4px solid #D32F2F; }
+
+        .task-type-bug { background: rgba(255, 82, 82, 0.1); }
+        .task-type-feature { background: rgba(76, 175, 80, 0.1); }
+        .task-type-epic { background: rgba(156, 39, 176, 0.1); }
+        .task-type-improvement { background: rgba(255, 152, 0, 0.1); }
+
+        .sidebar {
+            width: 280px;
+            background: var(--surface-container);
+            border-right: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .main-content {
+            margin-left: 280px;
+            padding-top: 64px;
+        }
+
+        .header {
+            position: fixed;
+            top: 0;
+            left: 280px;
+            right: 0;
+            height: 64px;
+            background: var(--surface-container);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            z-index: 100;
+            display: flex;
+            align-items: center;
+            padding: 0 24px;
+        }
+
+        .kanban-column {
+            min-width: 320px;
+            background: var(--surface-container-low);
+            border-radius: 8px;
+            padding: 16px;
+        }
+
+        .kanban-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 16px;
+            padding-bottom: 12px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.8);
+            backdrop-filter: blur(10px);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+        }
+
+        .modal-content {
+            background: var(--surface-container);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            padding: 24px;
+            max-width: 600px;
+            width: 90%;
+            max-height: 90vh;
+            overflow-y: auto;
+        }
+
+        .form-input {
+            width: 100%;
+            padding: 12px;
+            background: var(--surface-container-lowest);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 6px;
+            color: var(--on-surface);
+            font-family: 'Inter', sans-serif;
+        }
+
+        .form-input:focus {
+            outline: none;
+            border-color: var(--secondary);
+            box-shadow: 0 0 0 2px rgba(192, 193, 255, 0.2);
+        }
+
+        .btn-primary {
+            background: var(--primary);
+            color: var(--on-surface);
+            padding: 12px 24px;
+            border: none;
+            border-radius: 6px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .btn-primary:hover {
+            background: var(--primary-light);
+            transform: translateY(-1px);
+        }
+
+        .btn-secondary {
+            background: transparent;
+            color: var(--secondary);
+            padding: 12px 24px;
+            border: 1px solid var(--secondary);
+            border-radius: 6px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .btn-secondary:hover {
+            background: var(--secondary);
+            color: var(--surface);
+        }
+
+        .label {
+            display: inline-block;
+            padding: 4px 8px;
+            background: var(--surface-container-lowest);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 4px;
+            font-size: 0.75rem;
+            font-weight: 500;
+            margin: 2px;
+        }
+
+        .story-points {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 24px;
+            height: 24px;
+            background: var(--secondary);
+            color: var(--surface);
+            border-radius: 50%;
+            font-size: 0.75rem;
+            font-weight: 600;
+        }
+
+        .progress-bar {
+            height: 4px;
+            background: var(--surface-container-lowest);
+            border-radius: 2px;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: var(--success);
+            transition: width 0.3s ease;
+        }
+
+        @keyframes slideIn {
+            from { transform: translateX(100%); opacity: 0; }
+            to { transform: translateX(0); opacity: 1; }
+        }
+
+        .slide-in {
+            animation: slideIn 0.3s ease;
+        }
+    </style>
+</head>
+<body>
+    <!-- Sidebar -->
+    <aside class="sidebar fixed left-0 top-0 h-full overflow-y-auto">
+        <div class="p-6">
+            <div class="flex items-center gap-3 mb-8">
+                <div class="w-10 h-10 bg-primary rounded-lg flex items-center justify-center">
+                    <span class="material-symbols-outlined text-white">task_alt</span>
+                </div>
+                <h1 class="font-headline-md text-white">Task Board</h1>
+            </div>
+
+            <!-- Quick Filters -->
+            <div class="mb-6">
+                <h3 class="font-label-caps text-on-surface-variant mb-3">QUICK FILTERS</h3>
+                <div class="space-y-2">
+                    <button class="w-full text-left px-3 py-2 rounded hover:bg-surface-container-low transition-colors text-sm">
+                        <span class="material-symbols-outlined text-[16px] mr-2">assignment</span>
+                        My Tasks
+                    </button>
+                    <button class="w-full text-left px-3 py-2 rounded hover:bg-surface-container-low transition-colors text-sm">
+                        <span class="material-symbols-outlined text-[16px] mr-2">star</span>
+                        High Priority
+                    </button>
+                    <button class="w-full text-left px-3 py-2 rounded hover:bg-surface-container-low transition-colors text-sm">
+                        <span class="material-symbols-outlined text-[16px] mr-2">today</span>
+                        Due Today
+                    </button>
+                    <button class="w-full text-left px-3 py-2 rounded hover:bg-surface-container-low transition-colors text-sm">
+                        <span class="material-symbols-outlined text-[16px] mr-2">bug_report</span>
+                        Bugs Only
+                    </button>
+                </div>
+            </div>
+
+            <!-- Project Filter -->
+            <div class="mb-6">
+                <h3 class="font-label-caps text-on-surface-variant mb-3">PROJECTS</h3>
+                <select id="projectFilter" class="form-input text-sm">
+                    <option value="">All Projects</option>
+                </select>
+            </div>
+
+            <!-- Task Type Filter -->
+            <div class="mb-6">
+                <h3 class="font-label-caps text-on-surface-variant mb-3">TASK TYPES</h3>
+                <div class="space-y-2">
+                    <label class="flex items-center text-sm">
+                        <input type="checkbox" class="mr-2" value="task" checked>
+                        <span>Tasks</span>
+                    </label>
+                    <label class="flex items-center text-sm">
+                        <input type="checkbox" class="mr-2" value="bug" checked>
+                        <span>Bugs</span>
+                    </label>
+                    <label class="flex items-center text-sm">
+                        <input type="checkbox" class="mr-2" value="feature" checked>
+                        <span>Features</span>
+                    </label>
+                    <label class="flex items-center text-sm">
+                        <input type="checkbox" class="mr-2" value="epic" checked>
+                        <span>Epics</span>
+                    </label>
+                </div>
+            </div>
+
+            <!-- Statistics -->
+            <div class="mb-6">
+                <h3 class="font-label-caps text-on-surface-variant mb-3">STATISTICS</h3>
+                <div class="space-y-3">
+                    <div class="flex justify-between text-sm">
+                        <span>Total Tasks</span>
+                        <span id="totalTasks" class="font-data-mono">0</span>
+                    </div>
+                    <div class="flex justify-between text-sm">
+                        <span>In Progress</span>
+                        <span id="inProgressTasks" class="font-data-mono">0</span>
+                    </div>
+                    <div class="flex justify-between text-sm">
+                        <span>Completed</span>
+                        <span id="completedTasks" class="font-data-mono">0</span>
+                    </div>
+                    <div class="flex justify-between text-sm">
+                        <span>Story Points</span>
+                        <span id="totalStoryPoints" class="font-data-mono">0</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </aside>
+
+    <!-- Header -->
+    <header class="header">
+        <div class="flex items-center justify-between w-full">
+            <div class="flex items-center gap-4">
+                <h2 class="font-headline-md text-white">Advanced Task Board</h2>
+                <div class="flex items-center gap-2">
+                    <input type="text" id="searchTasks" placeholder="Search tasks..." class="form-input text-sm" style="width: 300px;">
+                    <button class="btn-secondary text-sm">
+                        <span class="material-symbols-outlined text-[16px]">search</span>
+                    </button>
+                </div>
+            </div>
+            <div class="flex items-center gap-3">
+                <button id="createTaskBtn" class="btn-primary">
+                    <span class="material-symbols-outlined text-[16px] mr-2">add</span>
+                    Create Task
+                </button>
+                <button class="btn-secondary">
+                    <span class="material-symbols-outlined text-[16px] mr-2">settings</span>
+                    Board Settings
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <div class="p-6">
+            <!-- Kanban Board -->
+            <div class="flex gap-6 overflow-x-auto pb-6" id="kanbanBoard">
+                <!-- To Do Column -->
+                <div class="kanban-column">
+                    <div class="kanban-header">
+                        <div class="flex items-center gap-2">
+                            <div class="w-2 h-2 bg-outline rotate-45"></div>
+                            <h3 class="font-label-caps text-on-surface-variant">TO DO</h3>
+                            <span class="font-data-mono text-[10px] bg-surface-container-lowest px-2 py-1 rounded" id="todoCount">0</span>
+                        </div>
+                        <button class="text-outline-variant hover:text-secondary">
+                            <span class="material-symbols-outlined text-[16px]">more_horiz</span>
+                        </button>
+                    </div>
+                    <div id="todoColumn" class="space-y-3 min-h-[200px]">
+                        <!-- Tasks will be loaded here -->
+                    </div>
+                </div>
+
+                <!-- In Progress Column -->
+                <div class="kanban-column">
+                    <div class="kanban-header">
+                        <div class="flex items-center gap-2">
+                            <div class="w-2 h-2 bg-secondary rotate-45"></div>
+                            <h3 class="font-label-caps text-on-surface-variant">IN PROGRESS</h3>
+                            <span class="font-data-mono text-[10px] bg-surface-container-lowest px-2 py-1 rounded" id="inProgressCount">0</span>
+                        </div>
+                        <button class="text-outline-variant hover:text-secondary">
+                            <span class="material-symbols-outlined text-[16px]">more_horiz</span>
+                        </button>
+                    </div>
+                    <div id="inProgressColumn" class="space-y-3 min-h-[200px]">
+                        <!-- Tasks will be loaded here -->
+                    </div>
+                </div>
+
+                <!-- Review Column -->
+                <div class="kanban-column">
+                    <div class="kanban-header">
+                        <div class="flex items-center gap-2">
+                            <div class="w-2 h-2 bg-tertiary rotate-45"></div>
+                            <h3 class="font-label-caps text-on-surface-variant">REVIEW</h3>
+                            <span class="font-data-mono text-[10px] bg-surface-container-lowest px-2 py-1 rounded" id="reviewCount">0</span>
+                        </div>
+                        <button class="text-outline-variant hover:text-secondary">
+                            <span class="material-symbols-outlined text-[16px]">more_horiz</span>
+                        </button>
+                    </div>
+                    <div id="reviewColumn" class="space-y-3 min-h-[200px]">
+                        <!-- Tasks will be loaded here -->
+                    </div>
+                </div>
+
+                <!-- Done Column -->
+                <div class="kanban-column">
+                    <div class="kanban-header">
+                        <div class="flex items-center gap-2">
+                            <div class="w-2 h-2 bg-success rotate-45"></div>
+                            <h3 class="font-label-caps text-on-surface-variant">DONE</h3>
+                            <span class="font-data-mono text-[10px] bg-surface-container-lowest px-2 py-1 rounded" id="doneCount">0</span>
+                        </div>
+                        <button class="text-outline-variant hover:text-secondary">
+                            <span class="material-symbols-outlined text-[16px]">more_horiz</span>
+                        </button>
+                    </div>
+                    <div id="doneColumn" class="space-y-3 min-h-[200px]">
+                        <!-- Tasks will be loaded here -->
+                    </div>
+                </div>
+
+                <!-- Blocked Column -->
+                <div class="kanban-column">
+                    <div class="kanban-header">
+                        <div class="flex items-center gap-2">
+                            <div class="w-2 h-2 bg-error rotate-45"></div>
+                            <h3 class="font-label-caps text-on-surface-variant">BLOCKED</h3>
+                            <span class="font-data-mono text-[10px] bg-surface-container-lowest px-2 py-1 rounded" id="blockedCount">0</span>
+                        </div>
+                        <button class="text-outline-variant hover:text-secondary">
+                            <span class="material-symbols-outlined text-[16px]">more_horiz</span>
+                        </button>
+                    </div>
+                    <div id="blockedColumn" class="space-y-3 min-h-[200px]">
+                        <!-- Tasks will be loaded here -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Task Creation Modal -->
+    <div id="taskModal" class="modal hidden">
+        <div class="modal-content">
+            <div class="flex items-center justify-between mb-6">
+                <h3 class="font-headline-md text-white">Create New Task</h3>
+                <button id="closeModal" class="text-outline-variant hover:text-white">
+                    <span class="material-symbols-outlined">close</span>
+                </button>
+            </div>
+
+            <form id="taskForm">
+                <div class="grid grid-cols-2 gap-4 mb-4">
+                    <div>
+                        <label class="block text-sm font-medium mb-2">Task Title *</label>
+                        <input type="text" id="taskTitle" class="form-input" required>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium mb-2">Task Type</label>
+                        <select id="taskType" class="form-input">
+                            <option value="task">Task</option>
+                            <option value="bug">Bug</option>
+                            <option value="feature">Feature</option>
+                            <option value="improvement">Improvement</option>
+                            <option value="epic">Epic</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="mb-4">
+                    <label class="block text-sm font-medium mb-2">Description</label>
+                    <textarea id="taskDescription" class="form-input" rows="4"></textarea>
+                </div>
+
+                <div class="grid grid-cols-2 gap-4 mb-4">
+                    <div>
+                        <label class="block text-sm font-medium mb-2">Priority</label>
+                        <select id="taskPriority" class="form-input">
+                            <option value="lowest">Lowest</option>
+                            <option value="low">Low</option>
+                            <option value="medium" selected>Medium</option>
+                            <option value="high">High</option>
+                            <option value="highest">Highest</option>
+                            <option value="critical">Critical</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium mb-2">Story Points</label>
+                        <input type="number" id="storyPoints" class="form-input" min="1" max="21" value="1">
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-2 gap-4 mb-4">
+                    <div>
+                        <label class="block text-sm font-medium mb-2">Project</label>
+                        <select id="taskProject" class="form-input">
+                            <option value="">Select Project</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium mb-2">Assignee</label>
+                        <select id="taskAssignee" class="form-input">
+                            <option value="">Unassigned</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-2 gap-4 mb-4">
+                    <div>
+                        <label class="block text-sm font-medium mb-2">Due Date</label>
+                        <input type="date" id="taskDueDate" class="form-input">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium mb-2">Time Estimate (hours)</label>
+                        <input type="number" id="timeEstimate" class="form-input" min="0">
+                    </div>
+                </div>
+
+                <div class="mb-4">
+                    <label class="block text-sm font-medium mb-2">Labels (comma-separated)</label>
+                    <input type="text" id="taskLabels" class="form-input" placeholder="frontend, urgent, backend">
+                </div>
+
+                <div class="mb-4">
+                    <label class="block text-sm font-medium mb-2">Environment</label>
+                    <select id="taskEnvironment" class="form-input">
+                        <option value="">All Environments</option>
+                        <option value="development">Development</option>
+                        <option value="staging">Staging</option>
+                        <option value="production">Production</option>
+                    </select>
+                </div>
+
+                <div class="flex justify-end gap-3">
+                    <button type="button" id="cancelBtn" class="btn-secondary">Cancel</button>
+                    <button type="submit" class="btn-primary">Create Task</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Task Detail Modal -->
+    <div id="taskDetailModal" class="modal hidden">
+        <div class="modal-content" style="max-width: 800px;">
+            <div class="flex items-center justify-between mb-6">
+                <h3 class="font-headline-md text-white">Task Details</h3>
+                <button id="closeDetailModal" class="text-outline-variant hover:text-white">
+                    <span class="material-symbols-outlined">close</span>
+                </button>
+            </div>
+
+            <div id="taskDetailContent">
+                <!-- Task details will be loaded here -->
+            </div>
+        </div>
+    </div>
+
+    <!-- API Integration -->
+    <script src="static/js/api.js"></script>
+    <script>
+        // Check authentication
+        checkAuth();
+
+        // Global variables
+        let tasks = [];
+        let projects = [];
+        let teamMembers = [];
+
+        // Initialize the board
+        document.addEventListener('DOMContentLoaded', async () => {
+            try {
+                await loadInitialData();
+                setupEventListeners();
+                renderTasks();
+            } catch (error) {
+                console.error('Failed to initialize board:', error);
+            }
+        });
+
+        // Load initial data
+        async function loadInitialData() {
+            try {
+                const [projectsData, tasksData, teamData] = await Promise.all([
+                    api.getProjects(),
+                    api.getTasks(),
+                    api.getTeam()
+                ]);
+
+                projects = projectsData;
+                tasks = tasksData;
+                teamMembers = teamData;
+
+                populateSelects();
+                updateStatistics();
+            } catch (error) {
+                console.error('Failed to load initial data:', error);
+            }
+        }
+
+        // Populate select elements
+        function populateSelects() {
+            // Project filter
+            const projectFilter = document.getElementById('projectFilter');
+            projectFilter.innerHTML = '<option value="">All Projects</option>';
+            projects.forEach(project => {
+                projectFilter.innerHTML += `<option value="${project.id}">${project.name}</option>`;
+            });
+
+            // Task project select
+            const taskProject = document.getElementById('taskProject');
+            taskProject.innerHTML = '<option value="">Select Project</option>';
+            projects.forEach(project => {
+                taskProject.innerHTML += `<option value="${project.id}">${project.name}</option>`;
+            });
+
+            // Task assignee select
+            const taskAssignee = document.getElementById('taskAssignee');
+            taskAssignee.innerHTML = '<option value="">Unassigned</option>';
+            teamMembers.forEach(member => {
+                taskAssignee.innerHTML += `<option value="${member.id}">${member.name}</option>`;
+            });
+        }
+
+        // Setup event listeners
+        function setupEventListeners() {
+            // Modal controls
+            document.getElementById('createTaskBtn').addEventListener('click', openTaskModal);
+            document.getElementById('closeModal').addEventListener('click', closeTaskModal);
+            document.getElementById('cancelBtn').addEventListener('click', closeTaskModal);
+            document.getElementById('taskForm').addEventListener('submit', handleTaskSubmit);
+
+            // Filters
+            document.getElementById('projectFilter').addEventListener('change', renderTasks);
+            document.getElementById('searchTasks').addEventListener('input', renderTasks);
+
+            // Task type checkboxes
+            document.querySelectorAll('input[type="checkbox"][value]').forEach(checkbox => {
+                checkbox.addEventListener('change', renderTasks);
+            });
+        }
+
+        // Render tasks on the board
+        function renderTasks() {
+            const filteredTasks = getFilteredTasks();
+            const columns = {
+                todo: document.getElementById('todoColumn'),
+                in_progress: document.getElementById('inProgressColumn'),
+                review: document.getElementById('reviewColumn'),
+                completed: document.getElementById('doneColumn'),
+                blocked: document.getElementById('blockedColumn')
+            };
+
+            // Clear all columns
+            Object.values(columns).forEach(column => {
+                column.innerHTML = '';
+            });
+
+            // Add tasks to columns
+            filteredTasks.forEach(task => {
+                const taskCard = createTaskCard(task);
+                const column = columns[task.status];
+                if (column) {
+                    column.appendChild(taskCard);
+                }
+            });
+
+            updateColumnCounts();
+        }
+
+        // Get filtered tasks
+        function getFilteredTasks() {
+            let filtered = [...tasks];
+
+            // Project filter
+            const projectFilter = document.getElementById('projectFilter').value;
+            if (projectFilter) {
+                filtered = filtered.filter(task => task.project_id == projectFilter);
+            }
+
+            // Search filter
+            const searchTerm = document.getElementById('searchTasks').value.toLowerCase();
+            if (searchTerm) {
+                filtered = filtered.filter(task => 
+                    task.title.toLowerCase().includes(searchTerm) ||
+                    task.description.toLowerCase().includes(searchTerm)
+                );
+            }
+
+            // Task type filter
+            const taskTypes = Array.from(document.querySelectorAll('input[type="checkbox"]:checked'))
+                .map(cb => cb.value);
+            if (taskTypes.length > 0 && taskTypes.length < 5) {
+                filtered = filtered.filter(task => taskTypes.includes(task.task_type));
+            }
+
+            return filtered;
+        }
+
+        // Create task card element
+        function createTaskCard(task) {
+            const card = document.createElement('div');
+            card.className = `task-card glass-card p-4 priority-${task.priority} task-type-${task.task_type}`;
+            card.dataset.taskId = task.id;
+
+            const priorityColors = {
+                critical: '#D32F2F',
+                highest: '#FF1744',
+                high: '#FF5722',
+                medium: '#FFC107',
+                low: '#4CAF50',
+                lowest: '#2196F3'
+            };
+
+            const typeIcons = {
+                task: 'assignment',
+                bug: 'bug_report',
+                feature: 'lightbulb',
+                improvement: 'trending_up',
+                epic: 'stars'
+            };
+
+            const labels = task.labels ? task.labels.split(',').map(label => label.trim()) : [];
+            const projectName = projects.find(p => p.id === task.project_id)?.name || 'No Project';
+            const assigneeName = teamMembers.find(m => m.id === task.assigned_to)?.name || 'Unassigned';
+
+            card.innerHTML = `
+                <div class="flex items-start justify-between mb-3">
+                    <div class="flex items-center gap-2">
+                        <span class="material-symbols-outlined text-[14px]" style="color: ${priorityColors[task.priority]}">
+                            ${task.priority === 'critical' ? 'priority_high' : 'arrow_upward'}
+                        </span>
+                        <span class="material-symbols-outlined text-[14px] text-secondary">
+                            ${typeIcons[task.task_type]}
+                        </span>
+                        <span class="story-points">${task.story_points || 1}</span>
+                    </div>
+                    <span class="font-data-mono text-[10px] text-outline-variant">#${task.id}</span>
+                </div>
+                
+                <h4 class="font-body-base font-medium mb-2 text-white">${task.title}</h4>
+                
+                ${task.description ? `<p class="text-sm text-on-surface-variant mb-3 line-clamp-2">${task.description}</p>` : ''}
+                
+                <div class="flex flex-wrap gap-1 mb-3">
+                    ${labels.map(label => `<span class="label">${label}</span>`).join('')}
+                </div>
+                
+                <div class="flex items-center justify-between text-xs text-on-surface-variant">
+                    <div class="flex items-center gap-2">
+                        <span class="material-symbols-outlined text-[14px]">folder</span>
+                        <span>${projectName}</span>
+                    </div>
+                    <div class="flex items-center gap-2">
+                        <span class="material-symbols-outlined text-[14px]">person</span>
+                        <span>${assigneeName}</span>
+                    </div>
+                </div>
+                
+                ${task.due_date ? `
+                <div class="flex items-center gap-2 text-xs text-warning mt-2">
+                    <span class="material-symbols-outlined text-[14px]">schedule</span>
+                    <span>${new Date(task.due_date).toLocaleDateString()}</span>
+                </div>
+                ` : ''}
+                
+                ${task.progress_percentage > 0 ? `
+                <div class="mt-3">
+                    <div class="progress-bar">
+                        <div class="progress-fill" style="width: ${task.progress_percentage}%"></div>
+                    </div>
+                    <span class="text-xs text-on-surface-variant">${task.progress_percentage}% complete</span>
+                </div>
+                ` : ''}
+            `;
+
+            card.addEventListener('click', () => showTaskDetail(task));
+            return card;
+        }
+
+        // Update column counts
+        function updateColumnCounts() {
+            const counts = {
+                todo: 0,
+                in_progress: 0,
+                review: 0,
+                completed: 0,
+                blocked: 0
+            };
+
+            getFilteredTasks().forEach(task => {
+                if (counts.hasOwnProperty(task.status)) {
+                    counts[task.status]++;
+                }
+            });
+
+            document.getElementById('todoCount').textContent = counts.todo;
+            document.getElementById('inProgressCount').textContent = counts.in_progress;
+            document.getElementById('reviewCount').textContent = counts.review;
+            document.getElementById('doneCount').textContent = counts.completed;
+            document.getElementById('blockedCount').textContent = counts.blocked;
+        }
+
+        // Update statistics
+        function updateStatistics() {
+            const totalTasks = tasks.length;
+            const inProgressTasks = tasks.filter(t => t.status === 'in_progress').length;
+            const completedTasks = tasks.filter(t => t.status === 'completed').length;
+            const totalStoryPoints = tasks.reduce((sum, t) => sum + (t.story_points || 0), 0);
+
+            document.getElementById('totalTasks').textContent = totalTasks;
+            document.getElementById('inProgressTasks').textContent = inProgressTasks;
+            document.getElementById('completedTasks').textContent = completedTasks;
+            document.getElementById('totalStoryPoints').textContent = totalStoryPoints;
+        }
+
+        // Modal functions
+        function openTaskModal() {
+            document.getElementById('taskModal').classList.remove('hidden');
+        }
+
+        function closeTaskModal() {
+            document.getElementById('taskModal').classList.add('hidden');
+            document.getElementById('taskForm').reset();
+        }
+
+        // Handle task submission
+        async function handleTaskSubmit(e) {
+            e.preventDefault();
+            
+            const taskData = {
+                title: document.getElementById('taskTitle').value,
+                description: document.getElementById('taskDescription').value,
+                task_type: document.getElementById('taskType').value,
+                priority: document.getElementById('taskPriority').value,
+                story_points: parseInt(document.getElementById('storyPoints').value),
+                project_id: document.getElementById('taskProject').value || null,
+                assigned_to: document.getElementById('taskAssignee').value || null,
+                due_date: document.getElementById('taskDueDate').value || null,
+                time_estimate: document.getElementById('timeEstimate').value || null,
+                labels: document.getElementById('taskLabels').value,
+                environment: document.getElementById('taskEnvironment').value
+            };
+
+            try {
+                showLoading('Creating task...');
+                const newTask = await api.createTask(taskData);
+                tasks.push(newTask);
+                renderTasks();
+                updateStatistics();
+                closeTaskModal();
+                showSuccess('Task created successfully!');
+            } catch (error) {
+                console.error('Failed to create task:', error);
+                showError('Failed to create task: ' + error.message);
+            }
+        }
+
+        // Show task details
+        function showTaskDetail(task) {
+            const modal = document.getElementById('taskDetailModal');
+            const content = document.getElementById('taskDetailContent');
+            
+            const projectName = projects.find(p => p.id === task.project_id)?.name || 'No Project';
+            const assigneeName = teamMembers.find(m => m.id === task.assigned_to)?.name || 'Unassigned';
+            const reporterName = teamMembers.find(m => m.id === task.reporter_id)?.name || 'Unknown';
+            const labels = task.labels ? task.labels.split(',').map(label => label.trim()) : [];
+
+            content.innerHTML = `
+                <div class="grid grid-cols-3 gap-6">
+                    <div class="col-span-2">
+                        <div class="mb-6">
+                            <div class="flex items-center gap-3 mb-3">
+                                <span class="material-symbols-outlined text-[20px] text-secondary">assignment</span>
+                                <h2 class="font-display-xl text-white">${task.title}</h2>
+                                <span class="story-points">${task.story_points || 1}</span>
+                            </div>
+                            <p class="text-on-surface-variant">${task.description || 'No description provided'}</p>
+                        </div>
+
+                        <div class="mb-6">
+                            <h3 class="font-label-caps text-on-surface-variant mb-3">DETAILS</h3>
+                            <div class="grid grid-cols-2 gap-4">
+                                <div>
+                                    <span class="text-sm text-on-surface-variant">Type:</span>
+                                    <span class="ml-2 text-sm">${task.task_type}</span>
+                                </div>
+                                <div>
+                                    <span class="text-sm text-on-surface-variant">Priority:</span>
+                                    <span class="ml-2 text-sm">${task.priority}</span>
+                                </div>
+                                <div>
+                                    <span class="text-sm text-on-surface-variant">Status:</span>
+                                    <span class="ml-2 text-sm">${task.status}</span>
+                                </div>
+                                <div>
+                                    <span class="text-sm text-on-surface-variant">Project:</span>
+                                    <span class="ml-2 text-sm">${projectName}</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="mb-6">
+                            <h3 class="font-label-caps text-on-surface-variant mb-3">LABELS</h3>
+                            <div class="flex flex-wrap gap-2">
+                                ${labels.length > 0 ? labels.map(label => `<span class="label">${label}</span>`).join('') : '<span class="text-sm text-on-surface-variant">No labels</span>'}
+                            </div>
+                        </div>
+
+                        ${task.time_estimate || task.time_spent ? `
+                        <div class="mb-6">
+                            <h3 class="font-label-caps text-on-surface-variant mb-3">TIME TRACKING</h3>
+                            <div class="grid grid-cols-2 gap-4">
+                                <div>
+                                    <span class="text-sm text-on-surface-variant">Estimated:</span>
+                                    <span class="ml-2 text-sm">${task.time_estimate || 0}h</span>
+                                </div>
+                                <div>
+                                    <span class="text-sm text-on-surface-variant">Spent:</span>
+                                    <span class="ml-2 text-sm">${task.time_spent || 0}h</span>
+                                </div>
+                            </div>
+                        </div>
+                        ` : ''}
+                    </div>
+
+                    <div>
+                        <div class="mb-6">
+                            <h3 class="font-label-caps text-on-surface-variant mb-3">PEOPLE</h3>
+                            <div class="space-y-3">
+                                <div>
+                                    <span class="text-sm text-on-surface-variant">Assignee:</span>
+                                    <div class="mt-1">${assigneeName}</div>
+                                </div>
+                                <div>
+                                    <span class="text-sm text-on-surface-variant">Reporter:</span>
+                                    <div class="mt-1">${reporterName}</div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="mb-6">
+                            <h3 class="font-label-caps text-on-surface-variant mb-3">DATES</h3>
+                            <div class="space-y-2">
+                                <div>
+                                    <span class="text-sm text-on-surface-variant">Created:</span>
+                                    <div class="mt-1 text-sm">${new Date(task.created_at).toLocaleDateString()}</div>
+                                </div>
+                                ${task.due_date ? `
+                                <div>
+                                    <span class="text-sm text-on-surface-variant">Due:</span>
+                                    <div class="mt-1 text-sm">${new Date(task.due_date).toLocaleDateString()}</div>
+                                </div>
+                                ` : ''}
+                            </div>
+                        </div>
+
+                        <div class="mb-6">
+                            <h3 class="font-label-caps text-on-surface-variant mb-3">ACTIONS</h3>
+                            <div class="space-y-2">
+                                <button class="btn-secondary w-full text-sm">Edit Task</button>
+                                <button class="btn-secondary w-full text-sm">Add Comment</button>
+                                <button class="btn-secondary w-full text-sm">Log Time</button>
+                                <button class="btn-secondary w-full text-sm">Add Attachment</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `;
+
+            modal.classList.remove('hidden');
+        }
+
+        // Close detail modal
+        document.getElementById('closeDetailModal').addEventListener('click', () => {
+            document.getElementById('taskDetailModal').classList.add('hidden');
+        });
+
+        // Notification functions
+        function showSuccess(message) {
+            showNotification(message, 'success');
+        }
+
+        function showError(message) {
+            showNotification(message, 'error');
+        }
+
+        function showLoading(message) {
+            showNotification(message, 'info');
+        }
+
+        function showNotification(message, type = 'info') {
+            const notification = document.createElement('div');
+            const colors = {
+                success: 'bg-emerald-500/10 border-emerald-500/30 text-emerald-400',
+                error: 'bg-error/10 border-error/30 text-error',
+                info: 'bg-secondary/10 border-secondary/30 text-secondary'
+            };
+            
+            notification.className = `fixed top-20 right-8 p-4 ${colors[type]} border rounded-lg glass-card z-50 transition-all slide-in`;
+            notification.innerHTML = `
+                <p class="font-data-mono text-sm">${message}</p>
+            `;
+            
+            document.body.appendChild(notification);
+            
+            setTimeout(() => {
+                notification.style.opacity = '0';
+                setTimeout(() => notification.remove(), 300);
+            }, 3000);
+        }
+    </script>
+</body>
+</html>

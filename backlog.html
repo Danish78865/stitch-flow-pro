@@ -1,0 +1,326 @@
+<!DOCTYPE html>
+<html class="dark" lang="en">
+<head>
+    <meta charset="utf-8"/>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+    <title>Stitch Flow Pro - Backlog</title>
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&display=swap" rel="stylesheet"/>
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        body {
+            background: linear-gradient(135deg, #12121d 0%, #1f1f2a 100%);
+            font-family: 'Space Grotesk', sans-serif;
+            color: #ffffff;
+        }
+        .glass-card {
+            background: rgba(31, 31, 42, 0.8);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        .text-on-surface {
+            color: #ffffff;
+        }
+        .text-on-surface-variant {
+            color: #b8b8d1;
+        }
+        .text-primary {
+            color: #c0c1ff;
+        }
+        .text-red-500 {
+            color: #ff5252;
+        }
+        .text-green-500 {
+            color: #4caf50;
+        }
+        .text-yellow-500 {
+            color: #ff9800;
+        }
+        .text-purple-500 {
+            color: #9c27b0;
+        }
+        .text-blue-500 {
+            color: #00b8d9;
+        }
+        .bg-surface-container-lowest {
+            background: rgba(48, 48, 80, 0.6);
+        }
+        .border-white\/10 {
+            border-color: rgba(255, 255, 255, 0.2);
+        }
+        .hover\:bg-white\/5:hover {
+            background: rgba(255, 255, 255, 0.1);
+        }
+    </style>
+</head>
+<body class="min-h-screen bg-background text-on-background">
+    <!-- Navigation -->
+    <nav class="glass-card border-b border-white/10">
+        <div class="flex items-center justify-between px-6 py-4">
+            <div class="flex items-center gap-3">
+                <div class="font-display-xl text-headline-md font-bold tracking-widest text-primary">FLOW</div>
+            </div>
+            <div class="flex items-center gap-6">
+                <a href="index.html" class="text-on-surface-variant hover:text-primary transition-colors">Dashboard</a>
+                <a href="jira_task_board.html" class="text-on-surface-variant hover:text-primary transition-colors">Task Board</a>
+                <a href="backlog.html" class="text-primary font-medium">Backlog</a>
+                <a href="active_sprint.html" class="text-on-surface-variant hover:text-primary transition-colors">Active Sprint</a>
+                <a href="reports.html" class="text-on-surface-variant hover:text-primary transition-colors">Reports</a>
+            </div>
+        </div>
+    </nav>
+
+    <div class="p-8">
+        <div class="max-w-7xl mx-auto">
+            <!-- Header -->
+            <div class="flex items-center justify-between mb-8">
+                <div>
+                    <h1 class="text-3xl font-bold mb-2">Backlog</h1>
+                    <p class="text-on-surface-variant">Manage your pending tasks and prioritize work</p>
+                </div>
+                <button onclick="showAddTaskModal()" class="px-6 py-3 bg-primary text-on-primary font-bold rounded-none hover:bg-primary/90 transition-all">
+                    + Add Task
+                </button>
+            </div>
+
+            <!-- Stats Cards -->
+            <div class="grid grid-cols-4 gap-6 mb-8">
+                <div class="glass-card p-6">
+                    <div class="flex items-center justify-between">
+                        <div>
+                            <p class="text-on-surface-variant text-sm mb-1">Total Backlog</p>
+                            <p class="text-3xl font-bold text-primary">24</p>
+                        </div>
+                        <span class="material-symbols-outlined text-4xl text-primary">list_alt</span>
+                    </div>
+                </div>
+                <div class="glass-card p-6">
+                    <div class="flex items-center justify-between">
+                        <div>
+                            <p class="text-on-surface-variant text-sm mb-1">High Priority</p>
+                            <p class="text-3xl font-bold text-red-500">8</p>
+                        </div>
+                        <span class="material-symbols-outlined text-4xl text-red-500">priority_high</span>
+                    </div>
+                </div>
+                <div class="glass-card p-6">
+                    <div class="flex items-center justify-between">
+                        <div>
+                            <p class="text-on-surface-variant text-sm mb-1">Story Points</p>
+                            <p class="text-3xl font-bold text-green-500">156</p>
+                        </div>
+                        <span class="material-symbols-outlined text-4xl text-green-500">stars</span>
+                    </div>
+                </div>
+                <div class="glass-card p-6">
+                    <div class="flex items-center justify-between">
+                        <div>
+                            <p class="text-on-surface-variant text-sm mb-1">Epics</p>
+                            <p class="text-3xl font-bold text-purple-500">4</p>
+                        </div>
+                        <span class="material-symbols-outlined text-4xl text-purple-500">auto_stories</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Backlog Items -->
+            <div class="glass-card">
+                <div class="p-6 border-b border-white/10">
+                    <div class="flex items-center gap-4">
+                        <select class="bg-surface-container-lowest border border-white/10 text-on-surface px-4 py-2 rounded-none">
+                            <option>All Priorities</option>
+                            <option>Critical</option>
+                            <option>High</option>
+                            <option>Medium</option>
+                            <option>Low</option>
+                        </select>
+                        <select class="bg-surface-container-lowest border border-white/10 text-on-surface px-4 py-2 rounded-none">
+                            <option>All Types</option>
+                            <option>Epic</option>
+                            <option>Story</option>
+                            <option>Task</option>
+                            <option>Bug</option>
+                        </select>
+                        <input type="text" placeholder="Search backlog..." class="flex-1 bg-surface-container-lowest border border-white/10 text-on-surface px-4 py-2 rounded-none">
+                    </div>
+                </div>
+                
+                <div class="divide-y divide-white/10">
+                    <!-- Backlog Item 1 -->
+                    <div class="p-4 hover:bg-white/5 transition-colors cursor-pointer">
+                        <div class="flex items-start justify-between">
+                            <div class="flex items-start gap-4">
+                                <span class="material-symbols-outlined text-red-500">priority_high</span>
+                                <div>
+                                    <h3 class="font-semibold mb-1">Implement user authentication system</h3>
+                                    <p class="text-sm text-on-surface-variant mb-2">Add OAuth2 and JWT authentication for secure access</p>
+                                    <div class="flex items-center gap-4 text-xs text-on-surface-variant">
+                                        <span>Story Points: 8</span>
+                                        <span>Epic: Security</span>
+                                        <span>Assigned to: John</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="flex items-center gap-2">
+                                <button class="px-3 py-1 bg-green-500/20 text-green-500 text-sm rounded-none hover:bg-green-500/30">Start</button>
+                                <button class="px-3 py-1 bg-blue-500/20 text-blue-500 text-sm rounded-none hover:bg-blue-500/30">Edit</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Backlog Item 2 -->
+                    <div class="p-4 hover:bg-white/5 transition-colors cursor-pointer">
+                        <div class="flex items-start justify-between">
+                            <div class="flex items-start gap-4">
+                                <span class="material-symbols-outlined text-red-500">priority_high</span>
+                                <div>
+                                    <h3 class="font-semibold mb-1">Database performance optimization</h3>
+                                    <p class="text-sm text-on-surface-variant mb-2">Optimize slow queries and add proper indexing</p>
+                                    <div class="flex items-center gap-4 text-xs text-on-surface-variant">
+                                        <span>Story Points: 13</span>
+                                        <span>Epic: Performance</span>
+                                        <span>Assigned to: Sarah</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="flex items-center gap-2">
+                                <button class="px-3 py-1 bg-green-500/20 text-green-500 text-sm rounded-none hover:bg-green-500/30">Start</button>
+                                <button class="px-3 py-1 bg-blue-500/20 text-blue-500 text-sm rounded-none hover:bg-blue-500/30">Edit</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Backlog Item 3 -->
+                    <div class="p-4 hover:bg-white/5 transition-colors cursor-pointer">
+                        <div class="flex items-start justify-between">
+                            <div class="flex items-start gap-4">
+                                <span class="material-symbols-outlined text-yellow-500">medium_priority</span>
+                                <div>
+                                    <h3 class="font-semibold mb-1">Mobile responsive design</h3>
+                                    <p class="text-sm text-on-surface-variant mb-2">Make the application fully responsive on all devices</p>
+                                    <div class="flex items-center gap-4 text-xs text-on-surface-variant">
+                                        <span>Story Points: 5</span>
+                                        <span>Epic: UI/UX</span>
+                                        <span>Unassigned</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="flex items-center gap-2">
+                                <button class="px-3 py-1 bg-green-500/20 text-green-500 text-sm rounded-none hover:bg-green-500/30">Start</button>
+                                <button class="px-3 py-1 bg-blue-500/20 text-blue-500 text-sm rounded-none hover:bg-blue-500/30">Edit</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Backlog Item 4 -->
+                    <div class="p-4 hover:bg-white/5 transition-colors cursor-pointer">
+                        <div class="flex items-start justify-between">
+                            <div class="flex items-start gap-4">
+                                <span class="material-symbols-outlined text-purple-500">auto_stories</span>
+                                <div>
+                                    <h3 class="font-semibold mb-1">E-commerce Platform</h3>
+                                    <p class="text-sm text-on-surface-variant mb-2">Complete e-commerce solution with payment integration</p>
+                                    <div class="flex items-center gap-4 text-xs text-on-surface-variant">
+                                        <span>Story Points: 34</span>
+                                        <span>Epic</span>
+                                        <span>Assigned to: Team</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="flex items-center gap-2">
+                                <button class="px-3 py-1 bg-green-500/20 text-green-500 text-sm rounded-none hover:bg-green-500/30">Start</button>
+                                <button class="px-3 py-1 bg-blue-500/20 text-blue-500 text-sm rounded-none hover:bg-blue-500/30">Edit</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Backlog Item 5 -->
+                    <div class="p-4 hover:bg-white/5 transition-colors cursor-pointer">
+                        <div class="flex items-start justify-between">
+                            <div class="flex items-start gap-4">
+                                <span class="material-symbols-outlined text-red-500">bug_report</span>
+                                <div>
+                                    <h3 class="font-semibold mb-1">Fix memory leak in dashboard</h3>
+                                    <p class="text-sm text-on-surface-variant mb-2">Dashboard consumes excessive memory after extended use</p>
+                                    <div class="flex items-center gap-4 text-xs text-on-surface-variant">
+                                        <span>Story Points: 3</span>
+                                        <span>Bug</span>
+                                        <span>Assigned to: Mike</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="flex items-center gap-2">
+                                <button class="px-3 py-1 bg-green-500/20 text-green-500 text-sm rounded-none hover:bg-green-500/30">Start</button>
+                                <button class="px-3 py-1 bg-blue-500/20 text-blue-500 text-sm rounded-none hover:bg-blue-500/30">Edit</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Add Task Modal -->
+    <div id="addTaskModal" class="fixed inset-0 bg-black/50 hidden items-center justify-center z-50">
+        <div class="glass-card p-8 max-w-2xl w-full mx-4">
+            <div class="flex items-center justify-between mb-6">
+                <h2 class="text-xl font-bold">Add Task to Backlog</h2>
+                <button onclick="hideAddTaskModal()" class="text-on-surface-variant hover:text-on-background">
+                    <span class="material-symbols-outlined">close</span>
+                </button>
+            </div>
+            <form class="space-y-4">
+                <div>
+                    <label class="block text-sm font-medium mb-2">Title</label>
+                    <input type="text" class="w-full bg-surface-container-lowest border border-white/10 text-on-surface px-4 py-2 rounded-none" placeholder="Task title">
+                </div>
+                <div>
+                    <label class="block text-sm font-medium mb-2">Description</label>
+                    <textarea class="w-full bg-surface-container-lowest border border-white/10 text-on-surface px-4 py-2 rounded-none" rows="3" placeholder="Task description"></textarea>
+                </div>
+                <div class="grid grid-cols-3 gap-4">
+                    <div>
+                        <label class="block text-sm font-medium mb-2">Priority</label>
+                        <select class="w-full bg-surface-container-lowest border border-white/10 text-on-surface px-4 py-2 rounded-none">
+                            <option>Low</option>
+                            <option>Medium</option>
+                            <option>High</option>
+                            <option>Critical</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium mb-2">Story Points</label>
+                        <input type="number" class="w-full bg-surface-container-lowest border border-white/10 text-on-surface px-4 py-2 rounded-none" value="1" min="1" max="21">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium mb-2">Type</label>
+                        <select class="w-full bg-surface-container-lowest border border-white/10 text-on-surface px-4 py-2 rounded-none">
+                            <option>Task</option>
+                            <option>Story</option>
+                            <option>Bug</option>
+                            <option>Epic</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="flex justify-end gap-3 mt-6">
+                    <button type="button" onclick="hideAddTaskModal()" class="px-6 py-2 border border-white/10 text-on-surface rounded-none hover:bg-white/5">Cancel</button>
+                    <button type="submit" class="px-6 py-2 bg-primary text-on-primary rounded-none hover:bg-primary/90">Add Task</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        function showAddTaskModal() {
+            document.getElementById('addTaskModal').classList.remove('hidden');
+            document.getElementById('addTaskModal').classList.add('flex');
+        }
+
+        function hideAddTaskModal() {
+            document.getElementById('addTaskModal').classList.add('hidden');
+            document.getElementById('addTaskModal').classList.remove('flex');
+        }
+    </script>
+</body>
+</html>

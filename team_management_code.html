@@ -1,0 +1,817 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "tertiary": "#ffb783",
+                    "secondary-fixed": "#b8eaff",
+                    "on-tertiary": "#4f2500",
+                    "on-background": "#e4e0f0",
+                    "primary": "#c0c1ff",
+                    "on-secondary": "#003544",
+                    "primary-fixed-dim": "#c0c1ff",
+                    "outline": "#908fa0",
+                    "on-error": "#690005",
+                    "outline-variant": "#464554",
+                    "surface-variant": "#343440",
+                    "on-primary": "#1000a9",
+                    "inverse-surface": "#e4e0f0",
+                    "on-primary-fixed-variant": "#2f2ebe",
+                    "on-primary-container": "#0d0096",
+                    "primary-container": "#8083ff",
+                    "background": "#12121d",
+                    "tertiary-container": "#d97721",
+                    "on-secondary-fixed-variant": "#004d61",
+                    "surface-container-highest": "#343440",
+                    "on-primary-fixed": "#07006c",
+                    "inverse-primary": "#494bd6",
+                    "surface": "#12121d",
+                    "secondary": "#56d5fe",
+                    "surface-container-lowest": "#0d0d18",
+                    "error": "#ffb4ab",
+                    "secondary-fixed-dim": "#56d5fe",
+                    "tertiary-fixed-dim": "#ffb783",
+                    "surface-tint": "#c0c1ff",
+                    "on-surface": "#e4e0f0",
+                    "secondary-container": "#00a9d0",
+                    "inverse-on-surface": "#302f3b",
+                    "on-error-container": "#ffdad6",
+                    "surface-bright": "#393844",
+                    "on-secondary-fixed": "#001f28",
+                    "on-tertiary-container": "#452000",
+                    "surface-container": "#1f1f2a",
+                    "surface-container-low": "#1b1b26",
+                    "error-container": "#93000a",
+                    "on-surface-variant": "#c7c4d7",
+                    "on-tertiary-fixed-variant": "#703700",
+                    "on-tertiary-fixed": "#301400",
+                    "surface-dim": "#12121d",
+                    "on-secondary-container": "#003847",
+                    "primary-fixed": "#e1e0ff",
+                    "tertiary-fixed": "#ffdcc5",
+                    "surface-container-high": "#292934"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.25rem",
+                    "lg": "0.5rem",
+                    "xl": "0.75rem",
+                    "full": "9999px"
+            },
+            "spacing": {
+                    "gutter": "1.5rem",
+                    "sidebar-width": "280px",
+                    "unit": "4px",
+                    "container-margin": "2rem"
+            },
+            "fontFamily": {
+                    "display-xl": ["Space Grotesk"],
+                    "headline-lg": ["Space Grotesk"],
+                    "headline-md": ["Space Grotesk"],
+                    "body-base": ["Space Grotesk"],
+                    "data-mono": ["ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace"],
+                    "label-caps": ["Space Grotesk"]
+            },
+            "fontSize": {
+                    "display-xl": ["48px", {"lineHeight": "1.1", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                    "headline-lg": ["32px", {"lineHeight": "1.2", "fontWeight": "600"}],
+                    "headline-md": ["24px", {"lineHeight": "1.3", "fontWeight": "600"}],
+                    "body-base": ["16px", {"lineHeight": "1.6", "fontWeight": "400"}],
+                    "data-mono": ["14px", {"lineHeight": "1.5", "letterSpacing": "0.05em", "fontWeight": "500"}],
+                    "label-caps": ["12px", {"lineHeight": "1", "letterSpacing": "0.1em", "fontWeight": "700"}]
+            }
+          },
+        },
+      }
+    </script>
+<style>
+        body {
+            background-color: #12121d;
+            font-family: 'Space Grotesk', sans-serif;
+            color: #e4e0f0;
+        }
+        .glass-card {
+            background: rgba(31, 31, 42, 0.4);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .glass-card:hover {
+            border-color: rgba(192, 193, 255, 0.3);
+            box-shadow: 0 0 30px rgba(192, 193, 255, 0.1);
+            transform: translateY(-2px);
+        }
+        .neon-glow-primary {
+            box-shadow: 0 0 15px rgba(192, 193, 255, 0.2);
+            transition: all 0.3s ease;
+        }
+        .neon-glow-primary:hover {
+            box-shadow: 0 0 25px 4px rgba(192, 193, 255, 0.4);
+        }
+        .neon-glow-secondary {
+            box-shadow: 0 0 15px rgba(86, 213, 254, 0.2);
+            transition: all 0.3s ease;
+        }
+        .neon-glow-secondary:hover {
+            box-shadow: 0 0 25px 4px rgba(86, 213, 254, 0.4);
+        }
+        .sparkline-svg {
+            stroke-dasharray: 1000;
+            stroke-dashoffset: 0;
+        }
+        .custom-scrollbar::-webkit-scrollbar {
+            width: 4px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-track {
+            background: rgba(255, 255, 255, 0.05);
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+            background: #c0c1ff;
+            border-radius: 2px;
+        }
+        .nav-item {
+            position: relative;
+            overflow: hidden;
+        }
+        .nav-item::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(192, 193, 255, 0.1), transparent);
+            transition: left 0.5s ease;
+        }
+        .nav-item:hover::before {
+            left: 100%;
+        }
+        .team-card {
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .team-card:hover {
+            transform: translateY(-4px) scale(1.02);
+            box-shadow: 0 20px 40px rgba(192, 193, 255, 0.15);
+        }
+        .member-avatar {
+            transition: all 0.3s ease;
+        }
+        .team-card:hover .member-avatar {
+            transform: scale(1.1);
+            border-color: rgba(192, 193, 255, 0.6);
+        }
+    </style>
+</head>
+<body class="bg-background text-on-background antialiased selection:bg-primary selection:text-on-primary">
+<!-- SideNavBar -->
+<aside class="w-sidebar-width h-screen fixed left-0 top-0 bg-surface/80 backdrop-blur-xl border-r border-white/10 flex flex-col h-full py-8 px-4 shadow-[15px_0_30px_-15px_rgba(192,193,255,0.1)] z-50">
+<div class="mb-12 px-4">
+<h1 class="font-display-xl text-headline-md font-bold tracking-widest text-primary">FLOW</h1>
+<p class="font-data-mono text-[10px] text-outline tracking-widest uppercase mt-1">V.2.0.48</p>
+</div>
+<nav class="flex-1 space-y-2">
+<a class="flex items-center gap-4 px-4 py-3 text-on-surface-variant font-body-base hover:bg-primary/10 hover:text-primary transition-all duration-300 rounded-none nav-item" href="executive_dashboard_code.html">
+<span class="material-symbols-outlined">dashboard</span>
+<span>Dashboard</span>
+</a>
+<a class="flex items-center gap-4 px-4 py-3 text-on-surface-variant font-body-base hover:bg-primary/10 hover:text-primary transition-all duration-300 rounded-none nav-item" href="project_board_code.html">
+<span class="material-symbols-outlined">folder_copy</span>
+<span>Projects</span>
+</a>
+<a class="flex items-center gap-4 px-4 py-3 text-on-surface-variant font-body-base hover:bg-primary/10 hover:text-primary transition-all duration-300 rounded-none nav-item" href="project_board_code.html">
+<span class="material-symbols-outlined">checklist</span>
+<span>Tasks</span>
+</a>
+<!-- Active State: Team -->
+<a class="flex items-center gap-4 px-4 py-3 text-primary border-l-2 border-primary bg-primary/5 font-bold transition-all ease-out rounded-none nav-item" href="team_management_code.html">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">groups</span>
+<span>Team</span>
+</a>
+<a class="flex items-center gap-4 px-4 py-3 text-on-surface-variant font-body-base hover:bg-primary/10 hover:text-primary transition-all duration-300 rounded-none nav-item" href="code.html">
+<span class="material-symbols-outlined">analytics</span>
+<span>Analytics</span>
+</a>
+<a class="flex items-center gap-4 px-4 py-3 text-on-surface-variant font-body-base hover:bg-primary/10 hover:text-primary transition-all duration-300 rounded-none nav-item" href="settings.html">
+<span class="material-symbols-outlined">settings</span>
+<span>Settings</span>
+</a>
+</nav>
+<div class="mt-auto px-4 pt-8 border-t border-white/5">
+<div class="flex items-center gap-3">
+<div class="w-10 h-10 bg-surface-container-highest border border-white/10 flex items-center justify-center">
+<span class="material-symbols-outlined text-primary">account_circle</span>
+</div>
+<div>
+<p class="text-on-surface text-sm font-bold">Admin Console</p>
+<p class="text-outline text-[10px] font-data-mono">ROOT_ACCESS_GRANTED</p>
+</div>
+</div>
+</div>
+</aside>
+<!-- TopAppBar -->
+<header class="fixed top-0 right-0 left-sidebar-width h-16 bg-background/60 backdrop-blur-md border-b border-white/10 flex justify-between items-center px-gutter w-[calc(100%-280px)] z-40">
+<div class="flex items-center gap-6">
+<div class="relative group">
+<span class="absolute inset-y-0 left-3 flex items-center text-outline group-focus-within:text-secondary transition-colors">
+<span class="material-symbols-outlined text-[20px]">search</span>
+</span>
+<input class="bg-black border-none focus:ring-1 focus:ring-secondary/30 text-body-base text-sm pl-10 pr-4 py-1.5 w-64 tracking-wider transition-all placeholder:text-outline-variant" placeholder="QUERY_SYSTEM..." type="text"/>
+</div>
+</div>
+<div class="flex items-center gap-4">
+<button class="p-2 text-on-surface-variant hover:text-secondary transition-colors relative">
+<span class="material-symbols-outlined">notifications</span>
+<span class="absolute top-2 right-2 w-1.5 h-1.5 bg-secondary rounded-full neon-glow-secondary"></span>
+</button>
+<button class="p-2 text-on-surface-variant hover:text-secondary transition-colors">
+<span class="material-symbols-outlined">help_outline</span>
+</button>
+<div class="h-8 w-[1px] bg-white/10 mx-2"></div>
+<div class="flex items-center gap-3 pl-2">
+<div class="text-right">
+<p class="text-xs font-bold text-on-surface leading-none uppercase">A. Volkov</p>
+<p class="text-[10px] text-secondary font-data-mono leading-none mt-1">LEAD_ARCHITECT</p>
+</div>
+<img alt="User Profile" class="w-8 h-8 object-cover border border-secondary/50" data-alt="A close-up professional headshot of a high-performance professional man with sharp features and a focused gaze. The setting is a dimly lit, high-tech environment with subtle cyan and indigo background lighting. He wears a dark, modern architectural suit. The image has a cinematic, high-contrast look with sharp focus and a polished, cyberpunk minimalist aesthetic." src="https://lh3.googleusercontent.com/aida-public/AB6AXuC5jDQgFHIwIf3pJnhHr-KvXUQaoNAhKzRWLMhYSJ3wW5JfDhD1PH8v8c7ZE_aPbJFW-CwJMf2RlU-w4ZZnGlFyioRKEbCB9dPM8OrydKhLl-RSj79Oi03HN_faQ3XF1YiESZK7kLdmA7eF8LeaJYLduRmUMIjU2c5lzpPC14Y1edCkaLpD4lkQzsOC_Clp9QpS_8LvexcThzoRxO9SuMH_4zZ7knrQCDIuGRhebB1jVEKOo7UgexiK-GbafK4bVWU7EUZa60AH5PM"/>
+</div>
+</div>
+</header>
+<!-- Main Content Canvas -->
+<main class="ml-sidebar-width pt-24 px-gutter pb-12 min-h-screen">
+<!-- Header Section -->
+<div class="flex justify-between items-end mb-8">
+<div>
+<h2 class="font-display-xl text-display-xl text-primary tracking-tighter">TEAM_MANAGEMENT</h2>
+<div class="flex items-center gap-4 mt-2">
+<span class="font-data-mono text-xs text-outline flex items-center gap-1">
+<span class="material-symbols-outlined text-[14px]">sensors</span>
+                        SYSTEM_STATUS: OPTIMAL
+                    </span>
+<span class="font-data-mono text-xs text-outline flex items-center gap-1">
+<span class="material-symbols-outlined text-[14px]">public</span>
+                        NODES: 12_ACTIVE
+                    </span>
+</div>
+</div>
+<div class="flex gap-4">
+<button class="px-6 py-2 border border-secondary text-secondary font-label-caps tracking-widest hover:bg-secondary/10 transition-all active:scale-95 flex items-center gap-2">
+<span class="material-symbols-outlined text-[18px]">key</span>
+                    MANAGE PERMISSIONS
+                </button>
+<button class="px-6 py-2 bg-primary text-on-primary font-label-caps tracking-widest hover:brightness-110 neon-glow-primary transition-all active:scale-95 flex items-center gap-2">
+<span class="material-symbols-outlined text-[18px]">person_add</span>
+                    INVITE MEMBER
+                </button>
+</div>
+</div>
+<!-- Team Overview Stats (Bento Style) -->
+<div class="grid grid-cols-12 gap-6 mb-12">
+<div class="col-span-12 md:col-span-4 glass-card p-6 border-l-4 border-l-primary">
+<div class="flex justify-between items-start mb-4">
+<p class="font-label-caps text-outline tracking-widest">ACTIVE_MEMBERS</p>
+<span class="material-symbols-outlined text-primary">groups</span>
+</div>
+<div class="flex items-baseline gap-2">
+<span class="text-4xl font-bold font-display-xl">24</span>
+<span class="text-primary font-data-mono text-sm">+2 THIS WEEK</span>
+</div>
+<div class="mt-4 w-full bg-white/5 h-1">
+<div class="bg-primary h-full neon-glow-primary" style="width: 75%"></div>
+</div>
+</div>
+<div class="col-span-12 md:col-span-4 glass-card p-6 border-l-4 border-l-secondary">
+<div class="flex justify-between items-start mb-4">
+<p class="font-label-caps text-outline tracking-widest">TASKS_PER_MEMBER</p>
+<span class="material-symbols-outlined text-secondary">checklist</span>
+</div>
+<div class="flex items-baseline gap-2">
+<span class="text-4xl font-bold font-display-xl">8.4</span>
+<span class="text-secondary font-data-mono text-sm">AVG_LOAD</span>
+</div>
+<div class="mt-4 w-full bg-white/5 h-1">
+<div class="bg-secondary h-full neon-glow-secondary" style="width: 45%"></div>
+</div>
+</div>
+<div class="col-span-12 md:col-span-4 glass-card p-6 border-l-4 border-l-tertiary">
+<div class="flex justify-between items-start mb-4">
+<p class="font-label-caps text-outline tracking-widest">OVERALL_VELOCITY</p>
+<span class="material-symbols-outlined text-tertiary">speed</span>
+</div>
+<div class="flex items-baseline gap-2">
+<span class="text-4xl font-bold font-display-xl">92%</span>
+<span class="text-tertiary font-data-mono text-sm">HIGH_OUTPUT</span>
+</div>
+<div class="mt-4 w-full bg-white/5 h-1">
+<div class="bg-tertiary h-full shadow-[0_0_15px_rgba(255,183,131,0.2)]" style="width: 92%"></div>
+</div>
+</div>
+</div>
+<!-- Team Members Grid -->
+<h3 class="font-headline-md text-on-surface mb-6 flex items-center gap-2">
+<span class="material-symbols-outlined text-primary">grid_view</span>
+            CORE_OPERATIVES
+        </h3>
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+<!-- Member Card 1 -->
+<div class="glass-card overflow-hidden group">
+<div class="h-2 w-full bg-primary/20">
+<div class="h-full bg-primary neon-glow-primary transition-all duration-700 group-hover:w-full w-[80%]"></div>
+</div>
+<div class="p-6">
+<div class="flex gap-4 items-start mb-6">
+<img alt="Member Avatar" class="w-16 h-16 object-cover border-2 border-primary/30" data-alt="A sharp, artistic close-up portrait of a tech professional man with dark hair and a precise beard. He is wearing a minimalist tech-wear jacket. The background is a dark studio setting with linear indigo neon light reflecting on his face. The overall mood is cold, professional, and sophisticated in a cyberpunk minimalist aesthetic." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDbIxBkLEqynP8w1HCORQ8n_jTDrvwn6hJTNwfaj9hvTN5y8XLMrBHLFc5TptBv2xKqi9BbM4il2l5KVCcfLE8Y2IR9Au0GKLf_Jr1_9CPjgfoTgR55kdP95c3OlSItnS7p3Wd3BxiQnGNq9lSfTeKk_AGXdfm0qGyABJNLmWKhoF-QBPqLKPGxNcoU0Y7C9c0RDAKHjOqppEOFr26hsw8yj-CV2-zg9iChBIQcEbTN7EB78n8GTPVAw0i5P2LJzug-PS19DSPvkO8"/>
+<div class="flex-1">
+<div class="flex justify-between items-center">
+<h4 class="text-headline-md text-primary font-bold">Xavier Reed</h4>
+<span class="px-2 py-0.5 bg-primary/10 border border-primary/20 text-[10px] font-data-mono text-primary uppercase">Admin</span>
+</div>
+<p class="text-outline text-xs font-data-mono tracking-tighter">Lead Frontend Engineer</p>
+</div>
+</div>
+<div class="mb-6">
+<p class="font-label-caps text-[10px] text-outline tracking-widest mb-2">ACTIVE_PROJECTS</p>
+<div class="flex flex-wrap gap-2">
+<span class="text-[11px] font-data-mono bg-white/5 px-2 py-1 text-on-surface-variant border border-white/10">NEURAL_OS</span>
+<span class="text-[11px] font-data-mono bg-white/5 px-2 py-1 text-on-surface-variant border border-white/10">FLUID_GRID</span>
+<span class="text-[11px] font-data-mono bg-white/5 px-2 py-1 text-on-surface-variant border border-white/10">+2</span>
+</div>
+</div>
+<div>
+<div class="flex justify-between items-end mb-2">
+<p class="font-label-caps text-[10px] text-outline tracking-widest">PRODUCTIVITY_SPARKLINE</p>
+<span class="text-[10px] font-data-mono text-primary">88% EFFICIENCY</span>
+</div>
+<div class="h-12 w-full flex items-end gap-1">
+<div class="flex-1 bg-primary/20 h-[40%]"></div>
+<div class="flex-1 bg-primary/40 h-[60%]"></div>
+<div class="flex-1 bg-primary/20 h-[30%]"></div>
+<div class="flex-1 bg-primary/60 h-[80%]"></div>
+<div class="flex-1 bg-primary/30 h-[50%]"></div>
+<div class="flex-1 bg-primary/80 h-[95%]"></div>
+<div class="flex-1 bg-primary/50 h-[70%]"></div>
+</div>
+</div>
+</div>
+</div>
+<!-- Member Card 2 -->
+<div class="glass-card overflow-hidden group">
+<div class="h-2 w-full bg-secondary/20">
+<div class="h-full bg-secondary neon-glow-secondary transition-all duration-700 group-hover:w-full w-[65%]"></div>
+</div>
+<div class="p-6">
+<div class="flex gap-4 items-start mb-6">
+<img alt="Member Avatar" class="w-16 h-16 object-cover border-2 border-secondary/30" data-alt="A portrait of a tech professional woman with a minimalist aesthetic. She has sleek hair and a modern, neutral expression. The lighting is cold with cyan neon accents hitting her profile. The background is a dark, abstract digital space. High-performance cyberpunk visual language." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAc-n4c9PiztVDj_JrhRAmJ40f2UWIa7vQ5JtgvEUOZumyrH3mlGrIVTH4WFIzkN1hR7hMxCZGyKlcQZ0IIlgT7cLVc0dFMZiHJyhl4-ZcbgeuwYNATH1kVpQCfSqs-novYgvtebh3qfA-AuySImqTmib1O2esHGetX-9TWPVDr85UckHcq16SslX2vPxssenj47L-9l-8pVwC0BUqC-r_r-MzYiHG_e_mfcupu-KK5Nw9ZQKlCI27YjPb1RUvpKk-M5UGa-FIXYwI"/>
+<div class="flex-1">
+<div class="flex justify-between items-center">
+<h4 class="text-headline-md text-secondary font-bold">Elena Thorne</h4>
+<span class="px-2 py-0.5 bg-secondary/10 border border-secondary/20 text-[10px] font-data-mono text-secondary uppercase">Member</span>
+</div>
+<p class="text-outline text-xs font-data-mono tracking-tighter">Senior UX Strategist</p>
+</div>
+</div>
+<div class="mb-6">
+<p class="font-label-caps text-[10px] text-outline tracking-widest mb-2">ACTIVE_PROJECTS</p>
+<div class="flex flex-wrap gap-2">
+<span class="text-[11px] font-data-mono bg-white/5 px-2 py-1 text-on-surface-variant border border-white/10">VOID_SYSTEMS</span>
+<span class="text-[11px] font-data-mono bg-white/5 px-2 py-1 text-on-surface-variant border border-white/10">CORE_V3</span>
+</div>
+</div>
+<div>
+<div class="flex justify-between items-end mb-2">
+<p class="font-label-caps text-[10px] text-outline tracking-widest">PRODUCTIVITY_SPARKLINE</p>
+<span class="text-[10px] font-data-mono text-secondary">94% EFFICIENCY</span>
+</div>
+<div class="h-12 w-full flex items-end gap-1">
+<div class="flex-1 bg-secondary/20 h-[30%]"></div>
+<div class="flex-1 bg-secondary/40 h-[50%]"></div>
+<div class="flex-1 bg-secondary/20 h-[80%]"></div>
+<div class="flex-1 bg-secondary/60 h-[90%]"></div>
+<div class="flex-1 bg-secondary/30 h-[70%]"></div>
+<div class="flex-1 bg-secondary/80 h-[85%]"></div>
+<div class="flex-1 bg-secondary/50 h-[100%]"></div>
+</div>
+</div>
+</div>
+</div>
+<!-- Member Card 3 -->
+<div class="glass-card overflow-hidden group">
+<div class="h-2 w-full bg-tertiary/20">
+<div class="h-full bg-tertiary shadow-[0_0_15px_rgba(255,183,131,0.2)] transition-all duration-700 group-hover:w-full w-[45%]"></div>
+</div>
+<div class="p-6">
+<div class="flex gap-4 items-start mb-6">
+<img alt="Member Avatar" class="w-16 h-16 object-cover border-2 border-tertiary/30" data-alt="A portrait of a male data scientist with a clean, modern look. The image has a cold, cinematic quality with amber neon lighting details in the shadows. Dark background with subtle technical overlays like data streams. Cyberpunk minimalist aesthetic." src="https://lh3.googleusercontent.com/aida-public/AB6AXuALNooI5k4KZtgi0rHe4Zcb7HkfD6THJ3lpXES5Qmdq2dIbAzMGmEXVlJNsfNA8NizbYZjAkRLWpmLYASJX-ztWOR9turx-gsOmaOcvqZ3yiKddiR9kysuOHkAuSJdjXxOsjD5rrhBEF8evq645HBzq4RLtRSirPouK7hrOxOd9ybe4V-jTg6WS-XQI4X7MuYhIhsRHd51xDiVDT2CfEbpIylBDW45e6E0gAWJnafp6jt0iZDaEQsBkwoujBIBAJ81FEZKD50jvd_E"/>
+<div class="flex-1">
+<div class="flex justify-between items-center">
+<h4 class="text-headline-md text-tertiary font-bold">Marcus Chen</h4>
+<span class="px-2 py-0.5 bg-tertiary/10 border border-tertiary/20 text-[10px] font-data-mono text-tertiary uppercase">Member</span>
+</div>
+<p class="text-outline text-xs font-data-mono tracking-tighter">Backend Architect</p>
+</div>
+</div>
+<div class="mb-6">
+<p class="font-label-caps text-[10px] text-outline tracking-widest mb-2">ACTIVE_PROJECTS</p>
+<div class="flex flex-wrap gap-2">
+<span class="text-[11px] font-data-mono bg-white/5 px-2 py-1 text-on-surface-variant border border-white/10">DB_OPTIMIZE</span>
+<span class="text-[11px] font-data-mono bg-white/5 px-2 py-1 text-on-surface-variant border border-white/10">LOG_STREAM</span>
+<span class="text-[11px] font-data-mono bg-white/5 px-2 py-1 text-on-surface-variant border border-white/10">API_GATE</span>
+</div>
+</div>
+<div>
+<div class="flex justify-between items-end mb-2">
+<p class="font-label-caps text-[10px] text-outline tracking-widest">PRODUCTIVITY_SPARKLINE</p>
+<span class="text-[10px] font-data-mono text-tertiary">72% EFFICIENCY</span>
+</div>
+<div class="h-12 w-full flex items-end gap-1">
+<div class="flex-1 bg-tertiary/20 h-[70%]"></div>
+<div class="flex-1 bg-tertiary/40 h-[40%]"></div>
+<div class="flex-1 bg-tertiary/20 h-[20%]"></div>
+<div class="flex-1 bg-tertiary/60 h-[50%]"></div>
+<div class="flex-1 bg-tertiary/30 h-[30%]"></div>
+<div class="flex-1 bg-tertiary/80 h-[60%]"></div>
+<div class="flex-1 bg-tertiary/50 h-[40%]"></div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Asymmetric Permissions Table Section -->
+<div class="mt-12 grid grid-cols-12 gap-8">
+<div class="col-span-12 lg:col-span-8 glass-card p-0 overflow-hidden">
+<div class="p-6 border-b border-white/10 flex justify-between items-center">
+<h3 class="font-headline-md text-primary">ACCESS_CONTROL_LOGS</h3>
+<div class="flex gap-2">
+<button class="material-symbols-outlined text-outline hover:text-primary transition-colors">refresh</button>
+<button class="material-symbols-outlined text-outline hover:text-primary transition-colors">more_vert</button>
+</div>
+</div>
+<table class="w-full text-left font-body-base">
+<thead class="bg-white/5 text-outline text-[10px] font-label-caps tracking-widest">
+<tr>
+<th class="px-6 py-4">OPERATIVE</th>
+<th class="px-6 py-4">PERMISSION_LEVEL</th>
+<th class="px-6 py-4">LAST_SYNC</th>
+<th class="px-6 py-4">STATUS</th>
+</tr>
+</thead>
+<tbody class="divide-y divide-white/5">
+<tr class="hover:bg-primary/5 transition-colors group">
+<td class="px-6 py-4 flex items-center gap-3">
+<div class="w-2 h-2 bg-primary neon-glow-primary"></div>
+<span class="text-sm font-bold">Xavier Reed</span>
+</td>
+<td class="px-6 py-4 font-data-mono text-xs">SUPER_USER [0]</td>
+<td class="px-6 py-4 font-data-mono text-xs text-outline">2023.10.24 14:22:01</td>
+<td class="px-6 py-4">
+<span class="px-2 py-0.5 bg-emerald-500/10 text-emerald-400 text-[9px] font-data-mono uppercase border border-emerald-500/20">Authorized</span>
+</td>
+</tr>
+<tr class="hover:bg-primary/5 transition-colors group">
+<td class="px-6 py-4 flex items-center gap-3">
+<div class="w-2 h-2 bg-secondary neon-glow-secondary"></div>
+<span class="text-sm font-bold">Elena Thorne</span>
+</td>
+<td class="px-6 py-4 font-data-mono text-xs">LEAD_OPERATIVE [1]</td>
+<td class="px-6 py-4 font-data-mono text-xs text-outline">2023.10.24 12:45:18</td>
+<td class="px-6 py-4">
+<span class="px-2 py-0.5 bg-emerald-500/10 text-emerald-400 text-[9px] font-data-mono uppercase border border-emerald-500/20">Authorized</span>
+</td>
+</tr>
+<tr class="hover:bg-primary/5 transition-colors group">
+<td class="px-6 py-4 flex items-center gap-3">
+<div class="w-2 h-2 bg-tertiary shadow-[0_0_10px_rgba(255,183,131,0.5)]"></div>
+<span class="text-sm font-bold">Marcus Chen</span>
+</td>
+<td class="px-6 py-4 font-data-mono text-xs">OPERATIVE [2]</td>
+<td class="px-6 py-4 font-data-mono text-xs text-outline">2023.10.23 09:12:44</td>
+<td class="px-6 py-4">
+<span class="px-2 py-0.5 bg-amber-500/10 text-amber-400 text-[9px] font-data-mono uppercase border border-amber-500/20">Syncing...</span>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="col-span-12 lg:col-span-4 glass-card p-6 flex flex-col justify-between border-t-4 border-t-secondary">
+<div>
+<h3 class="font-headline-md text-secondary mb-4">NODE_HEALTH</h3>
+<p class="text-sm text-outline-variant mb-6 leading-relaxed">
+                        Overall team connectivity is at <span class="text-secondary">98.4%</span>. All critical paths are maintained. Cross-node latency is within acceptable parameters of <span class="text-secondary">12ms</span>.
+                    </p>
+<div class="space-y-4">
+<div class="flex justify-between items-center text-xs font-data-mono">
+<span class="text-outline">CPU_LOAD</span>
+<span class="text-secondary">24%</span>
+</div>
+<div class="w-full bg-white/5 h-1">
+<div class="bg-secondary h-full" style="width: 24%"></div>
+</div>
+<div class="flex justify-between items-center text-xs font-data-mono">
+<span class="text-outline">MEM_USAGE</span>
+<span class="text-secondary">68%</span>
+</div>
+<div class="w-full bg-white/5 h-1">
+<div class="bg-secondary h-full" style="width: 68%"></div>
+</div>
+</div>
+</div>
+<div class="mt-8 pt-6 border-t border-white/5">
+<button class="w-full py-3 bg-secondary text-on-secondary font-label-caps tracking-widest hover:brightness-110 neon-glow-secondary transition-all">
+                        GENERATE REPORT
+                    </button>
+</div>
+</div>
+</div>
+</main>
+<!-- FAB for quick member search or add -->
+<button class="fixed bottom-8 right-8 w-14 h-14 bg-primary text-on-primary rounded-none neon-glow-primary flex items-center justify-center hover:scale-105 active:scale-95 transition-all z-50">
+<span class="material-symbols-outlined text-[28px]">search</span>
+</button>
+<!-- API Integration -->
+<script src="static/js/api.js"></script>
+<script>
+// Check authentication
+checkAuth();
+
+// Load team data when page loads
+document.addEventListener('DOMContentLoaded', async () => {
+    try {
+        await loadTeamStats();
+        await loadTeamMembers();
+        await loadAccessLogs();
+    } catch (error) {
+        console.error('Failed to load team data:', error);
+    }
+});
+
+async function loadTeamStats() {
+    try {
+        const stats = await api.getDashboardStats();
+        
+        // Update team overview stats
+        updateElementContent('.text-4xl.font-bold.font-display-xl', stats.team_members);
+        updateElementContent('.text-4xl.font-bold.font-display-xl', '8.4'); // Tasks per member (placeholder)
+        updateElementContent('.text-4xl.font-bold.font-display-xl', `${Math.round(stats.team_efficiency)}%`);
+        
+    } catch (error) {
+        console.error('Failed to load team stats:', error);
+    }
+}
+
+async function loadTeamMembers() {
+    try {
+        const teamMembers = await api.getTeamMembers();
+        const grid = document.querySelector('.grid.grid-cols-1.md\\:grid-cols-2.lg\\:grid-cols-3.gap-6');
+        
+        if (grid && teamMembers.length > 0) {
+            // Clear existing members
+            grid.innerHTML = '';
+            
+            // Add team member cards
+            teamMembers.forEach(member => {
+                const card = createTeamMemberCard(member);
+                grid.appendChild(card);
+            });
+        }
+    } catch (error) {
+        console.error('Failed to load team members:', error);
+    }
+}
+
+function createTeamMemberCard(member) {
+    const card = document.createElement('div');
+    card.className = 'glass-card overflow-hidden group team-card';
+    
+    const efficiencyColor = member.efficiency_score > 80 ? 'bg-primary' : 
+                           member.efficiency_score > 60 ? 'bg-secondary' : 'bg-tertiary';
+    
+    card.innerHTML = `
+        <div class="h-2 w-full bg-primary/20">
+            <div class="h-full ${efficiencyColor} neon-glow-primary transition-all duration-700 group-hover:w-full" style="width: ${member.efficiency_score}%"></div>
+        </div>
+        <div class="p-6">
+            <div class="flex gap-4 items-start mb-6">
+                <img alt="Member Avatar" class="w-16 h-16 object-cover border-2 border-primary/30 member-avatar" src="${member.avatar_url || 'https://picsum.photos/seed/' + member.id + '/100/100.jpg'}">
+                <div class="flex-1">
+                    <div class="flex justify-between items-center">
+                        <h4 class="text-headline-md text-primary font-bold">${member.name}</h4>
+                        <span class="px-2 py-0.5 bg-primary/10 border border-primary/20 text-[10px] font-data-mono text-primary uppercase">${member.role}</span>
+                    </div>
+                    <p class="text-outline text-xs font-data-mono tracking-tighter">${member.department || 'Team Member'}</p>
+                </div>
+            </div>
+            <div class="mb-6">
+                <p class="font-label-caps text-[10px] text-outline tracking-widest mb-2">TASKS_COMPLETED</p>
+                <div class="flex items-center gap-2">
+                    <span class="text-headline-md text-secondary font-bold">${member.tasks_completed}</span>
+                    <span class="text-xs text-on-surface-variant">tasks</span>
+                </div>
+            </div>
+            <div>
+                <div class="flex justify-between items-end mb-2">
+                    <p class="font-label-caps text-[10px] text-outline tracking-widest">PRODUCTIVITY_SPARKLINE</p>
+                    <span class="text-[10px] font-data-mono text-primary">${Math.round(member.efficiency_score)}% EFFICIENCY</span>
+                </div>
+                <div class="h-12 w-full flex items-end gap-1">
+                    ${generateSparkline(member.efficiency_score)}
+                </div>
+            </div>
+        </div>
+    `;
+    
+    return card;
+}
+
+function generateSparkline(efficiency) {
+    const bars = [];
+    for (let i = 0; i < 7; i++) {
+        const height = Math.random() * efficiency + 20;
+        const opacity = height / 100;
+        bars.push(`<div class="flex-1 bg-primary/20 h-[${height}%]"></div>`);
+    }
+    return bars.join('');
+}
+
+async function loadAccessLogs() {
+    try {
+        // This would load from an access logs endpoint
+        // For now, we'll keep the existing mock data
+        console.log('Access logs loaded');
+    } catch (error) {
+        console.error('Failed to load access logs:', error);
+    }
+}
+
+// Add team member functionality
+document.addEventListener('click', async (e) => {
+    if (e.target.closest('button') && e.target.textContent.includes('INVITE MEMBER')) {
+        // Create a modal for better UX
+        const modal = createTeamMemberModal();
+        document.body.appendChild(modal);
+        
+        // Handle modal close
+        modal.addEventListener('click', (e) => {
+            if (e.target === modal || e.target.classList.contains('cancel-btn')) {
+                modal.remove();
+            }
+        });
+        
+        // Handle form submission
+        modal.querySelector('.submit-btn').addEventListener('click', async () => {
+            const memberName = modal.querySelector('#memberName').value.trim();
+            const memberEmail = modal.querySelector('#memberEmail').value.trim();
+            const memberRole = modal.querySelector('#memberRole').value.trim();
+            const memberDept = modal.querySelector('#memberDept').value.trim();
+            
+            if (!memberName || !memberEmail || !memberRole) {
+                showError('Name, email, and role are required');
+                return;
+            }
+            
+            // Basic email validation
+            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            if (!emailRegex.test(memberEmail)) {
+                showError('Please enter a valid email address');
+                return;
+            }
+            
+            try {
+                showLoading('Adding team member...');
+                await api.addTeamMember({
+                    name: memberName,
+                    email: memberEmail,
+                    role: memberRole,
+                    department: memberDept || 'Engineering'
+                });
+                
+                showSuccess(`Team member "${memberName}" added successfully!`);
+                modal.remove();
+                
+                // Reload data with delay
+                setTimeout(async () => {
+                    await loadTeamMembers();
+                    await loadTeamStats();
+                }, 500);
+                
+            } catch (error) {
+                console.error('Failed to add team member:', error);
+                
+                // Handle specific error messages
+                if (error.message.includes('already exists')) {
+                    showError('A team member with this email already exists');
+                } else if (error.message.includes('Authentication required')) {
+                    showError('Please log in again');
+                } else {
+                    showError('Failed to add team member: ' + error.message);
+                }
+            }
+        });
+    }
+});
+
+function createTeamMemberModal() {
+    const modal = document.createElement('div');
+    modal.className = 'fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-50';
+    modal.innerHTML = `
+        <div class="glass-card p-8 max-w-md w-full mx-4">
+            <h3 class="font-headline-md text-primary mb-6">Invite Team Member</h3>
+            
+            <div class="space-y-4">
+                <div>
+                    <label class="block text-sm font-medium text-on-surface mb-2">Name *</label>
+                    <input type="text" id="memberName" class="w-full bg-surface-container-lowest border border-white/10 text-on-surface text-sm px-4 py-2 rounded-none focus:ring-1 focus:ring-secondary" placeholder="Enter member name">
+                </div>
+                
+                <div>
+                    <label class="block text-sm font-medium text-on-surface mb-2">Email *</label>
+                    <input type="email" id="memberEmail" class="w-full bg-surface-container-lowest border border-white/10 text-on-surface text-sm px-4 py-2 rounded-none focus:ring-1 focus:ring-secondary" placeholder="Enter email address">
+                </div>
+                
+                <div>
+                    <label class="block text-sm font-medium text-on-surface mb-2">Role *</label>
+                    <select id="memberRole" class="w-full bg-surface-container-lowest border border-white/10 text-on-surface text-sm px-4 py-2 rounded-none focus:ring-1 focus:ring-secondary">
+                        <option value="">Select role</option>
+                        <option value="Developer">Developer</option>
+                        <option value="Designer">Designer</option>
+                        <option value="Manager">Manager</option>
+                        <option value="QA Engineer">QA Engineer</option>
+                        <option value="DevOps">DevOps</option>
+                        <option value="Product Manager">Product Manager</option>
+                    </select>
+                </div>
+                
+                <div>
+                    <label class="block text-sm font-medium text-on-surface mb-2">Department</label>
+                    <input type="text" id="memberDept" class="w-full bg-surface-container-lowest border border-white/10 text-on-surface text-sm px-4 py-2 rounded-none focus:ring-1 focus:ring-secondary" placeholder="Enter department (optional)">
+                </div>
+            </div>
+            
+            <div class="flex gap-4 mt-6">
+                <button class="flex-1 py-2 border border-secondary text-secondary font-label-caps tracking-widest hover:bg-secondary/10 transition-all cancel-btn">
+                    CANCEL
+                </button>
+                <button class="flex-1 py-2 bg-primary text-on-primary font-label-caps tracking-widest hover:brightness-110 neon-glow-primary transition-all submit-btn">
+                    INVITE
+                </button>
+            </div>
+        </div>
+    `;
+    
+    // Auto-focus on name input
+    setTimeout(() => {
+        modal.querySelector('#memberName').focus();
+    }, 100);
+    
+    return modal;
+}
+
+function showSuccess(message) {
+    showNotification(message, 'success');
+}
+
+function showError(message) {
+    showNotification(message, 'error');
+}
+
+function showLoading(message) {
+    showNotification(message, 'info');
+}
+
+function showNotification(message, type = 'info') {
+    const notification = document.createElement('div');
+    const colors = {
+        success: 'bg-emerald-500/10 border-emerald-500/30 text-emerald-400',
+        error: 'bg-error/10 border-error/30 text-error',
+        info: 'bg-secondary/10 border-secondary/30 text-secondary'
+    };
+    
+    notification.className = `fixed top-20 right-8 p-4 ${colors[type]} border rounded-none glass-card z-50 transition-all`;
+    notification.innerHTML = `
+        <p class="font-data-mono text-sm">${message}</p>
+    `;
+    
+    document.body.appendChild(notification);
+    
+    // Auto-remove after 3 seconds
+    setTimeout(() => {
+        notification.style.opacity = '0';
+        setTimeout(() => notification.remove(), 300);
+    }, 3000);
+}
+
+// Add logout functionality
+document.addEventListener('click', (e) => {
+    if (e.target.closest('button') && e.target.textContent.includes('LOGOUT')) {
+        api.logout();
+    }
+});
+</script>
+</body></html>

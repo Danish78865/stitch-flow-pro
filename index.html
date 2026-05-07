@@ -1,0 +1,482 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Stitch Flow Pro - Project Management System</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Symbols+Outlined" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #19216C;
+            --primary-light: #2D35B3;
+            --secondary: #C0C1FF;
+            --secondary-light: #D4D5FF;
+            --tertiary: #00D9FF;
+            --tertiary-light: #1EE5FF;
+            --surface: #0F0F23;
+            --surface-container: #1A1A2E;
+            --surface-container-low: #252542;
+            --surface-container-lowest: #303050;
+            --on-surface: #FFFFFF;
+            --on-surface-variant: #B8B8D1;
+            --outline: #6B6B8E;
+            --outline-variant: #4A4A6E;
+            --error: #FF5252;
+            --success: #4CAF50;
+            --warning: #FF9800;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: var(--surface);
+            color: var(--on-surface);
+            overflow-x: hidden;
+        }
+
+        .font-display-xl { font-size: 2.5rem; font-weight: 700; font-family: 'Inter', sans-serif; }
+        .font-headline-md { font-size: 1.125rem; font-weight: 600; font-family: 'Inter', sans-serif; }
+        .font-body-base { font-size: 1rem; font-weight: 400; font-family: 'Inter', sans-serif; }
+        .font-label-caps { font-size: 0.75rem; font-weight: 500; font-family: 'Inter', sans-serif; letter-spacing: 0.1em; }
+        .font-data-mono { font-family: 'JetBrains Mono', monospace; }
+
+        .glass-card {
+            background: rgba(37, 37, 66, 0.8);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+        }
+
+        .neon-glow-primary {
+            box-shadow: 0 0 20px rgba(25, 33, 108, 0.5);
+        }
+
+        .neon-glow-secondary {
+            box-shadow: 0 0 20px rgba(192, 193, 255, 0.5);
+        }
+
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 12px 24px;
+            border-radius: 8px;
+            font-weight: 500;
+            font-size: 14px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: 1px solid transparent;
+            text-decoration: none;
+            background: none;
+        }
+
+        .btn-primary {
+            background: var(--primary);
+            color: var(--on-surface);
+            border-color: var(--primary);
+        }
+
+        .btn-primary:hover {
+            background: var(--primary-light);
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(25, 33, 108, 0.3);
+        }
+
+        .btn-secondary {
+            background: transparent;
+            color: var(--secondary);
+            border-color: var(--secondary);
+        }
+
+        .btn-secondary:hover {
+            background: var(--secondary);
+            color: var(--surface);
+            transform: translateY(-2px);
+        }
+
+        .feature-card {
+            background: linear-gradient(135deg, var(--surface-container-low), var(--surface-container));
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 16px;
+            padding: 32px;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-8px);
+            border-color: var(--secondary);
+            box-shadow: 0 20px 40px rgba(192, 193, 255, 0.2);
+        }
+
+        .feature-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, var(--primary), var(--secondary));
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-20px); }
+        }
+
+        .float-animation {
+            animation: float 6s ease-in-out infinite;
+        }
+
+        @keyframes pulse-glow {
+            0%, 100% { box-shadow: 0 0 20px rgba(192, 193, 255, 0.5); }
+            50% { box-shadow: 0 0 40px rgba(192, 193, 255, 0.8); }
+        }
+
+        .pulse-glow {
+            animation: pulse-glow 2s ease-in-out infinite;
+        }
+
+        .hero-gradient {
+            background: linear-gradient(135deg, var(--surface-container), var(--surface-container-low));
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero-gradient::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(192, 193, 255, 0.1) 0%, transparent 70%);
+            animation: rotate 20s linear infinite;
+        }
+
+        @keyframes rotate {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        .status-indicator {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 6px 12px;
+            background: rgba(76, 175, 80, 0.1);
+            border: 1px solid rgba(76, 175, 80, 0.3);
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 500;
+            color: #4CAF50;
+        }
+
+        .status-indicator::before {
+            content: '';
+            width: 8px;
+            height: 8px;
+            background: #4CAF50;
+            border-radius: 50%;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+    </style>
+</head>
+<body>
+    <!-- Hero Section -->
+    <section class="hero-gradient min-h-screen flex items-center justify-center relative">
+        <div class="container mx-auto px-8 text-center relative z-10">
+            <div class="mb-8">
+                <div class="inline-flex items-center gap-3 mb-6">
+                    <div class="w-12 h-12 bg-primary rounded-lg flex items-center justify-center neon-glow-primary">
+                        <span class="material-symbols-outlined text-white text-2xl">dashboard</span>
+                    </div>
+                    <h1 class="font-display-xl text-white">Stitch Flow Pro</h1>
+                </div>
+                <div class="status-indicator mb-6">
+                    System Online
+                </div>
+                <h2 class="font-display-xl text-white mb-6">Advanced Project Management System</h2>
+                <p class="font-body-base text-on-surface-variant mb-8 max-w-2xl mx-auto">
+                    Experience the power of Jira-like task management with advanced features, real-time collaboration, and comprehensive analytics.
+                </p>
+            </div>
+
+            <!-- Main Actions -->
+            <div class="flex flex-col sm:flex-row gap-4 justify-center mb-12">
+                <a href="jira_dashboard.html" class="btn btn-primary neon-glow-primary">
+                    <span class="material-symbols-outlined">dashboard</span>
+                    Go to Dashboard
+                </a>
+                <a href="jira_task_board.html" class="btn btn-secondary neon-glow-secondary">
+                    <span class="material-symbols-outlined">view_kanban</span>
+                    Task Board
+                </a>
+                <a href="backlog.html" class="btn btn-secondary">
+                    <span class="material-symbols-outlined">list_alt</span>
+                    Backlog
+                </a>
+                <a href="active_sprint.html" class="btn btn-secondary">
+                    <span class="material-symbols-outlined">directions_run</span>
+                    Active Sprint
+                </a>
+                <a href="reports.html" class="btn btn-secondary">
+                    <span class="material-symbols-outlined">analytics</span>
+                    Reports
+                </a>
+                <a href="login.html" class="btn btn-secondary">
+                    <span class="material-symbols-outlined">login</span>
+                    Login
+                </a>
+            </div>
+
+            <!-- System Stats -->
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-6 mb-12">
+                <div class="glass-card p-6 text-center">
+                    <div class="text-3xl font-bold text-primary mb-2">17+</div>
+                    <div class="text-sm text-on-surface-variant">Active Projects</div>
+                </div>
+                <div class="glass-card p-6 text-center">
+                    <div class="text-3xl font-bold text-secondary mb-2">16+</div>
+                    <div class="text-sm text-on-surface-variant">Tasks Managed</div>
+                </div>
+                <div class="glass-card p-6 text-center">
+                    <div class="text-3xl font-bold text-tertiary mb-2">5</div>
+                    <div class="text-sm text-on-surface-variant">Team Members</div>
+                </div>
+                <div class="glass-card p-6 text-center">
+                    <div class="text-3xl font-bold text-success mb-2">100%</div>
+                    <div class="text-sm text-on-surface-variant">System Health</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Features Section -->
+    <section class="py-20 px-8">
+        <div class="container mx-auto">
+            <div class="text-center mb-16">
+                <h2 class="font-display-xl text-white mb-4">Powerful Features</h2>
+                <p class="font-body-base text-on-surface-variant max-w-2xl mx-auto">
+                    Everything you need for professional project management, inspired by Jira and enhanced with modern technology.
+                </p>
+            </div>
+
+            <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <!-- Jira-like Task Board -->
+                <div class="feature-card">
+                    <div class="w-12 h-12 bg-primary/20 rounded-lg flex items-center justify-center mb-6 float-animation">
+                        <span class="material-symbols-outlined text-primary text-2xl">view_kanban</span>
+                    </div>
+                    <h3 class="font-headline-md text-white mb-3">Jira-like Task Board</h3>
+                    <p class="font-body-base text-on-surface-variant mb-4">
+                        Professional 5-column kanban board with task types, priorities, story points, and real-time updates.
+                    </p>
+                    <a href="jira_task_board.html" class="btn btn-secondary">
+                        <span class="material-symbols-outlined">arrow_forward</span>
+                        Try Now
+                    </a>
+                </div>
+
+                <!-- Advanced Dashboard -->
+                <div class="feature-card">
+                    <div class="w-12 h-12 bg-secondary/20 rounded-lg flex items-center justify-center mb-6 float-animation" style="animation-delay: 1s;">
+                        <span class="material-symbols-outlined text-secondary text-2xl">dashboard</span>
+                    </div>
+                    <h3 class="font-headline-md text-white mb-3">Advanced Analytics</h3>
+                    <p class="font-body-base text-on-surface-variant mb-4">
+                        Comprehensive dashboard with charts, metrics, sprint progress, and team performance analytics.
+                    </p>
+                    <a href="jira_dashboard.html" class="btn btn-secondary">
+                        <span class="material-symbols-outlined">arrow_forward</span>
+                        View Dashboard
+                    </a>
+                </div>
+
+                <!-- Team Management -->
+                <div class="feature-card">
+                    <div class="w-12 h-12 bg-tertiary/20 rounded-lg flex items-center justify-center mb-6 float-animation" style="animation-delay: 2s;">
+                        <span class="material-symbols-outlined text-tertiary text-2xl">group</span>
+                    </div>
+                    <h3 class="font-headline-md text-white mb-3">Team Collaboration</h3>
+                    <p class="font-body-base text-on-surface-variant mb-4">
+                        Assign tasks, track progress, and manage team members with real-time collaboration features.
+                    </p>
+                    <a href="team_management_code.html" class="btn btn-secondary">
+                        <span class="material-symbols-outlined">arrow_forward</span>
+                        Manage Team
+                    </a>
+                </div>
+
+                <!-- Project Management -->
+                <div class="feature-card">
+                    <div class="w-12 h-12 bg-success/20 rounded-lg flex items-center justify-center mb-6 float-animation" style="animation-delay: 3s;">
+                        <span class="material-symbols-outlined text-success text-2xl">folder</span>
+                    </div>
+                    <h3 class="font-headline-md text-white mb-3">Project Management</h3>
+                    <p class="font-body-base text-on-surface-variant mb-4">
+                        Create and manage projects with detailed tracking, milestones, and progress monitoring.
+                    </p>
+                    <a href="executive_dashboard_code.html" class="btn btn-secondary">
+                        <span class="material-symbols-outlined">arrow_forward</span>
+                        View Projects
+                    </a>
+                </div>
+
+                <!-- Analytics & Reports -->
+                <div class="feature-card">
+                    <div class="w-12 h-12 bg-warning/20 rounded-lg flex items-center justify-center mb-6 float-animation" style="animation-delay: 4s;">
+                        <span class="material-symbols-outlined text-warning text-2xl">assessment</span>
+                    </div>
+                    <h3 class="font-headline-md text-white mb-3">Analytics & Reports</h3>
+                    <p class="font-body-base text-on-surface-variant mb-4">
+                        Generate detailed reports, track performance metrics, and gain insights into your projects.
+                    </p>
+                    <a href="code.html" class="btn btn-secondary">
+                        <span class="material-symbols-outlined">arrow_forward</span>
+                        View Analytics
+                    </a>
+                </div>
+
+                <!-- System Settings -->
+                <div class="feature-card">
+                    <div class="w-12 h-12 bg-error/20 rounded-lg flex items-center justify-center mb-6 float-animation" style="animation-delay: 5s;">
+                        <span class="material-symbols-outlined text-error text-2xl">settings</span>
+                    </div>
+                    <h3 class="font-headline-md text-white mb-3">System Configuration</h3>
+                    <p class="font-body-base text-on-surface-variant mb-4">
+                        Customize your workspace, manage settings, and configure the system to your needs.
+                    </p>
+                    <a href="settings.html" class="btn btn-secondary">
+                        <span class="material-symbols-outlined">arrow_forward</span>
+                        Settings
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Quick Access Section -->
+    <section class="py-20 px-8">
+        <div class="container mx-auto">
+            <div class="text-center mb-16">
+                <h2 class="font-display-xl text-white mb-4">Quick Access</h2>
+                <p class="font-body-base text-on-surface-variant max-w-2xl mx-auto">
+                    Jump directly to any part of the system with these quick links.
+                </p>
+            </div>
+
+            <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
+                <a href="jira_dashboard.html" class="glass-card p-6 block hover:neon-glow-primary transition-all">
+                    <div class="flex items-center gap-4 mb-3">
+                        <span class="material-symbols-outlined text-primary">dashboard</span>
+                        <h3 class="font-headline-md text-white">Dashboard</h3>
+                    </div>
+                    <p class="font-body-base text-on-surface-variant">View project metrics, team performance, and sprint progress</p>
+                </a>
+                <a href="jira_task_board.html" class="glass-card p-6 block hover:neon-glow-secondary transition-all">
+                    <div class="flex items-center gap-4 mb-3">
+                        <span class="material-symbols-outlined text-secondary">view_kanban</span>
+                        <h3 class="font-headline-md text-white">Task Board</h3>
+                    </div>
+                    <p class="font-body-base text-on-surface-variant">Manage tasks with drag-and-drop Kanban board</p>
+                </a>
+                <a href="backlog.html" class="glass-card p-6 block hover:neon-glow-tertiary transition-all">
+                    <div class="flex items-center gap-4 mb-3">
+                        <span class="material-symbols-outlined text-tertiary">list_alt</span>
+                        <h3 class="font-headline-md text-white">Backlog</h3>
+                    </div>
+                    <p class="font-body-base text-on-surface-variant">Organize and prioritize pending tasks</p>
+                </a>
+                <a href="active_sprint.html" class="glass-card p-6 block hover:neon-glow-success transition-all">
+                    <div class="flex items-center gap-4 mb-3">
+                        <span class="material-symbols-outlined text-success">directions_run</span>
+                        <h3 class="font-headline-md text-white">Active Sprint</h3>
+                    </div>
+                    <p class="font-body-base text-on-surface-variant">Track current sprint progress and tasks</p>
+                </a>
+                <a href="reports.html" class="glass-card p-6 block hover:neon-glow-warning transition-all">
+                    <div class="flex items-center gap-4 mb-3">
+                        <span class="material-symbols-outlined text-warning">analytics</span>
+                        <h3 class="font-headline-md text-white">Reports</h3>
+                    </div>
+                    <p class="font-body-base text-on-surface-variant">View detailed analytics and reports</p>
+                </a>
+                <a href="project_board_code.html" class="glass-card p-6 block hover:neon-glow-tertiary transition-all">
+                    <div class="flex items-center gap-4 mb-4">
+                        <div class="w-10 h-10 bg-secondary/20 rounded-lg flex items-center justify-center">
+                            <span class="material-symbols-outlined text-secondary">view_kanban</span>
+                        </div>
+                        <div>
+                            <p class="text-sm text-on-surface-variant">Jira-like Kanban</p>
+                        </div>
+                    </div>
+                </a>
+
+                <a href="project_board_code.html" class="glass-card p-6 block hover:neon-glow-tertiary transition-all">
+                    <div class="flex items-center gap-4 mb-4">
+                        <div class="w-10 h-10 bg-tertiary/20 rounded-lg flex items-center justify-center">
+                            <span class="material-symbols-outlined text-tertiary">assignment</span>
+                        </div>
+                        <div>
+                            <h3 class="font-headline-md text-white">Projects</h3>
+                            <p class="text-sm text-on-surface-variant">Project Management</p>
+                        </div>
+                    </div>
+                </a>
+
+                <a href="team_management_code.html" class="glass-card p-6 block hover:neon-glow-success transition-all">
+                    <div class="flex items-center gap-4 mb-4">
+                        <div class="w-10 h-10 bg-success/20 rounded-lg flex items-center justify-center">
+                            <span class="material-symbols-outlined text-success">group</span>
+                        </div>
+                        <div>
+                            <h3 class="font-headline-md text-white">Team</h3>
+                            <p class="text-sm text-on-surface-variant">Team Management</p>
+                        </div>
+                    </div>
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="py-12 px-8 border-t border-white/10">
+        <div class="container mx-auto text-center">
+            <div class="flex items-center justify-center gap-2 mb-4">
+                <div class="w-8 h-8 bg-primary rounded-lg flex items-center justify-center">
+                    <span class="material-symbols-outlined text-white text-sm">dashboard</span>
+                </div>
+                <span class="font-headline-md text-white">Stitch Flow Pro</span>
+            </div>
+            <p class="text-on-surface-variant text-sm">
+                Advanced Project Management System • Built with FastAPI & Modern Web Technologies
+            </p>
+            <div class="flex items-center justify-center gap-6 mt-6">
+                <span class="status-indicator">
+                    Backend API: Running
+                </span>
+                <span class="status-indicator">
+                    Database: Connected
+                </span>
+                <span class="status-indicator">
+                    Frontend: Active
+                </span>
+            </div>
+        </div>
+    </footer>
+</body>
+</html>

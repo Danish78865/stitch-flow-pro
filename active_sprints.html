@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html class="dark" lang="en">
+<head>
+    <meta charset="utf-8"/>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+    <title>Stitch Flow Pro - Active Sprint</title>
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&display=swap" rel="stylesheet"/>
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        body {
+            background: linear-gradient(135deg, #12121d 0%, #1f1f2a 100%);
+            font-family: 'Space Grotesk', sans-serif;
+            color: #ffffff;
+        }
+        .glass-card {
+            background: rgba(31, 31, 42, 0.8);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        .text-on-surface {
+            color: #ffffff;
+        }
+        .text-on-surface-variant {
+            color: #b8b8d1;
+        }
+    </style>
+</head>
+<body class="min-h-screen bg-background text-on-background">
+    <!-- Navigation -->
+    <nav class="glass-card border-b border-white/10">
+        <div class="flex items-center justify-between px-6 py-4">
+            <div class="flex items-center gap-3">
+                <div class="font-display-xl text-headline-md font-bold tracking-widest text-primary">FLOW</div>
+            </div>
+            <div class="flex items-center gap-6">
+                <a href="index.html" class="text-on-surface-variant hover:text-primary transition-colors">Dashboard</a>
+                <a href="jira_task_board.html" class="text-on-surface-variant hover:text-primary transition-colors">Task Board</a>
+                <a href="backlog.html" class="text-on-surface-variant hover:text-primary transition-colors">Backlog</a>
+                <a href="active_sprint.html" class="text-primary font-medium">Active Sprint</a>
+                <a href="reports.html" class="text-on-surface-variant hover:text-primary transition-colors">Reports</a>
+            </div>
+        </div>
+    </nav>
+
+    <div class="p-8">
+        <div class="max-w-7xl mx-auto">
+            <!-- Header -->
+            <div class="flex items-center justify-between mb-8">
+                <div>
+                    <h1 class="text-3xl font-bold mb-2">Sprint 3 - Q4 2024</h1>
+                    <p class="text-on-surface-variant">October 15 - October 29, 2024</p>
+                </div>
+                <div class="flex items-center gap-3">
+                    <button class="px-6 py-3 bg-green-500 text-white font-bold rounded-none hover:bg-green-500/90 transition-all">
+                        Complete Sprint
+                    </button>
+                    <button class="px-6 py-3 border border-white/10 text-on-surface font-bold rounded-none hover:bg-white/5 transition-all">
+                        Add Task
+                    </button>
+                </div>
+            </div>
+
+            <!-- Sprint Stats -->
+            <div class="grid grid-cols-5 gap-6 mb-8">
+                <div class="glass-card p-6">
+                    <p class="text-on-surface-variant text-sm mb-1">Days Left</p>
+                    <p class="text-3xl font-bold text-primary">8</p>
+                </div>
+                <div class="glass-card p-6">
+                    <p class="text-on-surface-variant text-sm mb-1">Total Tasks</p>
+                    <p class="text-3xl font-bold text-blue-500">12</p>
+                </div>
+                <div class="glass-card p-6">
+                    <p class="text-on-surface-variant text-sm mb-1">Completed</p>
+                    <p class="text-3xl font-bold text-green-500">7</p>
+                </div>
+                <div class="glass-card p-6">
+                    <p class="text-on-surface-variant text-sm mb-1">In Progress</p>
+                    <p class="text-3xl font-bold text-yellow-500">3</p>
+                </div>
+                <div class="glass-card p-6">
+                    <p class="text-on-surface-variant text-sm mb-1">Story Points</p>
+                    <p class="text-3xl font-bold text-purple-500">45/60</p>
+                </div>
+            </div>
+
+            <!-- Sprint Goal -->
+            <div class="glass-card p-6 mb-8">
+                <h2 class="text-lg font-bold mb-2">Sprint Goal</h2>
+                <p class="text-on-surface-variant">Complete the authentication system and improve dashboard performance to enhance user experience and security.</p>
+            </div>
+
+            <!-- Progress Bar -->
+            <div class="glass-card p-6 mb-8">
+                <div class="flex items-center justify-between mb-2">
+                    <span class="text-sm font-medium">Sprint Progress</span>
+                    <span class="text-sm text-on-surface-variant">75%</span>
+                </div>
+                <div class="h-3 bg-surface-container-lowest rounded-full overflow-hidden">
+                    <div class="h-full bg-gradient-to-r from-primary to-secondary rounded-full" style="width: 75%"></div>
+                </div>
+            </div>
+
+            <!-- Sprint Tasks -->
+            <div class="grid grid-cols-2 gap-6">
+                <!-- In Progress -->
+                <div class="glass-card">
+                    <div class="p-4 border-b border-white/10 flex items-center justify-between">
+                        <h2 class="font-bold text-yellow-500">In Progress (3)</h2>
+                        <span class="material-symbols-outlined text-yellow-500">pending</span>
+                    </div>
+                    <div class="p-4 space-y-3">
+                        <div class="bg-surface-container-lowest p-4 rounded-none border-l-4 border-yellow-500">
+                            <div class="flex items-start justify-between mb-2">
+                                <h3 class="font-semibold">API Rate Limiting</h3>
+                                <span class="text-xs bg-yellow-500/20 text-yellow-500 px-2 py-1 rounded">5 pts</span>
+                            </div>
+                            <p class="text-sm text-on-surface-variant mb-2">Implement rate limiting for API endpoints</p>
+                            <div class="flex items-center justify-between text-xs text-on-surface-variant">
+                                <span>Assigned to: John</span>
+                                <span>3 days left</span>
+                            </div>
+                        </div>
+                        <div class="bg-surface-container-lowest p-4 rounded-none border-l-4 border-yellow-500">
+                            <div class="flex items-start justify-between mb-2">
+                                <h3 class="font-semibold">Dashboard Charts</h3>
+                                <span class="text-xs bg-yellow-500/20 text-yellow-500 px-2 py-1 rounded">8 pts</span>
+                            </div>
+                            <p class="text-sm text-on-surface-variant mb-2">Add interactive charts to dashboard</p>
+                            <div class="flex items-center justify-between text-xs text-on-surface-variant">
+                                <span>Assigned to: Sarah</span>
+                                <span>5 days left</span>
+                            </div>
+                        </div>
+                        <div class="bg-surface-container-lowest p-4 rounded-none border-l-4 border-yellow-500">
+                            <div class="flex items-start justify-between mb-2">
+                                <h3 class="font-semibold">User Profile</h3>
+                                <span class="text-xs bg-yellow-500/20 text-yellow-500 px-2 py-1 rounded">3 pts</span>
+                            </div>
+                            <p class="text-sm text-on-surface-variant mb-2">Complete user profile management</p>
+                            <div class="flex items-center justify-between text-xs text-on-surface-variant">
+                                <span>Assigned to: Mike</span>
+                                <span>2 days left</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Completed -->
+                <div class="glass-card">
+                    <div class="p-4 border-b border-white/10 flex items-center justify-between">
+                        <h2 class="font-bold text-green-500">Completed (7)</h2>
+                        <span class="material-symbols-outlined text-green-500">check_circle</span>
+                    </div>
+                    <div class="p-4 space-y-3">
+                        <div class="bg-surface-container-lowest p-4 rounded-none border-l-4 border-green-500 opacity-70">
+                            <div class="flex items-start justify-between mb-2">
+                                <h3 class="font-semibold line-through">Login Page</h3>
+                                <span class="text-xs bg-green-500/20 text-green-500 px-2 py-1 rounded">3 pts</span>
+                            </div>
+                            <p class="text-sm text-on-surface-variant mb-2 line-through">Create login page with OAuth</p>
+                            <div class="flex items-center justify-between text-xs text-on-surface-variant">
+                                <span>Completed by: John</span>
+                                <span>Oct 18</span>
+                            </div>
+                        </div>
+                        <div class="bg-surface-container-lowest p-4 rounded-none border-l-4 border-green-500 opacity-70">
+                            <div class="flex items-start justify-between mb-2">
+                                <h3 class="font-semibold line-through">Database Setup</h3>
+                                <span class="text-xs bg-green-500/20 text-green-500 px-2 py-1 rounded">5 pts</span>
+                            </div>
+                            <p class="text-sm text-on-surface-variant mb-2 line-through">Configure database models</p>
+                            <div class="flex items-center justify-between text-xs text-on-surface-variant">
+                                <span>Completed by: Sarah</span>
+                                <span>Oct 17</span>
+                            </div>
+                        </div>
+                        <div class="bg-surface-container-lowest p-4 rounded-none border-l-4 border-green-500 opacity-70">
+                            <div class="flex items-start justify-between mb-2">
+                                <h3 class="font-semibold line-through">API Endpoints</h3>
+                                <span class="text-xs bg-green-500/20 text-green-500 px-2 py-1 rounded">8 pts</span>
+                            </div>
+                            <p class="text-sm text-on-surface-variant mb-2 line-through">Create REST API endpoints</p>
+                            <div class="flex items-center justify-between text-xs text-on-surface-variant">
+                                <span>Completed by: Mike</span>
+                                <span>Oct 19</span>
+                            </div>
+                        </div>
+                        <div class="text-center text-sm text-on-surface-variant py-2">
+                            + 4 more completed tasks
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Team Members -->
+            <div class="glass-card mt-8">
+                <div class="p-4 border-b border-white/10">
+                    <h2 class="font-bold">Sprint Team</h2>
+                </div>
+                <div class="p-4 flex items-center gap-4">
+                    <div class="flex items-center gap-3">
+                        <div class="w-10 h-10 bg-primary rounded-full flex items-center justify-center text-white font-bold">J</div>
+                        <div>
+                            <p class="font-medium">John</p>
+                            <p class="text-xs text-on-surface-variant">4 tasks completed</p>
+                        </div>
+                    </div>
+                    <div class="flex items-center gap-3">
+                        <div class="w-10 h-10 bg-secondary rounded-full flex items-center justify-center text-white font-bold">S</div>
+                        <div>
+                            <p class="font-medium">Sarah</p>
+                            <p class="text-xs text-on-surface-variant">3 tasks completed</p>
+                        </div>
+                    </div>
+                    <div class="flex items-center gap-3">
+                        <div class="w-10 h-10 bg-green-500 rounded-full flex items-center justify-center text-white font-bold">M</div>
+                        <div>
+                            <p class="font-medium">Mike</p>
+                            <p class="text-xs text-on-surface-variant">3 tasks completed</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

@@ -1,0 +1,767 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Phoenix Platform | Flow Kanban</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "tertiary": "#ffb783",
+                        "secondary-fixed": "#b8eaff",
+                        "on-tertiary": "#4f2500",
+                        "on-background": "#e4e0f0",
+                        "primary": "#c0c1ff",
+                        "on-secondary": "#003544",
+                        "primary-fixed-dim": "#c0c1ff",
+                        "outline": "#908fa0",
+                        "on-error": "#690005",
+                        "outline-variant": "#464554",
+                        "surface-variant": "#343440",
+                        "on-primary": "#1000a9",
+                        "inverse-surface": "#e4e0f0",
+                        "on-primary-fixed-variant": "#2f2ebe",
+                        "on-primary-container": "#0d0096",
+                        "primary-container": "#8083ff",
+                        "background": "#12121d",
+                        "tertiary-container": "#d97721",
+                        "on-secondary-fixed-variant": "#004d61",
+                        "surface-container-highest": "#343440",
+                        "on-primary-fixed": "#07006c",
+                        "inverse-primary": "#494bd6",
+                        "surface": "#12121d",
+                        "secondary": "#56d5fe",
+                        "surface-container-lowest": "#0d0d18",
+                        "error": "#ffb4ab",
+                        "secondary-fixed-dim": "#56d5fe",
+                        "tertiary-fixed-dim": "#ffb783",
+                        "surface-tint": "#c0c1ff",
+                        "on-surface": "#e4e0f0",
+                        "secondary-container": "#00a9d0",
+                        "inverse-on-surface": "#302f3b",
+                        "on-error-container": "#ffdad6",
+                        "surface-bright": "#393844",
+                        "on-secondary-fixed": "#001f28",
+                        "on-tertiary-container": "#452000",
+                        "surface-container": "#1f1f2a",
+                        "surface-container-low": "#1b1b26",
+                        "error-container": "#93000a",
+                        "on-surface-variant": "#c7c4d7",
+                        "on-tertiary-fixed-variant": "#703700",
+                        "on-tertiary-fixed": "#301400",
+                        "surface-dim": "#12121d",
+                        "on-secondary-container": "#003847",
+                        "primary-fixed": "#e1e0ff",
+                        "tertiary-fixed": "#ffdcc5",
+                        "surface-container-high": "#292934"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0px",
+                        "lg": "0px",
+                        "xl": "0px",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "gutter": "1.5rem",
+                        "sidebar-width": "280px",
+                        "unit": "4px",
+                        "container-margin": "2rem"
+                    },
+                    "fontFamily": {
+                        "display-xl": ["Space Grotesk"],
+                        "headline-lg": ["Space Grotesk"],
+                        "headline-md": ["Space Grotesk"],
+                        "body-base": ["Space Grotesk"],
+                        "data-mono": ["ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace"],
+                        "label-caps": ["Space Grotesk"]
+                    },
+                    "fontSize": {
+                        "display-xl": ["48px", {"lineHeight": "1.1", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                        "headline-lg": ["32px", {"lineHeight": "1.2", "fontWeight": "600"}],
+                        "headline-md": ["24px", {"lineHeight": "1.3", "fontWeight": "600"}],
+                        "body-base": ["16px", {"lineHeight": "1.6", "fontWeight": "400"}],
+                        "data-mono": ["14px", {"lineHeight": "1.5", "letterSpacing": "0.05em", "fontWeight": "500"}],
+                        "label-caps": ["12px", {"lineHeight": "1", "letterSpacing": "0.1em", "fontWeight": "700"}]
+                    }
+                },
+            },
+        }
+    </script>
+<style>
+        .glass-card {
+            background: rgba(31, 31, 42, 0.4);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .glass-card:hover {
+            border-color: rgba(192, 193, 255, 0.3);
+            box-shadow: 0 0 30px rgba(192, 193, 255, 0.1);
+            transform: translateY(-2px);
+        }
+        .neon-glow-indigo {
+            box-shadow: 0 0 15px rgba(192, 193, 255, 0.15);
+            transition: all 0.3s ease;
+        }
+        .neon-glow-indigo:hover {
+            box-shadow: 0 0 25px 4px rgba(192, 193, 255, 0.3);
+        }
+        .neon-glow-error {
+            box-shadow: 0 0 15px rgba(255, 180, 171, 0.2);
+            border-color: rgba(255, 180, 171, 0.3);
+            transition: all 0.3s ease;
+        }
+        .neon-glow-error:hover {
+            box-shadow: 0 0 25px 4px rgba(255, 180, 171, 0.4);
+        }
+        ::-webkit-scrollbar {
+            width: 6px;
+            height: 6px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #0d0d18;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #343440;
+            border-radius: 3px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #c0c1ff;
+        }
+        .nav-item {
+            position: relative;
+            overflow: hidden;
+        }
+        .nav-item::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(192, 193, 255, 0.1), transparent);
+            transition: left 0.5s ease;
+        }
+        .nav-item:hover::before {
+            left: 100%;
+        }
+        .task-card {
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .task-card:hover {
+            transform: translateY(-4px) scale(1.02);
+            box-shadow: 0 20px 40px rgba(192, 193, 255, 0.15);
+        }
+        .column-header {
+            transition: all 0.2s ease;
+        }
+        .column-header:hover {
+            transform: translateX(2px);
+        }
+    </style>
+</head>
+<body class="bg-background text-on-background font-body-base min-h-screen overflow-hidden">
+<!-- SideNavBar -->
+<aside class="w-sidebar-width h-screen fixed left-0 top-0 bg-surface/80 backdrop-blur-xl border-r border-white/10 shadow-[15px_0_30px_-15px_rgba(192,193,255,0.1)] flex flex-col h-full py-8 px-4 z-50">
+<div class="mb-12 px-4">
+<h1 class="font-display-xl text-headline-md font-bold tracking-widest text-primary uppercase">FLOW</h1>
+<p class="font-data-mono text-[10px] text-outline-variant tracking-widest mt-1">V.2.0.48</p>
+</div>
+<nav class="flex-1 space-y-2">
+<a class="flex items-center gap-4 px-4 py-3 text-on-surface-variant font-body-base hover:bg-primary/10 hover:text-primary transition-all duration-300 nav-item" href="executive_dashboard_code.html">
+<span class="material-symbols-outlined">dashboard</span>
+<span>Dashboard</span>
+</a>
+<!-- Active State: Projects -->
+<a class="flex items-center gap-4 px-4 py-3 text-primary border-l-2 border-primary bg-primary/5 font-bold Active: border-l-4 transition-all ease-out nav-item" href="project_board_code.html">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">folder_copy</span>
+<span>Projects</span>
+</a>
+<a class="flex items-center gap-4 px-4 py-3 text-on-surface-variant font-body-base hover:bg-primary/10 hover:text-primary transition-all duration-300 nav-item" href="project_board_code.html">
+<span class="material-symbols-outlined">checklist</span>
+<span>Tasks</span>
+</a>
+<a class="flex items-center gap-4 px-4 py-3 text-on-surface-variant font-body-base hover:bg-primary/10 hover:text-primary transition-all duration-300 nav-item" href="team_management_code.html">
+<span class="material-symbols-outlined">groups</span>
+<span>Team</span>
+</a>
+<a class="flex items-center gap-4 px-4 py-3 text-on-surface-variant font-body-base hover:bg-primary/10 hover:text-primary transition-all duration-300 nav-item" href="code.html">
+<span class="material-symbols-outlined">analytics</span>
+<span>Analytics</span>
+</a>
+</nav>
+<div class="mt-auto px-4">
+<a class="flex items-center gap-4 py-3 text-on-surface-variant font-body-base hover:bg-primary/10 hover:text-primary transition-all duration-300 nav-item" href="settings.html">
+<span class="material-symbols-outlined">settings</span>
+<span>Settings</span>
+</a>
+</div>
+</aside>
+<!-- TopAppBar -->
+<header class="fixed top-0 right-0 left-sidebar-width h-16 bg-background/60 backdrop-blur-md border-b border-white/10 flex justify-between items-center px-gutter w-auto z-40">
+<div class="flex items-center gap-8">
+<h2 class="hidden md:block font-display-xl text-headline-md text-primary uppercase">Phoenix Platform</h2>
+<div class="relative group">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-outline-variant group-focus-within:text-secondary">search</span>
+<input class="bg-black border-0 border-b border-white/10 text-on-surface text-data-mono w-64 pl-10 py-1 focus:ring-0 focus:border-secondary transition-all outline-none" placeholder="Filter project nodes..." type="text"/>
+</div>
+</div>
+<div class="flex items-center gap-6">
+<div class="flex items-center gap-2 border-r border-white/10 pr-6 mr-2">
+<button class="text-on-surface-variant hover:text-secondary transition-colors p-1 flex items-center gap-2">
+<span class="material-symbols-outlined text-[20px]">filter_list</span>
+<span class="font-label-caps text-[10px] uppercase">Filters</span>
+</button>
+<div class="flex -space-x-2">
+<img class="w-8 h-8 rounded-full border-2 border-background" data-alt="Close-up portrait of a professional man in a tech environment, characterized by soft neon blue lighting and high-contrast shadows. He is wearing a dark, minimalist shirt, conveying a focused and high-performance atmosphere. The image is crisp, modern, and fits a high-end cybernetic aesthetic with deep blacks and cool tones." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAtlx2HMsTqtcf8tmI_Q-CbIRvWA_t-HZ4WKNJEuZ6Nc7nkEPJ1ucj-L2gp6AsRDOZz4yv3NwIE67KZFGCzI29ljFg-8zUg7kpAJHbJj5QjVMBjtPdsvp2QKLY2Ogzu2tJPTYjpkPS3feGwN4pSDhIWLbLaCsPeuqvC8igh3FBrBI-tPz-IYCw4kb7DNRDXGh8VF5QfO57o9Jon7YZVUbDT8r-RgVx2UmO3nSSnt2yyNh3H3miF0tg4cyMLzKXlnbSctZwkQm2VMGw"/>
+<img class="w-8 h-8 rounded-full border-2 border-background" data-alt="A portrait of a woman in a high-tech corporate setting, illuminated by ethereal cyan and indigo light reflecting off glass surfaces. Her expression is calm and confident. The visual style is minimalist and clean, with a sophisticated color palette of pristine whites and tech-inspired blues, emphasizing a professional yet advanced atmosphere." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDqgKUrySy_I0YPh5m_O01PXVqz-nZLkOF-kUKLlecjKIGRh-MidcR3PMVXQuX4zPUBP99GuEPvlJSVqNaqlCaSxaMjbRXwGxPcyxWx0SMdei-j0Wjm0IXeGz9WEkw88ejPd-unlbds1eBrZsgowJIijDpGX8qMQKQ6BXbAAqCe0jmw04OIsZn5O-yvTMztltPE04P4-fXfWUB_qX42IylUfOKJsYN4toQKdwOdGWYYINu5o8USpcCqqlFveaUZHYp8jpvGkeDnrz8"/>
+</div>
+</div>
+<div class="flex items-center gap-4">
+<button class="text-on-surface-variant hover:text-secondary transition-colors"><span class="material-symbols-outlined">notifications</span></button>
+<button class="text-on-surface-variant hover:text-secondary transition-colors"><span class="material-symbols-outlined">help_outline</span></button>
+<div class="w-8 h-8 bg-primary/20 flex items-center justify-center text-primary font-bold border border-primary/30">JD</div>
+</div>
+</div>
+</header>
+<!-- Kanban Canvas -->
+<main class="fixed inset-0 left-sidebar-width top-16 overflow-x-auto overflow-y-hidden bg-surface-container-lowest">
+<div class="p-8">
+<!-- Project Filter -->
+<div class="mb-6 flex items-center gap-4">
+    <label class="font-data-mono text-sm text-on-surface-variant">Filter by Project:</label>
+    <select id="projectFilter" class="bg-surface-container-lowest border border-white/10 text-on-surface text-sm px-4 py-2 rounded-none">
+        <option value="">All Projects</option>
+    </select>
+    <button id="refreshTasks" class="px-4 py-2 bg-secondary/10 text-secondary border border-secondary/30 font-data-mono text-xs uppercase hover:bg-secondary/20 transition-all">
+        <span class="material-symbols-outlined text-[16px]">refresh</span>
+        REFRESH
+    </button>
+</div>
+</div>
+<div class="flex h-full px-8 pb-8 gap-6 min-w-max">
+<!-- Column: To Do -->
+<div class="w-[350px] flex flex-col h-full bg-surface-container/30 border border-white/5 p-4">
+<div class="flex items-center justify-between mb-6 px-2 column-header">
+<div class="flex items-center gap-3">
+<div class="w-2 h-2 bg-outline rotate-45"></div>
+<h3 class="font-label-caps uppercase tracking-widest text-on-surface-variant">To Do</h3>
+<span class="font-data-mono text-[10px] bg-white/10 px-2 py-0.5" data-column="todo">04</span>
+</div>
+<button class="text-outline-variant hover:text-primary"><span class="material-symbols-outlined">add</span></button>
+</div>
+<div id="todoColumn" class="flex-1 overflow-y-auto space-y-4 pr-2">
+<!-- Task Card 1 (Critical) -->
+<div class="glass-card p-5 relative group transition-all duration-300 hover:border-primary/40">
+<div class="flex justify-between items-start mb-3">
+<span class="font-data-mono text-[10px] uppercase text-error flex items-center gap-1">
+<span class="material-symbols-outlined text-[14px]" style="font-variation-settings: 'FILL' 1;">priority_high</span>
+                                CRITICAL
+                            </span>
+<span class="font-data-mono text-[10px] text-outline-variant">#PHX-102</span>
+</div>
+<h4 class="font-headline-md text-[18px] text-on-surface mb-2 leading-tight">Neural Core Integration</h4>
+<p class="text-on-surface-variant text-sm line-clamp-2 mb-4 font-light">Implement the asynchronous handshaking protocol between the core processing unit and the edge nodes.</p>
+<div class="flex items-center justify-between mt-auto">
+<div class="flex -space-x-1">
+<div class="w-6 h-6 bg-secondary/20 border border-secondary/30 flex items-center justify-center text-[10px] text-secondary">AM</div>
+</div>
+<div class="flex items-center gap-2 font-data-mono text-[11px] text-tertiary">
+<span class="material-symbols-outlined text-[16px]">schedule</span>
+                                2 DAYS REMAINING
+                            </div>
+</div>
+</div>
+<!-- Task Card 2 -->
+<div class="glass-card p-5 transition-all duration-300 hover:border-primary/40">
+<div class="flex justify-between items-start mb-3">
+<span class="font-data-mono text-[10px] uppercase text-secondary flex items-center gap-1">
+<span class="material-symbols-outlined text-[14px]">low_priority</span>
+                                MEDIUM
+                            </span>
+<span class="font-data-mono text-[10px] text-outline-variant">#PHX-105</span>
+</div>
+<h4 class="font-headline-md text-[18px] text-on-surface mb-2 leading-tight">UI Pattern Library</h4>
+<p class="text-on-surface-variant text-sm line-clamp-2 mb-4 font-light">Standardize glassmorphism tokens across the phoenix platform modules.</p>
+<div class="flex items-center justify-between mt-auto">
+<img class="w-6 h-6" data-alt="Macro close-up portrait of a developer in a dark room illuminated by the glow of multiple monitors. The lighting is dominated by sharp purple and blue hues, creating a technical, professional cyberpunk mood. The style is ultra-high resolution with deep contrast and a focus on precision and digital craftsmanship." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCM7Q5lYr_0Fw2yj8fWUDlKo1s7bf7XWKWoDbEjJJI2bpiqqS_DAN5UXUwSG651DnL5s4t4H-DeLs8rXenlSaeQNp2SaTxg-6KKM0hRNd17TGRPV3DPMUBCUMA_oziWEq-9-BHj-vIcKEzVWWr3z_DFbGvE7NowIMQuCs9_4_jDQ-5lRU15TLv65L6Ld4GF0fYFWfJvxLuZma_FHAz6r91R9cqaPfIQ1EBgYleTXnubjS6Xg9um5WigLKsvXEo9Ou_Qe3i2pftpDXk"/>
+<div class="flex items-center gap-2 font-data-mono text-[11px] text-on-surface-variant">
+<span class="material-symbols-outlined text-[16px]">schedule</span>
+                                5 DAYS REMAINING
+                            </div>
+</div>
+</div>
+</div>
+</div>
+<!-- Column: In Progress -->
+<div class="w-[350px] flex flex-col h-full bg-surface-container/30 border border-white/5 p-4">
+<div class="flex items-center justify-between mb-6 px-2">
+<div class="flex items-center gap-3">
+<div class="w-2 h-2 bg-secondary rotate-45 neon-glow-indigo"></div>
+<h3 class="font-label-caps uppercase tracking-widest text-on-surface-variant">In Progress</h3>
+<span class="font-data-mono text-[10px] bg-secondary/20 text-secondary px-2 py-0.5" data-column="in-progress">03</span>
+</div>
+<button class="text-outline-variant hover:text-primary"><span class="material-symbols-outlined">more_horiz</span></button>
+</div>
+<div id="inProgressColumn" class="flex-1 overflow-y-auto space-y-4 pr-2">
+<!-- Overdue Task -->
+<div class="glass-card p-5 neon-glow-error border-error/30 transition-all duration-300">
+<div class="flex justify-between items-start mb-3">
+<span class="font-data-mono text-[10px] uppercase text-error flex items-center gap-1">
+<span class="material-symbols-outlined text-[14px]" style="font-variation-settings: 'FILL' 1;">priority_high</span>
+                                HIGH PRIORITY
+                            </span>
+<span class="font-data-mono text-[10px] text-error font-bold">OVERDUE</span>
+</div>
+<h4 class="font-headline-md text-[18px] text-on-surface mb-2 leading-tight">API Mesh Validation</h4>
+<p class="text-on-surface-variant text-sm line-clamp-2 mb-4 font-light">Validating the encrypted data streams across the mesh network architecture.</p>
+<div class="flex items-center justify-between mt-auto">
+<div class="flex -space-x-1">
+<img class="w-6 h-6 border border-white/10" data-alt="A portrait of a male engineer in a futuristic server room. The background is a blur of neon indicator lights and dark metallic surfaces. The character is illuminated by a sharp, cool white light from the front and a subtle amber rim light, emphasizing a high-tech, professional atmosphere within the 'Void' aesthetic." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCwxU5c9pMxfCUztbKSC-zlWRtetDyWdgU_FIyFcu6Zv2CRRMBWjcZFIY3DyAMPpV8gCU5llpxIsJQmUY2E7TACN2xiBiVWv0O8QGUIeQOJQQvvQXQymlzMpx3kcE3sUrRokr_Nt4ZszR64TwbaqW0-fMslUWMn-Jyw8j2wTYSOgnoPY0eUeCijfF031wea9aJAou4uZFkUFLY7fCOjnjIiW7NUy1nNLXZQhR9qiEZ8hMUyMNOQLeDoIvTC6seTid9ADj5D0FiCWqY"/>
+</div>
+<div class="flex items-center gap-2 font-data-mono text-[11px] text-error">
+<span class="material-symbols-outlined text-[16px]">warning</span>
+                                EXPIRED 24H AGO
+                            </div>
+</div>
+</div>
+<div class="glass-card p-5 transition-all duration-300 hover:border-primary/40">
+<div class="flex justify-between items-start mb-3">
+<span class="font-data-mono text-[10px] uppercase text-primary flex items-center gap-1">
+<span class="material-symbols-outlined text-[14px]">arrow_upward</span>
+                                HIGH
+                            </span>
+<span class="font-data-mono text-[10px] text-outline-variant">#PHX-98</span>
+</div>
+<h4 class="font-headline-md text-[18px] text-on-surface mb-2 leading-tight">Datastore Migration</h4>
+<p class="text-on-surface-variant text-sm line-clamp-2 mb-4 font-light">Moving legacy SQL structures to the high-performance Phoenix vector database.</p>
+<div class="flex items-center justify-between mt-auto">
+<div class="flex -space-x-1">
+<div class="w-6 h-6 bg-tertiary/20 border border-tertiary/30 flex items-center justify-center text-[10px] text-tertiary">SK</div>
+</div>
+<div class="flex items-center gap-2 font-data-mono text-[11px] text-secondary">
+<span class="material-symbols-outlined text-[16px]">sync</span>
+                                IN PROGRESS
+                            </div>
+</div>
+</div>
+</div>
+</div>
+<!-- Column: Review -->
+<div class="w-[350px] flex flex-col h-full bg-surface-container/30 border border-white/5 p-4">
+<div class="flex items-center justify-between mb-6 px-2">
+<div class="flex items-center gap-3">
+<div class="w-2 h-2 bg-tertiary rotate-45"></div>
+<h3 class="font-label-caps uppercase tracking-widest text-on-surface-variant">Review</h3>
+<span class="font-data-mono text-[10px] bg-tertiary/20 text-tertiary px-2 py-0.5" data-column="review">02</span>
+</div>
+<button class="text-outline-variant hover:text-primary"><span class="material-symbols-outlined">more_horiz</span></button>
+</div>
+<div id="reviewColumn" class="flex-1 overflow-y-auto space-y-4 pr-2">
+<div class="glass-card p-5 transition-all duration-300 hover:border-primary/40 border-l-4 border-l-tertiary">
+<div class="flex justify-between items-start mb-3">
+<span class="font-data-mono text-[10px] uppercase text-on-surface-variant flex items-center gap-1">
+<span class="material-symbols-outlined text-[14px]">info</span>
+                                LOW
+                            </span>
+<span class="font-data-mono text-[10px] text-outline-variant">#PHX-84</span>
+</div>
+<h4 class="font-headline-md text-[18px] text-on-surface mb-2 leading-tight">Telemetry Dashboard</h4>
+<p class="text-on-surface-variant text-sm line-clamp-2 mb-4 font-light">Final review of the real-time telemetry visualizer for phoenix system health.</p>
+<div class="flex items-center justify-between mt-auto">
+<img class="w-6 h-6" data-alt="A portrait of a high-level executive in a futuristic minimalist office. Large glass panels show a dark city at night with neon lights. The office lighting is focused and professional, utilizing a palette of deep navy and bright white accents. The image conveys authority, precision, and technological advancement in a high-end corporate setting." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCO4p4f9pQSpgKJlrUcEoENSEMfuZl-GIdKbOLPUR_iGhtAE_N37wD79S65lnwGJFfxmX5Z1dH6pQ53FDsTIUaGbnpMZIShwSAUcSIxyiOt3sTVWlbCTFeqMVTsw3J7vIL06rtyi6DwdE8KL-B3FKJTJCiJfe5zgPWGR93CfujdYo9kdmbAb2XVocxsUbgCuAJyP4t4zge1jf11Xop-Kt2UOHrJCaMehzAnRdckqaVfnAwEeH6oMEelqQD4HuvNJGKXf2Lt7BwOo58"/>
+<div class="flex items-center gap-2 font-data-mono text-[11px] text-tertiary">
+<span class="material-symbols-outlined text-[16px]">visibility</span>
+                                AWAITING QA
+                            </div>
+</div>
+</div>
+</div>
+</div>
+<!-- Column: Done -->
+<div class="w-[350px] flex flex-col h-full bg-surface-container/30 border border-white/5 p-4 opacity-70">
+<div class="flex items-center justify-between mb-6 px-2">
+<div class="flex items-center gap-3">
+<div class="w-2 h-2 bg-emerald-400 rotate-45"></div>
+<h3 class="font-label-caps uppercase tracking-widest text-on-surface-variant">Done</h3>
+<span class="font-data-mono text-[10px] bg-white/10 px-2 py-0.5" data-column="completed">12</span>
+</div>
+</div>
+<div id="completedColumn" class="flex-1 overflow-y-auto space-y-4 pr-2">
+<div class="bg-surface-container-high/40 p-5 border border-white/5">
+<div class="flex justify-between items-start mb-3">
+<span class="font-data-mono text-[10px] uppercase text-outline-variant flex items-center gap-1">
+<span class="material-symbols-outlined text-[14px]">check_circle</span>
+                                COMPLETED
+                            </span>
+</div>
+<h4 class="font-headline-md text-[18px] text-outline mb-2 leading-tight line-through">Vector Engine v1.2</h4>
+<div class="flex items-center justify-between mt-auto">
+<div class="w-6 h-6 bg-outline/20 flex items-center justify-center text-[10px] text-outline">JS</div>
+<div class="font-data-mono text-[11px] text-outline">MAR 14, 2024</div>
+</div>
+</div>
+<div class="bg-surface-container-high/40 p-5 border border-white/5">
+<div class="flex justify-between items-start mb-3">
+<span class="font-data-mono text-[10px] uppercase text-outline-variant flex items-center gap-1">
+<span class="material-symbols-outlined text-[14px]">check_circle</span>
+                                COMPLETED
+                            </span>
+</div>
+<h4 class="font-headline-md text-[18px] text-outline mb-2 leading-tight line-through">Edge Node Firewall</h4>
+<div class="flex items-center justify-between mt-auto">
+<div class="w-6 h-6 bg-outline/20 flex items-center justify-center text-[10px] text-outline">RA</div>
+<div class="font-data-mono text-[11px] text-outline">MAR 12, 2024</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</main>
+<!-- Project-Specific FAB -->
+<button class="fixed bottom-8 right-8 w-14 h-14 bg-primary text-on-primary shadow-[0_0_20px_rgba(192,193,255,0.4)] flex items-center justify-center transition-transform hover:scale-110 active:scale-95 z-50">
+<span class="material-symbols-outlined text-[32px]">add_task</span>
+</button>
+<!-- API Integration -->
+<script src="static/js/api.js"></script>
+<script>
+// Check authentication
+checkAuth();
+
+// Load dashboard data when page loads
+document.addEventListener('DOMContentLoaded', async () => {
+    try {
+        await loadProjects();
+        await loadTasks();
+        await populateProjectFilter();
+        
+        // Add event listeners
+        document.getElementById('projectFilter').addEventListener('change', loadTasks);
+        document.getElementById('refreshTasks').addEventListener('click', loadTasks);
+        
+    } catch (error) {
+        console.error('Failed to load data:', error);
+    }
+});
+
+// Populate project filter dropdown
+async function populateProjectFilter() {
+    try {
+        const projects = await api.getProjects();
+        const select = document.getElementById('projectFilter');
+        
+        // Clear existing options except "All Projects"
+        select.innerHTML = '<option value="">All Projects</option>';
+        
+        // Add project options
+        projects.forEach(project => {
+            const option = document.createElement('option');
+            option.value = project.id;
+            option.textContent = project.name;
+            select.appendChild(option);
+        });
+        
+    } catch (error) {
+        console.error('Failed to populate project filter:', error);
+    }
+}
+
+async function loadProjects() {
+    try {
+        const projects = await api.getProjects();
+        // Update project selector if needed
+        console.log('Projects loaded:', projects);
+    } catch (error) {
+        console.error('Failed to load projects:', error);
+    }
+}
+
+async function loadTasks() {
+    try {
+        // Get selected project filter
+        const projectFilter = document.getElementById('projectFilter');
+        const selectedProject = projectFilter.value;
+        
+        // Build API URL with project filter
+        let apiUrl = '/tasks';
+        if (selectedProject) {
+            apiUrl += `?project_id=${selectedProject}`;
+        }
+        
+        const tasks = await api.request(apiUrl);
+        console.log('Loaded tasks:', tasks); // Debug log
+        
+        // Use the specific IDs for reliable column selection
+        const columns = {
+            'todo': document.getElementById('todoColumn'),
+            'in_progress': document.getElementById('inProgressColumn'),
+            'review': document.getElementById('reviewColumn'),
+            'completed': document.getElementById('completedColumn')
+        };
+
+        console.log('Found columns:', {
+            todo: !!columns.todo,
+            in_progress: !!columns.in_progress,
+            review: !!columns.review,
+            completed: !!columns.completed
+        });
+
+        // Clear existing tasks
+        Object.values(columns).forEach(column => {
+            if (column) column.innerHTML = '';
+        });
+
+        // Add tasks to appropriate columns
+        tasks.forEach(task => {
+            const taskCard = createTaskCard(task);
+            const column = columns[task.status];
+            if (column) {
+                column.appendChild(taskCard);
+            } else {
+                console.warn(`Column not found for status: ${task.status}`);
+            }
+        });
+
+        // Update task counts
+        updateTaskCounts();
+
+    } catch (error) {
+        console.error('Failed to load tasks:', error);
+        showError('Failed to load tasks: ' + error.message);
+    }
+}
+
+function createTaskCard(task) {
+    const card = document.createElement('div');
+    card.className = 'glass-card p-5 relative group transition-all duration-300 hover:border-primary/40 task-card';
+    
+    const priorityClass = getPriorityColor(task.priority);
+    const priorityIcon = task.priority === 'critical' ? 'priority_high' : 
+                        task.priority === 'high' ? 'arrow_upward' : 
+                        task.priority === 'medium' ? 'low_priority' : 'info';
+    
+    // Get project name if available
+    const projectName = task.project_name || 'No Project';
+    
+    card.innerHTML = `
+        <div class="flex justify-between items-start mb-3">
+            <span class="font-data-mono text-[10px] uppercase ${priorityClass} flex items-center gap-1">
+                <span class="material-symbols-outlined text-[14px]" style="font-variation-settings: 'FILL' 1;">${priorityIcon}</span>
+                ${task.priority.toUpperCase()}
+            </span>
+            <span class="font-data-mono text-[10px] text-outline-variant">#${task.id}</span>
+        </div>
+        <h4 class="font-headline-md text-[18px] text-on-surface mb-2 leading-tight">${task.title}</h4>
+        <p class="text-on-surface-variant text-sm line-clamp-2 mb-2 font-light">${task.description}</p>
+        <div class="flex items-center gap-2 mb-4">
+            <span class="material-symbols-outlined text-[14px] text-primary">folder</span>
+            <span class="font-data-mono text-[10px] text-primary">${projectName}</span>
+        </div>
+        <div class="flex items-center justify-between mt-auto">
+            <div class="flex -space-x-1">
+                ${task.assigned_members ? task.assigned_members.map(member => 
+                    `<div class="w-6 h-6 bg-secondary/20 border border-secondary/30 flex items-center justify-center text-[10px] text-secondary">${member}</div>`
+                ).join('') : '<div class="w-6 h-6 bg-primary/20 border border-primary/30 flex items-center justify-center text-[10px] text-primary">UN</div>'}
+            </div>
+            <div class="flex items-center gap-2 font-data-mono text-[11px] text-tertiary">
+                <span class="material-symbols-outlined text-[16px]">schedule</span>
+                ${task.due_date ? `${Math.ceil((new Date(task.due_date) - new Date()) / (1000 * 60 * 60 * 24))} DAYS REMAINING` : 'NO DUE DATE'}
+            </div>
+        </div>
+    `;
+    
+    return card;
+}
+
+function updateTaskCounts() {
+    // Use the specific column IDs to get counts and update the corresponding count elements
+    const columnMappings = {
+        'todoColumn': 'todo',
+        'inProgressColumn': 'in-progress', 
+        'reviewColumn': 'review',
+        'completedColumn': 'completed'
+    };
+
+    Object.entries(columnMappings).forEach(([columnId, dataColumn]) => {
+        const container = document.getElementById(columnId);
+        if (container) {
+            const count = container.children.length;
+            // Find the count element using data attribute
+            const countElement = document.querySelector(`[data-column="${dataColumn}"]`);
+            if (countElement) {
+                countElement.textContent = count.toString().padStart(2, '0');
+            }
+        }
+    });
+}
+
+// Add new task functionality
+document.addEventListener('click', async (e) => {
+    if (e.target.closest('button') && e.target.textContent.includes('add_task')) {
+        // First load projects to get a valid project_id
+        let projects = [];
+        try {
+            projects = await api.getProjects();
+            if (projects.length === 0) {
+                showError('No projects available. Please create a project first.');
+                return;
+            }
+        } catch (error) {
+            console.error('Failed to load projects:', error);
+            showError('Failed to load projects. Please try again.');
+            return;
+        }
+        
+        // Create task creation modal
+        const modal = createTaskModal(projects);
+        document.body.appendChild(modal);
+        
+        // Handle modal close
+        modal.addEventListener('click', (e) => {
+            if (e.target === modal || e.target.classList.contains('cancel-btn')) {
+                modal.remove();
+            }
+        });
+        
+        // Handle form submission
+        modal.querySelector('.submit-btn').addEventListener('click', async () => {
+            const taskTitle = modal.querySelector('#taskTitle').value.trim();
+            const taskDesc = modal.querySelector('#taskDesc').value.trim();
+            const projectId = parseInt(modal.querySelector('#projectSelect').value);
+            const priority = modal.querySelector('#prioritySelect').value;
+            
+            if (!taskTitle) {
+                showError('Task title is required');
+                return;
+            }
+            
+            try {
+                showLoading('Creating task...');
+                const newTask = await api.createTask({
+                    title: taskTitle,
+                    description: taskDesc || 'New task created from board',
+                    project_id: projectId,
+                    priority: priority,
+                    status: 'todo'
+                });
+                
+                showSuccess(`Task "${taskTitle}" created successfully!`);
+                modal.remove();
+                
+                // Reload tasks with delay
+                setTimeout(async () => {
+                    await loadTasks();
+                }, 500);
+                
+            } catch (error) {
+                console.error('Failed to create task:', error);
+                showError('Failed to create task: ' + error.message);
+            }
+        });
+    }
+});
+
+function createTaskModal(projects) {
+    const modal = document.createElement('div');
+    modal.className = 'fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-50';
+    modal.innerHTML = `
+        <div class="glass-card p-8 max-w-md w-full mx-4">
+            <h3 class="font-headline-md text-primary mb-6">Create New Task</h3>
+            
+            <div class="space-y-4">
+                <div>
+                    <label class="block text-sm font-medium text-on-surface mb-2">Task Title *</label>
+                    <input type="text" id="taskTitle" class="w-full bg-surface-container-lowest border border-white/10 text-on-surface text-sm px-4 py-2 rounded-none focus:ring-1 focus:ring-secondary" placeholder="Enter task title">
+                </div>
+                
+                <div>
+                    <label class="block text-sm font-medium text-on-surface mb-2">Description</label>
+                    <textarea id="taskDesc" class="w-full bg-surface-container-lowest border border-white/10 text-on-surface text-sm px-4 py-2 rounded-none focus:ring-1 focus:ring-secondary" rows="3" placeholder="Enter task description"></textarea>
+                </div>
+                
+                <div>
+                    <label class="block text-sm font-medium text-on-surface mb-2">Project *</label>
+                    <select id="projectSelect" class="w-full bg-surface-container-lowest border border-white/10 text-on-surface text-sm px-4 py-2 rounded-none focus:ring-1 focus:ring-secondary">
+                        ${projects.map(p => `<option value="${p.id}">${p.name}</option>`).join('')}
+                    </select>
+                </div>
+                
+                <div>
+                    <label class="block text-sm font-medium text-on-surface mb-2">Priority</label>
+                    <select id="prioritySelect" class="w-full bg-surface-container-lowest border border-white/10 text-on-surface text-sm px-4 py-2 rounded-none focus:ring-1 focus:ring-secondary">
+                        <option value="low">Low</option>
+                        <option value="medium" selected>Medium</option>
+                        <option value="high">High</option>
+                        <option value="critical">Critical</option>
+                    </select>
+                </div>
+            </div>
+            
+            <div class="flex gap-4 mt-6">
+                <button class="flex-1 py-2 border border-secondary text-secondary font-label-caps tracking-widest hover:bg-secondary/10 transition-all cancel-btn">
+                    CANCEL
+                </button>
+                <button class="flex-1 py-2 bg-primary text-on-primary font-label-caps tracking-widest hover:brightness-110 neon-glow-primary transition-all submit-btn">
+                    CREATE
+                </button>
+            </div>
+        </div>
+    `;
+    
+    // Auto-focus on title input
+    setTimeout(() => {
+        modal.querySelector('#taskTitle').focus();
+    }, 100);
+    
+    return modal;
+}
+
+function showSuccess(message) {
+    showNotification(message, 'success');
+}
+
+function showError(message) {
+    showNotification(message, 'error');
+}
+
+function showLoading(message) {
+    showNotification(message, 'info');
+}
+
+function showNotification(message, type = 'info') {
+    const notification = document.createElement('div');
+    const colors = {
+        success: 'bg-emerald-500/10 border-emerald-500/30 text-emerald-400',
+        error: 'bg-error/10 border-error/30 text-error',
+        info: 'bg-secondary/10 border-secondary/30 text-secondary'
+    };
+    
+    notification.className = `fixed top-20 right-8 p-4 ${colors[type]} border rounded-none glass-card z-50 transition-all`;
+    notification.innerHTML = `
+        <p class="font-data-mono text-sm">${message}</p>
+    `;
+    
+    document.body.appendChild(notification);
+    
+    // Auto-remove after 3 seconds
+    setTimeout(() => {
+        notification.style.opacity = '0';
+        setTimeout(() => notification.remove(), 300);
+    }, 3000);
+}
+
+// Add logout functionality
+document.addEventListener('click', (e) => {
+    if (e.target.closest('button') && e.target.textContent.includes('LOGOUT')) {
+        api.logout();
+    }
+});
+</script>
+</body></html>
