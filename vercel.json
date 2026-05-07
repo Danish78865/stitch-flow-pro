@@ -35,5 +35,10 @@
       "src": "/(.*)",
       "dest": "/$1.html"
     }
-  ]
+  ],
+  "experimentalServices": {
+    "web": {
+      "routePrefix": "/"
+    }
+  }
 }
