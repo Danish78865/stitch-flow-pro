@@ -1,11 +1,7 @@
 class ApiService {
     constructor() {
-        // Detect if running on Render or local
-        if (window.location.hostname.includes('onrender.com')) {
-            this.baseURL = 'https://task-ai.onrender.com';
-        } else {
-            this.baseURL = window.location.origin + '/api';
-        }
+        // Always use Render backend
+        this.baseURL = 'https://stitch-flow-pro.onrender.com';
         this.token = localStorage.getItem('authToken');
         this.ws = null;
         this.reconnectAttempts = 0;
