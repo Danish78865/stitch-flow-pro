@@ -1,0 +1,13 @@
+services:
+  - type: web
+    name: task-ai
+    env: python
+    buildCommand: "pip install -r requirements.txt"
+    startCommand: "uvicorn app.main:app --host 0.0.0.0 --port $PORT"
+    healthCheckPath: /docs
+    autoDeploy: true
+    
+databases:
+  - name: task-ai-db
+    databaseName: task_ai
+    user: task_ai_user

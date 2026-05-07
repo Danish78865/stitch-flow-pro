@@ -6,18 +6,16 @@ from dotenv import load_dotenv
 
 load_dotenv()
 
-# Database URL - Vercel serverless uses in-memory SQLite
+# Database URL - Render provides DATABASE_URL automatically
 DATABASE_URL = os.getenv("DATABASE_URL")
 
-# Create engine (works with PostgreSQL, SQLite file, and in-memory SQLite)
+# Create engine (works with PostgreSQL and SQLite)
 if DATABASE_URL and DATABASE_URL.startswith("postgresql"):
     engine = create_engine(DATABASE_URL, echo=False)
-elif DATABASE_URL and DATABASE_URL.startswith("sqlite"):
-    engine = create_engine(DATABASE_URL, connect_args={"check_same_thread": False}, echo=False)
 else:
-    # Vercel serverless: use in-memory SQLite
-    DATABASE_URL = "sqlite:///:memory:"
-    engine = create_engine(DATABASE_URL, echo=False)
+    # Fallback to SQLite for local development
+    DATABASE_URL = DATABASE_URL or "sqlite:///./stitchflow.db"
+    engine = create_engine(DATABASE_URL, connect_args={"check_same_thread": False}, echo=False)
 
 # Create SessionLocal class
 SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)

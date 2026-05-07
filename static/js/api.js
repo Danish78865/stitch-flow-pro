@@ -1,6 +1,11 @@
 class ApiService {
     constructor() {
-        this.baseURL = window.location.origin + '/api';
+        // Detect if running on Render or local
+        if (window.location.hostname.includes('onrender.com')) {
+            this.baseURL = 'https://task-ai.onrender.com';
+        } else {
+            this.baseURL = window.location.origin + '/api';
+        }
         this.token = localStorage.getItem('authToken');
         this.ws = null;
         this.reconnectAttempts = 0;

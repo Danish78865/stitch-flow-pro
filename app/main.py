@@ -18,12 +18,28 @@ from app.schemas import (
 )
 from app.auth import create_access_token, verify_token, get_password_hash, authenticate_user
 
-# Create database tables (for serverless, create on startup)
-def create_tables():
+# Create database tables and initialize sample data
+def initialize_database():
     Base.metadata.create_all(bind=engine)
+    
+    # Initialize sample data if database is empty
+    from app.database import SessionLocal
+    db = SessionLocal()
+    try:
+        # Check if users exist
+        from app.models import User
+        if db.query(User).count() == 0:
+            # Import and run sample data creation
+            from init_db import create_sample_data
+            create_sample_data()
+            print("✅ Sample data created successfully!")
+    except Exception as e:
+        print(f"❌ Error initializing database: {e}")
+    finally:
+        db.close()
 
-# Initialize tables on startup
-create_tables()
+# Initialize database on startup
+initialize_database()
 
 app = FastAPI(
     title="Task AI API",
