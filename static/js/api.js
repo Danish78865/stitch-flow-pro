@@ -1,6 +1,6 @@
 class ApiService {
     constructor() {
-        // Use Render backend URL
+        // Always use Render backend
         this.baseURL = 'https://stitch-flow-pro.onrender.com';
         this.token = localStorage.getItem('authToken');
         this.ws = null;
