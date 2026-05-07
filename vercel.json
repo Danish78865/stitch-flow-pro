@@ -1,0 +1,39 @@
+{
+  "version": 2,
+  "cleanUrls": true,
+  "trailingSlash": false,
+  "routes": [
+    {
+      "src": "/",
+      "dest": "/index.html"
+    },
+    {
+      "src": "/dashboard",
+      "dest": "/dashboard.html"
+    },
+    {
+      "src": "/task-board",
+      "dest": "/jira_task_board.html"
+    },
+    {
+      "src": "/backlog",
+      "dest": "/backlog.html"
+    },
+    {
+      "src": "/active-sprint",
+      "dest": "/active_sprint.html"
+    },
+    {
+      "src": "/reports",
+      "dest": "/reports.html"
+    },
+    {
+      "src": "/settings",
+      "dest": "/settings.html"
+    },
+    {
+      "src": "/(.*)",
+      "dest": "/$1.html"
+    }
+  ]
+}
