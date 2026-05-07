@@ -6,7 +6,7 @@ def test_complete_system():
     base_url = "http://localhost:8000"
     frontend_url = "http://localhost:3000"
     
-    print("🚀 Testing Complete Stitch Flow Pro System")
+    print("🚀 Testing Complete Task AI System")
     print("=" * 50)
     
     # Test 1: Backend Health

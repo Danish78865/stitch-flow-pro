@@ -1,7 +1,7 @@
-# Stitch Flow Pro - Deployment Guide
+# Task AI - Deployment Guide
 
 ## Overview
-Stitch Flow Pro is a production-ready project management system with real-time updates, advanced analytics, and team collaboration features.
+Task AI is a production-ready project management system with real-time updates, advanced analytics, and team collaboration features.
 
 ## Features
 - ✅ Real-time WebSocket updates
@@ -234,4 +234,4 @@ For issues and support:
 4. Check database connectivity
 
 ## License
-© 2024 Stitch Flow Pro. All rights reserved.
+© 2024 Task AI. All rights reserved.

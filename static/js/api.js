@@ -1,6 +1,6 @@
 class ApiService {
     constructor() {
-        this.baseURL = 'http://localhost:8000';
+        this.baseURL = window.location.origin + '/api';
         this.token = localStorage.getItem('authToken');
         this.ws = null;
         this.reconnectAttempts = 0;

@@ -1,6 +1,6 @@
-# Stitch Flow Pro Backend
+# Task AI Backend
 
-A comprehensive Python backend API for the Stitch Flow Pro project management system, built with FastAPI and SQLAlchemy.
+A comprehensive Python backend API for the Task AI project management system, built with FastAPI and SQLAlchemy.
 
 ## Features
 
@@ -163,4 +163,4 @@ print(response.json())
 
 ## License
 
-This project is part of the Stitch Flow Pro system.
+This project is part of the Task AI system.

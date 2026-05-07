@@ -1,5 +1,5 @@
 """
-Database initialization script for Stitch Flow Pro
+Database initialization script for Task AI
 Creates sample data for testing the application
 """
 
@@ -429,7 +429,7 @@ def create_sample_data():
 
 def init_database():
     """Initialize database with tables and sample data"""
-    print("🚀 Initializing Stitch Flow Pro database...")
+    print("🚀 Initializing Task AI database...")
     
     # Create all tables
     Base.metadata.create_all(bind=engine)

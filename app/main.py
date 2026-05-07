@@ -18,12 +18,16 @@ from app.schemas import (
 )
 from app.auth import create_access_token, verify_token, get_password_hash, authenticate_user
 
-# Create database tables
-Base.metadata.create_all(bind=engine)
+# Create database tables (for serverless, create on startup)
+def create_tables():
+    Base.metadata.create_all(bind=engine)
+
+# Initialize tables on startup
+create_tables()
 
 app = FastAPI(
-    title="Stitch Flow Pro API",
-    description="Backend API for Stitch Flow Pro Project Management System",
+    title="Task AI API",
+    description="Backend API for Task AI Project Management System",
     version="1.0.0"
 )
 
