@@ -6,18 +6,16 @@ from dotenv import load_dotenv
 
 load_dotenv()
 
-# Database URL - can be configured via environment variable
-DATABASE_URL = os.getenv("DATABASE_URL", "sqlite:///./stitchflow.db")
+# Database URL - Railway provides DATABASE_URL automatically
+DATABASE_URL = os.getenv("DATABASE_URL")
 
-# For Railway deployment: ensure directory exists for SQLite
-if DATABASE_URL.startswith("sqlite:////app/data"):
-    os.makedirs("/app/data", exist_ok=True)
-
-# Create engine (SQLite specific args only for SQLite)
-if DATABASE_URL.startswith("sqlite"):
-    engine = create_engine(DATABASE_URL, connect_args={"check_same_thread": False}, echo=False)
-else:
+# Create engine (works with both PostgreSQL and SQLite)
+if DATABASE_URL and DATABASE_URL.startswith("postgresql"):
     engine = create_engine(DATABASE_URL, echo=False)
+else:
+    # Fallback to SQLite for local development
+    DATABASE_URL = DATABASE_URL or "sqlite:///./stitchflow.db"
+    engine = create_engine(DATABASE_URL, connect_args={"check_same_thread": False}, echo=False)
 
 # Create SessionLocal class
 SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
