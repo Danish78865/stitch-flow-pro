@@ -123,12 +123,15 @@
             errorDiv.classList.add('hidden');
             
             try {
-                await api.login(username, password);
+                console.log('Attempting login to:', api.baseURL);
+                const result = await api.login(username, password);
+                console.log('Login successful:', result);
                 // Redirect to dashboard on successful login
                 window.location.href = '/dashboard';
             } catch (error) {
                 console.error('Login failed:', error);
-                errorText.textContent = error.message || 'Login failed. Please check your credentials.';
+                console.error('Error details:', error.message, error.stack);
+                errorText.textContent = 'Error: ' + (error.message || 'Login failed. Please check your credentials.');
                 errorDiv.classList.remove('hidden');
                 
                 // Reset button
