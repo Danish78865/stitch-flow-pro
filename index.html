@@ -9,19 +9,55 @@
     <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
     <style>
         body {
-            background: linear-gradient(135deg, #12121d 0%, #1f1f2a 100%);
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
             font-family: 'Space Grotesk', sans-serif;
+            color: #ffffff;
         }
         .glass-card {
-            background: rgba(31, 31, 42, 0.4);
+            background: rgba(255, 255, 255, 0.95);
             backdrop-filter: blur(20px);
-            border: 1px solid rgba(255, 255, 255, 0.1);
+            border: 2px solid rgba(0, 0, 0, 0.1);
+            border-radius: 12px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+        }
+        .text-primary {
+            color: #4f46e5 !important;
+        }
+        .text-secondary {
+            color: #06b6d4 !important;
+        }
+        .text-on-surface {
+            color: #1f2937 !important;
+        }
+        .text-on-surface-variant {
+            color: #4b5563 !important;
+        }
+        .bg-surface-container-lowest {
+            background-color: #f3f4f6 !important;
+        }
+        .text-error {
+            color: #dc2626 !important;
+        }
+        .bg-error\/10 {
+            background-color: rgba(220, 38, 38, 0.1) !important;
+        }
+        .border-error\/30 {
+            border-color: rgba(220, 38, 38, 0.3) !important;
+        }
+        .bg-primary {
+            background-color: #4f46e5 !important;
+        }
+        .text-on-primary {
+            color: #ffffff !important;
+        }
+        input::placeholder {
+            color: #9ca3af !important;
         }
         .neon-glow-primary {
-            box-shadow: 0 0 15px rgba(192, 193, 255, 0.2);
+            box-shadow: 0 4px 15px rgba(79, 70, 229, 0.4);
         }
-        .neon-glow-secondary {
-            box-shadow: 0 0 15px rgba(86, 213, 254, 0.2);
+        h1, h2, h3, p, label, span, div {
+            font-weight: 500;
         }
     </style>
 </head>
