@@ -781,7 +781,7 @@
         // Load data from API
         async function loadData() {
             try {
-                // Authenticate first
+                // Try to authenticate and load from API
                 if (!api.token) {
                     await authenticateUser();
                 }
@@ -801,9 +801,13 @@
                 renderTeamMembers();
                 showNotification('Connected to backend API', 'success');
             } catch (error) {
-                console.error('Failed to load data:', error);
-                showNotification('Failed to load data: ' + error.message, 'error');
-                throw error;
+                console.error('Failed to load data from API, using demo data:', error);
+                // Use demo data as fallback
+                loadMockData();
+                populateSelects();
+                updateStatistics();
+                renderTeamMembers();
+                showNotification('Using demo data', 'info');
             }
         }
 
