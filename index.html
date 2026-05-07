@@ -125,7 +125,7 @@
             try {
                 await api.login(username, password);
                 // Redirect to dashboard on successful login
-                window.location.href = 'dashboard.html';
+                window.location.href = '/dashboard';
             } catch (error) {
                 console.error('Login failed:', error);
                 errorText.textContent = error.message || 'Login failed. Please check your credentials.';
@@ -139,7 +139,7 @@
 
         // Check if already logged in
         if (localStorage.getItem('authToken')) {
-            window.location.href = 'dashboard.html';
+            window.location.href = '/dashboard';
         }
     </script>
 </body>

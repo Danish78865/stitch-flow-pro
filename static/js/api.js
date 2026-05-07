@@ -76,7 +76,7 @@ class ApiService {
     logout() {
         this.token = null;
         localStorage.removeItem('authToken');
-        window.location.href = 'login.html';
+        window.location.href = '/';
     }
 
     // Dashboard methods
@@ -278,9 +278,9 @@ function showError(selector, message) {
 
 // Authentication check
 function checkAuth() {
-    const token = localStorage.getItem('access_token');
-    if (!token && !window.location.pathname.includes('login.html')) {
-        window.location.href = 'login.html';
+    const token = localStorage.getItem('authToken');
+    if (!token && window.location.pathname !== '/') {
+        window.location.href = '/';
         return false;
     }
     return true;
