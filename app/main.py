@@ -21,6 +21,27 @@ from app.auth import create_access_token, verify_token, get_password_hash, authe
 # Create database tables
 Base.metadata.create_all(bind=engine)
 
+# Initialize sample data on startup
+@app.on_event("startup")
+async def startup_event():
+    """Initialize sample data on startup"""
+    from app.database import SessionLocal
+    from app.models import User
+    db = SessionLocal()
+    try:
+        # Check if users exist, if not create sample data
+        if db.query(User).count() == 0:
+            print("🚀 Initializing sample data...")
+            from init_db import create_sample_data
+            create_sample_data()
+            print("✅ Sample data created successfully!")
+        else:
+            print("✅ Database already has data, skipping initialization")
+    except Exception as e:
+        print(f"❌ Error initializing sample data: {e}")
+    finally:
+        db.close()
+
 app = FastAPI(
     title="Task AI API",
     description="Backend API for Task AI Project Management System",
