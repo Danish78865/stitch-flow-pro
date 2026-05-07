@@ -21,6 +21,37 @@ from app.auth import create_access_token, verify_token, get_password_hash, authe
 # Create database tables
 Base.metadata.create_all(bind=engine)
 
+# Initialize admin user on startup
+def create_admin_user():
+    from app.database import SessionLocal
+    from app.auth import get_password_hash
+    db = SessionLocal()
+    try:
+        # Check if admin user exists
+        admin = db.query(User).filter(User.username == "admin").first()
+        if not admin:
+            # Create admin user
+            admin_user = User(
+                username="admin",
+                email="admin@taskai.com",
+                full_name="Administrator",
+                role="admin",
+                hashed_password=get_password_hash("admin123"),
+                is_active=True
+            )
+            db.add(admin_user)
+            db.commit()
+            print("✅ Admin user created: admin/admin123")
+        else:
+            print("✅ Admin user already exists")
+    except Exception as e:
+        print(f"❌ Error creating admin user: {e}")
+    finally:
+        db.close()
+
+# Create admin user on startup
+create_admin_user()
+
 app = FastAPI(
     title="Task AI API",
     description="Backend API for Task AI Project Management System",
